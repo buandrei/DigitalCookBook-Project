@@ -1,4 +1,4 @@
-package ro.sci.ems.domain;
+package ro.digitalCookBook.domain;
 
 public class User {
 

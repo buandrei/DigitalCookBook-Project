@@ -1,4 +1,4 @@
-package ro.sci.ems.controllers;
+package ro.digitalCookBook.controllers;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
