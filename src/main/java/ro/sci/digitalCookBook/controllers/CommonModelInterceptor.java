@@ -1,4 +1,4 @@
-package ro.digitalCookBook.controllers;
+package ro.sci.digitalCookBook.controllers;
 
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
