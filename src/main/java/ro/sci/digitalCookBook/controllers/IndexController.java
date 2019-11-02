@@ -1,4 +1,4 @@
-package ro.digitalCookBook.controllers;
+package ro.sci.digitalCookBook.controllers;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
