@@ -1,6 +1,7 @@
-package ro.digitalCookBook.domain;
+package ro.sci.digitalCookBook.domain;
 
-public class User {
+
+public class User extends AbstractModel {
 
 	private String userName;
 

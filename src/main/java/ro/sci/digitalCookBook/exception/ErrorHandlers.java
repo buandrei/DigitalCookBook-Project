@@ -13,7 +13,7 @@ public class ErrorHandlers {
 
     @ExceptionHandler(RuntimeException.class)
     public ModelAndView handle(RuntimeException e) {
-        LOGGER.error("Something went wrong!", e);
+        LOGGER.error("Something went very wrong!", e);
 
         ApplicationError applicationError = new ApplicationError();
         applicationError.setCode(HttpStatus.OK.value());

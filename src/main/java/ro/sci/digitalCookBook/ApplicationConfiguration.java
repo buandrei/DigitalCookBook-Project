@@ -5,9 +5,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.datasource.SingleConnectionDataSource;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import ro.sci.digitalCookBook.dao.RecipeDAO;
-import ro.sci.digitalCookBook.dao.db.JDBCRecipeDAO;
-import ro.sci.digitalCookBook.service.RecipeService;
+import ro.sci.digitalCookBook.dao.*;
+import ro.sci.digitalCookBook.dao.db.*;
+import ro.sci.digitalCookBook.service.*;
 
 import javax.sql.DataSource;
 
@@ -40,6 +40,58 @@ public class ApplicationConfiguration {
     }
 
     @Bean
+    public RecipePhotoDAO recipePhotoDAO() {
+        return new JDBCRecipePhotoDAO(dbHost, "5432", dbName, dbUser, dbPassword);
+    }
+
+    @Bean
+    public RecipePhotoService recipePhotoService() {
+        RecipePhotoService recipePhotoService = new RecipePhotoService();
+
+        recipePhotoService.setDao(recipePhotoDAO());
+        return recipePhotoService;
+    }
+
+    @Bean
+    public RecipeCategoryDAO recipeCategory() {
+        return new JDBCRecipeCategoryDAO(dbHost, "5432", dbName, dbUser, dbPassword);
+    }
+
+    @Bean
+    public RecipeCategoryService recipeCategoryService() {
+        RecipeCategoryService recipeCategoryService = new RecipeCategoryService();
+
+        recipeCategoryService.setDao(recipeCategory());
+        return recipeCategoryService;
+    }
+
+    @Bean
+    public RecipeIngredientDAO recipeIngredients() {
+        return new JDBCRecipeIngredientDAO(dbHost, "5432", dbName, dbUser, dbPassword);
+    }
+
+    @Bean
+    public RecipeIngredientsService recipeIngredientsService() {
+        RecipeIngredientsService recipeIngredientsService = new RecipeIngredientsService();
+
+        recipeIngredientsService.setDao(recipeIngredients());
+        return recipeIngredientsService;
+    }
+
+    @Bean
+    public IngredientDAO ingredientDAO() {
+        return new JDBCIngredientDAO(dbHost, "5432", dbName, dbUser, dbPassword);
+    }
+
+    @Bean
+    public IngredientService IngredientsService() {
+        IngredientService ingredientService = new IngredientService();
+
+        ingredientService.setDao(ingredientDAO());
+        return ingredientService;
+    }
+
+    @Bean
     public DataSource dataSource() {
         String url = new StringBuilder()
                 .append("jdbc:")
@@ -62,4 +114,7 @@ public class ApplicationConfiguration {
     public BCryptPasswordEncoder bCryptPasswordEncoder() {
         return new BCryptPasswordEncoder();
     }
+
+
+
 }
