@@ -3,9 +3,8 @@
 	xsi:schemaLocation="http://www.springframework.org/schema/beans
 	http://www.springframework.org/schema/beans/spring-beans-4.0.xsd">
 
-	<bean id="imDAO" class="ro.sci.ems...."/>
-	<bean id="employeeService" class="ro.sci....">
-	    <property name="dao" ref="imDAO" />
+	<bean id="multiPartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<property name="maxUploadSize" value="1000000" />
 	</bean>
 
 </beans>
