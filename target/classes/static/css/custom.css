@@ -1,0 +1,21 @@
+.dropdown:hover>.dropdown-menu{
+    display:block;
+}
+
+
+.navbar-nav {
+    display:table;
+    width:100%;
+    margin: 0;
+}
+.navbar-nav > li {
+    float:none;
+    display:table-cell;
+    text-align:center;
+}
+
+.dropdown-menu-modified{
+    min-width:600px;
+    text-align:center;
+    padding:5px;
+}
