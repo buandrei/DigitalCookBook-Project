@@ -8,7 +8,7 @@
 <body>
 	<div class="container">
 		<div class="page-header">
-		<!-- TOP (top part, navbar)-->
+        		<!-- TOP (top part, navbar)-->
 
 			<div class="row">
 			<!--logo-->
@@ -21,41 +21,39 @@
 			  </div>
 			</div>
 		</div>
-		<!--
-		<div class="">
-			<a href="/"><img src="[@spring.url '/images/logo.png' /]" width="100"/></a>
-		</div>
-		-->
 
-		<!--navbar -->
-		<nav class="navbar navbar-inverse .navbar-fixed-top">
-		  <div class="container-fluid">
-			<ul class="nav navbar-nav">
-				<li class="active"><a href="/">Home</a></li>
-				<li class="dropdown">
-					<a class="dropdown-toggle"  href="/retete">Cautare retete
-					<span class="caret"></span></a>
-						<ul class="dropdown-menu list-inline dropdown-menu-modified">
+		<nav class="navbar navbar-expand-sm navbar-dark bg-dark">
+		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExample03" aria-controls="navbarsExample03" aria-expanded="false" aria-label="Toggle navigation">
+			<span class="navbar-toggler-icon"></span>
+		</button>
 
-								<li>
-									<a href="/retete">Cautare simpla</a>
-								</li>
-								<li>
-									<a href="/specific_ingredients">Cauta dupa idIngrediente specifice</a>
-								</li>
+		<div class="collapse navbar-collapse" id="navbarsExample03">
+			<ul class="navbar-nav mr-auto">
+				<li class="nav-item">
+					<a class="nav-link" href="/">Home</a>
+				</li>
+				<li class="nav-item dropdown">
+					<a class="nav-link dropdown-toggle " style="padding:0" href="#" id="dropdown03" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Retete</a>
+					<div class="dropdown-menu" style="top:30px" aria-labelledby="dropdown03">
 
-						</ul>
-					</li>
-				<li><a href="/promotion">Promovare</a></li>
-				<li><a href="/tutorials">Tutoriale de gatit</a></li>
-				<li><a href="/retete/upload_recipe">Incarca reteta</a></li>
-				<li><a href="/events">Evenimente</a></li>
+								<a class="dropdown-item" href="/retete/list_all">Cautare simpla</a>
+
+
+								<a class="dropdown-item" href="/retete/search_ingredients">Cauta dupa ingrediente specifice</a>
+
+
+					</div>
+				</li>
+				<li class="nav-item"><a class="nav-link" href="/promotion">Promovare</a></li>
+				<li class="nav-item" ><a class="nav-link" href="/retete/tutorials">Tutoriale de gatit</a></li>
+				<li class="nav-item active"><a  class="nav-link" href="/retete/upload_recipe">Incarca reteta</a></li>
+				<li class="nav-item"><a class="nav-link" href="/events">Evenimente</a></li>
 			</ul>
-		  </div>
+			<form class="form-inline my-2 my-md-0">
+				<input class="form-control" type="text" placeholder="Search">
+			</form>
+		</div>
 		</nav>
-
-
-
 
 	<!--
 		<ol class="breadcrumb">
