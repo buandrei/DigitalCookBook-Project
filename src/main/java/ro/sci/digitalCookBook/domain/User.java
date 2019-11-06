@@ -1,9 +1,11 @@
 package ro.sci.digitalCookBook.domain;
 
+
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
 import java.util.Objects;
+
 
 public class User extends AbstractModel {
 

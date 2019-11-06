@@ -1,8 +1,9 @@
 [#ftl]
 [#import "/spring.ftl" as spring /]
+<!DOCTYPE html>
 <html lang="ro">
 <head>
-[#include '/bootstrap_header.ftl']
+[#include "/bootstrap_header.ftl"]
 </head>
 <body>
 	<div class="container">
@@ -35,19 +36,19 @@
 					<a class="dropdown-toggle"  href="/retete">Cautare retete
 					<span class="caret"></span></a>
 						<ul class="dropdown-menu list-inline dropdown-menu-modified">
-							
+
 								<li>
 									<a href="/retete">Cautare simpla</a>
 								</li>
 								<li>
-									<a href="/specific_ingredients">Cauta dupa ingrediente specifice</a>
+									<a href="/specific_ingredients">Cauta dupa idIngrediente specifice</a>
 								</li>
-							
+
 						</ul>
 					</li>
 				<li><a href="/promotion">Promovare</a></li>
 				<li><a href="/tutorials">Tutoriale de gatit</a></li>
-				<li><a href="/upload_recipe">Incarca reteta</a></li>
+				<li><a href="/retete/upload_recipe">Incarca reteta</a></li>
 				<li><a href="/events">Evenimente</a></li>
 			</ul>
 		  </div>
@@ -72,7 +73,7 @@
 	-->
 
 <!-- PAGE BODY-->
-	
+
 
 <!-- FOOTER -->
 

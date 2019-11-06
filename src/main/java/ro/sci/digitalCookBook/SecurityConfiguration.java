@@ -9,6 +9,8 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import javax.sql.DataSource;
@@ -30,7 +32,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Value("${spring.queries.roles-query}")
     private String rolesQuery;
 
-
     @Override
     protected void configure(AuthenticationManagerBuilder auth)
             throws Exception {
@@ -46,24 +47,24 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 
-//        http
-//                .authorizeRequests()
-//                .antMatchers("/", "/file").permitAll()
-//
-//                // .antMatchers("/employee/delete").hasRole("ADMIN")
-//                .anyRequest().authenticated()
-//
-//                .and()
-//                .csrf().disable()
-//                .formLogin()
-//                .loginPage("/login")
-//                .permitAll()
-//
-//
-//                .and()
-//                .logout().logoutSuccessUrl("/").permitAll()
-//                .and().exceptionHandling()
-//                .accessDeniedPage("/access-denied");
+        http
+                .authorizeRequests()
+                .antMatchers("/", "/file").permitAll()
+
+
+                .anyRequest().authenticated()
+
+                .and()
+                .csrf().disable()
+                .formLogin()
+                .loginPage("/login")
+                .permitAll()
+
+
+                .and()
+                .logout().logoutSuccessUrl("/").permitAll()
+                .and().exceptionHandling()
+                .accessDeniedPage("/access-denied");
 
 
     }
