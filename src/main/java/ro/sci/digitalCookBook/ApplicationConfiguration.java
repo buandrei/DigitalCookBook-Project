@@ -5,6 +5,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.datasource.SingleConnectionDataSource;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.web.servlet.ViewResolver;
+import org.springframework.web.servlet.view.BeanNameViewResolver;
+import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import ro.sci.digitalCookBook.dao.*;
 import ro.sci.digitalCookBook.dao.db.*;
 import ro.sci.digitalCookBook.service.*;
@@ -90,6 +93,23 @@ public class ApplicationConfiguration {
         ingredientService.setDao(ingredientDAO());
         return ingredientService;
     }
+
+    @Bean
+    public ViewResolver beanNameViewResolver() {
+        BeanNameViewResolver resolver = new BeanNameViewResolver();
+        return resolver;
+    }
+
+    @Bean
+    public ViewResolver jspViewResolver() {
+        InternalResourceViewResolver viewResolver = new InternalResourceViewResolver();
+        String path = System.getProperty("user.dir") + "/src/main/resources/retete/";
+
+        viewResolver.setPrefix("/WEB-INF/view/");
+        viewResolver.setSuffix(".jsp");
+        return viewResolver;
+    }
+
 
     @Bean
     public DataSource dataSource() {

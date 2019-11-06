@@ -4,16 +4,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ro.sci.digitalCookBook.dao.IngredientDAO;
 import ro.sci.digitalCookBook.domain.Ingredient;
-import ro.sci.digitalCookBook.domain.RecipeCategory;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 public class JDBCIngredientDAO implements IngredientDAO {
     private static final Logger LOGGER = LoggerFactory.getLogger(JDBCRecipeDAO.class);
@@ -68,7 +64,6 @@ public class JDBCIngredientDAO implements IngredientDAO {
 
             while (rs.next()) {
                 result.add(extractIngredient(rs));
-
             }
             connection.commit();
         } catch (SQLException ex) {
@@ -108,6 +103,38 @@ public class JDBCIngredientDAO implements IngredientDAO {
         }
         return result.isEmpty() ? null : result.get(0);
     }
+
+    @Override
+    public Collection<Ingredient> findByMultipleId(ArrayList<Integer> ids) {
+        Connection connection = newConnection();
+
+        List<Ingredient> result = new LinkedList<>();
+
+
+
+        String databaseArray = ids.toString().replace("[", "(").replace("]",")");
+
+        try (ResultSet rs = connection.createStatement()
+                .executeQuery("SELECT * FROM ingrediente WHERE id IN " + databaseArray)) {
+            while (rs.next()) {
+
+                result.add(extractIngredient(rs));
+
+            }
+            connection.commit();
+        } catch (SQLException ex) {
+
+            throw new RuntimeException("Nu am gasit ingredientul!", ex);
+        } finally {
+            try {
+                connection.close();
+            } catch (Exception ex) {
+
+            }
+        }
+        return result;
+    }
+
 
     @Override
     public Ingredient update(Ingredient ingredient) {

@@ -42,10 +42,10 @@ public class RecipePhotoService {
 //        return false;
 //    }
 
-//    public Recipe get(int id) {
-//        LOGGER.debug("Getting recipe for id: " + id);
-//        return dao.findById(id);
-//    }
+    public RecipePhoto get(int id) {
+        LOGGER.debug("Getting photo for id: " + id);
+        return recipePhotoDAO.findById(id);
+    }
 
     public void save(RecipePhoto recipePhoto ) throws ValidationException {
         LOGGER.debug("Saving: " + recipePhoto);
