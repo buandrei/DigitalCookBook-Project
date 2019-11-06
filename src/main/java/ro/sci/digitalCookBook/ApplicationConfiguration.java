@@ -6,8 +6,11 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.datasource.SingleConnectionDataSource;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import ro.sci.digitalCookBook.dao.RecipeDAO;
+import ro.sci.digitalCookBook.dao.UserDAO;
 import ro.sci.digitalCookBook.dao.db.JDBCRecipeDAO;
+import ro.sci.digitalCookBook.dao.db.JDBCuserDAO;
 import ro.sci.digitalCookBook.service.RecipeService;
+import ro.sci.digitalCookBook.service.UserService;
 
 import javax.sql.DataSource;
 
@@ -32,11 +35,24 @@ public class ApplicationConfiguration {
     }
 
     @Bean
+    public UserDAO userDAO() {
+        return new JDBCuserDAO(dbHost, "5432", dbName, dbUser, dbPassword);
+    }
+
+    @Bean
     public RecipeService recipeService() {
         RecipeService recipeService = new RecipeService();
 
         recipeService.setDao(recipeDAO());
         return recipeService;
+    }
+
+    @Bean
+    public UserService userService(){
+        UserService userService = new UserService();
+
+        userService.setDao(userDAO());
+        return userService;
     }
 
     @Bean
