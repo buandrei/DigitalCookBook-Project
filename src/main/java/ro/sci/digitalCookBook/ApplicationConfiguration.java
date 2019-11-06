@@ -41,6 +41,46 @@ public class ApplicationConfiguration {
     }
 
     @Bean
+    public PromovariDAO promovariDAO() {
+        return new JDBCPromovariDAO(dbHost, "5432", dbName, dbUser, dbPassword);
+    }
+
+    @Bean
+    public PromovariService promovariService() {
+        PromovariService promovariService = new PromovariService();
+
+        promovariService.setDao(promovariDAO());
+        return promovariService;
+    }
+
+    @Bean
+    public PromovareAleasaDAO promovareAleasaDAO() {
+        return new JDBCPromovareAleasaDAO(dbHost, "5432", dbName, dbUser, dbPassword);
+    }
+
+    @Bean
+    public PromovareAleasaService promovareAleasaService() {
+        PromovareAleasaService promovareAleasaService = new PromovareAleasaService();
+
+        promovareAleasaService.setDao(promovareAleasaDAO());
+        return promovareAleasaService;
+    }
+
+    @Bean
+    public TipPromovariDAO tipPromovariDAO() {
+        return new JDBCTipPromovareDAO(dbHost, "5432", dbName, dbUser, dbPassword);
+    }
+
+    @Bean
+    public TipPromovariService tipPromovariService() {
+        TipPromovariService tipPromovariService = new TipPromovariService();
+
+        tipPromovariService.setDao(tipPromovariDAO());
+        return tipPromovariService;
+    }
+
+
+    @Bean
     public UserDAO userDAO() {
         return new JDBCuserDAO(dbHost, "5432", dbName, dbUser, dbPassword);
     }
@@ -61,7 +101,8 @@ public class ApplicationConfiguration {
         userService.setDao(userDAO());
         return userService;
     }
-  
+
+    @Bean
     public RecipePhotoDAO recipePhotoDAO() {
         return new JDBCRecipePhotoDAO(dbHost, "5432", dbName, dbUser, dbPassword);
     }
