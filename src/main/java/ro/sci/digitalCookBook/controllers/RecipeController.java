@@ -5,8 +5,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -22,7 +24,9 @@ import ro.sci.digitalCookBook.service.*;
 import javax.validation.Valid;
 
 import java.io.*;
+import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 @Controller
 @RequestMapping("/retete")
@@ -77,13 +81,68 @@ public class RecipeController {
 
 
 
-    @RequestMapping("/view")
-    public ModelAndView view() {
-        ModelAndView modelAndView = new ModelAndView("retete/view");
-        modelAndView.addObject("recipe", new Recipe());
+    @RequestMapping("/vizualizare_reteta")
+    public ModelAndView view(int id) {
+        Recipe recipe = recipeService.get(id);
+        RecipeCategory recipeCategory = recipeCategoryService.get(recipe.getIdCategoria());
+        RecipePhoto recipePhoto = recipePhotoService.get(recipe.getIdPoza());
+        RecipeIngredient recipeIngredient= recipeIngredientsService.get(recipe.getIdRetetar());
+
+        Collection<Ingredient> ingredients = ingredientService.get(recipeIngredient.getIdIngrediente());
+
+        String cookingTime =  getTime(recipe.getTimp_gatire());
+        String preparationTime =  getTime(recipe.getTimp_preparare());
+
+        ModelAndView modelAndView = new ModelAndView("retete/vizualizare_reteta");
+        modelAndView.addObject("recipe", recipe);
+        modelAndView.addObject("recipeCategory", recipeCategory);
+        modelAndView.addObject("recipePhoto", recipePhoto);
+        modelAndView.addObject("recipeIngredient", recipeIngredient);
+        modelAndView.addObject("ingredients", ingredients);
+        modelAndView.addObject("cookingTime", cookingTime);
+        modelAndView.addObject("preparationTime", preparationTime);
+
         return modelAndView;
     }
-//
+
+    private String getTime(long minutes){
+
+        String hms = String.format("%02d:%02d", TimeUnit.MINUTES.toHours(minutes),
+                TimeUnit.MINUTES.toMinutes(minutes) - TimeUnit.HOURS.toMinutes(TimeUnit.MINUTES.toHours(minutes)));
+      return hms;
+    }
+
+
+    @GetMapping("/pdfview")
+    public String handleForexRequest(Model model, int id) {
+
+        Recipe recipe = recipeService.get(id);
+        RecipeIngredient recipeIngredient= recipeIngredientsService.get(recipe.getIdRetetar());
+
+        Collection<Ingredient> ingredients = ingredientService.get(recipeIngredient.getIdIngrediente());
+        StringBuilder listString = new StringBuilder();
+
+        for (Ingredient ingredient : ingredients)
+        {
+            listString.append(ingredient.getDenumire() + "\n");
+        }
+        ModelAndView modelAndView = new ModelAndView("retete/vizualizare_reteta");
+
+        model.addAttribute("reteta", recipe);
+        model.addAttribute("instructions", recipeIngredient);
+        model.addAttribute("ingredients",listString.toString());
+        return "pdfview";
+    }
+
+    public Recipe getRecipe(int id) {
+
+        Recipe recipe = recipeService.get(id);
+
+        return recipe;
+    }
+
+
+
     @RequestMapping("/edit_recipe")
     public ModelAndView edit(int id) {
         Recipe recipe = recipeService.get(id);
@@ -92,11 +151,15 @@ public class RecipeController {
         return modelAndView;
     }
 
+
+
     @RequestMapping("/delete")
     public String delete(int id) {
         recipeService.delete(id);
         return "redirect:/retete";
     }
+
+
 
 
 
@@ -122,8 +185,6 @@ public class RecipeController {
                 recipe.setIdRetetar(recipeIngredient.getId());
                 recipeService.save(recipe);
 
-                System.out.println(recipe.isIstutorial());
-
                 RedirectView redirectView = new RedirectView("/retete/list_all");
                 modelAndView.setView(redirectView);
             } catch (ValidationException e) {
@@ -143,6 +204,7 @@ public class RecipeController {
                 modelAndView.addObject("errors", errors);
                 modelAndView.addObject("recipeIngredients", recipeIngredient);
                 modelAndView.addObject("recipe", recipe);
+
             }
 
         } else {
@@ -165,7 +227,7 @@ public class RecipeController {
         if(!file.isEmpty()){
             try{
                 byte[] bytes = file.getBytes();
-                String path = System.getProperty("user.dir") + "/src/main/resources/static/";
+                String path = System.getProperty("user.dir") + "/src/main/resources/";
                 File dir = new File(path + File.separator + "recipe_images");
                 if(!dir.exists())
                     dir.mkdirs();

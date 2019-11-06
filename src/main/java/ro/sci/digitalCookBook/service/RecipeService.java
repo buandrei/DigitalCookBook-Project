@@ -37,7 +37,7 @@ public class RecipeService {
         try {
             recipe = dao.findById(id);
         } catch (EmptyResultDataAccessException e) {
-            LOGGER.warn("There is no recipe with id = ");
+            LOGGER.warn("Nu s-a putut sterge.Nu am gasit  ID: " + id +" .Contactati suport!");
             return false;
         }
         if (recipe != null) {
@@ -76,6 +76,15 @@ public class RecipeService {
 
         if (StringUtils.isEmpty(recipe.getLink())) {
             errors.add("Reteta nu are link!");
+        }
+
+
+        if (StringUtils.isEmpty(recipe.getTimp_gatire())) {
+            errors.add("Nu a fost completat timpul de gatire!");
+        }
+
+        if (StringUtils.isEmpty(recipe.getLink())) {
+            errors.add("Nu a fost completat timpul de preparare!");
         }
 
         if (!errors.isEmpty()) {

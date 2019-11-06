@@ -13,6 +13,9 @@ import ro.sci.digitalCookBook.dao.db.JDBCuserDAO;
 import ro.sci.digitalCookBook.service.RecipeService;
 import ro.sci.digitalCookBook.service.UserService;
 
+import org.springframework.web.servlet.ViewResolver;
+import org.springframework.web.servlet.view.BeanNameViewResolver;
+import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import ro.sci.digitalCookBook.dao.*;
 import ro.sci.digitalCookBook.dao.db.*;
 import ro.sci.digitalCookBook.service.*;
@@ -153,6 +156,23 @@ public class ApplicationConfiguration {
         ingredientService.setDao(ingredientDAO());
         return ingredientService;
     }
+
+    @Bean
+    public ViewResolver beanNameViewResolver() {
+        BeanNameViewResolver resolver = new BeanNameViewResolver();
+        return resolver;
+    }
+
+    @Bean
+    public ViewResolver jspViewResolver() {
+        InternalResourceViewResolver viewResolver = new InternalResourceViewResolver();
+        String path = System.getProperty("user.dir") + "/src/main/resources/retete/";
+
+        viewResolver.setPrefix("/WEB-INF/view/");
+        viewResolver.setSuffix(".jsp");
+        return viewResolver;
+    }
+
 
     @Bean
     public DataSource dataSource() {
