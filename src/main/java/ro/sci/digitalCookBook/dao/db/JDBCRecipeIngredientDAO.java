@@ -7,7 +7,7 @@ import ro.sci.digitalCookBook.domain.RecipeIngredient;
 import ro.sci.digitalCookBook.domain.RecipePhoto;
 
 import java.sql.*;
-import java.util.Collection;
+import java.util.*;
 
 public class JDBCRecipeIngredientDAO implements RecipeIngredientDAO {
     private static final Logger LOGGER = LoggerFactory.getLogger(JDBCRecipeDAO.class);
@@ -27,10 +27,22 @@ public class JDBCRecipeIngredientDAO implements RecipeIngredientDAO {
     }
 
 
-    private RecipePhoto extractRecipe(ResultSet rs) throws SQLException {
-        return null;
-    }
+    private RecipeIngredient extractRecipeIngredients(ResultSet rs) throws SQLException {
+        RecipeIngredient recipeIngredient = new RecipeIngredient();
 
+        recipeIngredient.setId(rs.getInt("id"));
+        recipeIngredient.setInstructiuni(rs.getString("instructiuni"));
+        Array ingredientArray = rs.getArray("idingrediente");
+        if(ingredientArray == null) {
+            return null;
+        }
+        Integer[] ingredientIntArray = (Integer[]) ingredientArray.getArray();
+        ArrayList<Integer> ingredientArrayList = new ArrayList<>();
+        Collections.addAll(ingredientArrayList, ingredientIntArray);
+        recipeIngredient.setIdIngrediente(ingredientArrayList);
+
+        return recipeIngredient;
+    }
 
     @Override
     public Collection<RecipeIngredient> getAll() {
@@ -39,8 +51,38 @@ public class JDBCRecipeIngredientDAO implements RecipeIngredientDAO {
 
     @Override
     public RecipeIngredient findById(int id) {
-        return null;
+        Connection connection = newConnection();
+
+        List<RecipeIngredient> result = new LinkedList<>();
+
+        try (ResultSet rs = connection.createStatement()
+                .executeQuery("SELECT retetar.*," +
+                        "         1 AS unu " +
+                        "   FROM retetar " +
+
+                        "   WHERE retetar.id = " + id)) {
+
+            while (rs.next()) {
+                result.add(extractRecipeIngredients(rs));
+            }
+            connection.commit();
+        } catch (SQLException ex) {
+
+            throw new RuntimeException("Error getting photo!", ex);
+        } finally {
+            try {
+                connection.close();
+            } catch (Exception ex) {
+
+            }
+        }
+
+        if (result.size() > 1) {
+            throw new IllegalStateException("Multiple photos for the ID: " + id);
+        }
+        return result.isEmpty() ? null : result.get(0);
     }
+
 
     @Override
     public RecipeIngredient update(RecipeIngredient recipeIngredient) {
@@ -59,6 +101,7 @@ public class JDBCRecipeIngredientDAO implements RecipeIngredientDAO {
 
             }
             Array ingredientArray = connection.createArrayOf("integer", recipeIngredient.getIdIngrediente().toArray());
+
             ps.setArray(1, ingredientArray);
             ps.setString(2, recipeIngredient.getInstructiuni());
 
@@ -81,7 +124,7 @@ public class JDBCRecipeIngredientDAO implements RecipeIngredientDAO {
             try {
                 connection.close();
             } catch (Exception e) {
-                System.out.println(e.getMessage());
+               // System.out.println(e.getMessage());
             }
         }
 

@@ -1,6 +1,7 @@
 package ro.sci.digitalCookBook.domain;
 
 import org.hibernate.validator.constraints.NotEmpty;
+import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.NotNull;
@@ -8,7 +9,7 @@ import java.util.Date;
 import java.util.Objects;
 
 /**
- * Used to define the information needed for an Employee.
+ * Used to define the information needed for a Recipe.
  *
  * @author Andrei Bu
 
@@ -16,7 +17,7 @@ import java.util.Objects;
 
 public class Recipe extends AbstractModel{
 
-    @NotEmpty(message = "{Denumirea retetei este obligatorie!}")
+
     private String denumire;
 
     @NotNull
@@ -29,13 +30,15 @@ public class Recipe extends AbstractModel{
     private boolean istutorial;
     private String  link;
     private int cautari;
-    private long rating;
+    private double rating;
     private int idTipPromotie;
     private int idUser;
     private int idCategoria;
     private int idPoza;
     private int idRetetar;
     private char inactiv;
+    private long timp_gatire;
+    private long timp_preparare;
 
     public String getDenumire() {
         return denumire;
@@ -93,11 +96,11 @@ public class Recipe extends AbstractModel{
         this.cautari = cautari;
     }
 
-    public long getRating() {
+    public double getRating() {
         return rating;
     }
 
-    public void setRating(long rating) {
+    public void setRating(double rating) {
         this.rating = rating;
     }
 
@@ -147,6 +150,31 @@ public class Recipe extends AbstractModel{
 
     public void setInactiv(char inactiv) {
         this.inactiv = inactiv;
+    }
+
+
+    public Date getDataAdaugarii() {
+        return dataAdaugarii;
+    }
+
+    public void setDataAdaugarii(Date dataAdaugarii) {
+        this.dataAdaugarii = dataAdaugarii;
+    }
+
+    public long getTimp_gatire() {
+        return timp_gatire;
+    }
+
+    public void setTimp_gatire(long timp_gatire) {
+        this.timp_gatire = timp_gatire;
+    }
+
+    public long getTimp_preparare() {
+        return timp_preparare;
+    }
+
+    public void setTimp_preparare(long timp_preparare) {
+        this.timp_preparare = timp_preparare;
     }
 
     @Override

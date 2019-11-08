@@ -56,6 +56,7 @@
 			</div>
 			<div class="card-group">
 				[#list recipes as recipe]
+
 				<div class="card mb-3" style="max-width: 540px;">
 					<div class="row no-gutters">
 						<div class="col-md-4">
@@ -63,7 +64,7 @@
 						</div>
 						<div class="col-md-8">
 							<div class="card-body">
-								<a href="/retete/view?id=${recipe.id?c}">
+								<a href="/retete/vizualizare_reteta?id=${recipe.id?c}">
 									<h5 class="card-title">${recipe.denumire}</h5>
 									<p class="card-text">${recipe.descriere}</p>
 									<p class="card-text"><small class="text-muted">Author: cineva</small></p>

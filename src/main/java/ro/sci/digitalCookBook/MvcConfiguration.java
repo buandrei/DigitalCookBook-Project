@@ -51,12 +51,14 @@ public class MvcConfiguration extends WebMvcConfigurerAdapter {
         messageSource.setCacheSeconds(10); //reload messages every 10 seconds
         return messageSource;
     }
+    String imagesPath = System.getProperty("user.dir") + "/src/main/resources/recipe_images/";
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("/ext-img/**")
-                .addResourceLocations("file:" + localFilesDir)
+        registry.addResourceHandler("/recipe_images/**")
+                .addResourceLocations("file:" + imagesPath)
                 .setCachePeriod(0);
     }
+
 }
 

@@ -45,10 +45,12 @@ public class RecipeIngredientsService {
 //        return false;
 //    }
 
-//    public Recipe get(int id) {
-//        LOGGER.debug("Getting recipe for id: " + id);
-//        return dao.findById(id);
-//    }
+    public RecipeIngredient get(int id) {
+        LOGGER.debug("Getting ingredients for id's: " + id);
+        return recipeIngredientDAO.findById(id);
+    }
+
+
 
     public void save(RecipeIngredient recipeIngredient) throws ValidationException {
         LOGGER.debug("Saving: " + recipeIngredient);
