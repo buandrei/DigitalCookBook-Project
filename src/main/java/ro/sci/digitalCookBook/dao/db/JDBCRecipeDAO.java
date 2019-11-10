@@ -88,7 +88,7 @@ public class JDBCRecipeDAO implements RecipeDAO {
         recipe.setId(rs.getInt("id"));
         recipe.setName(rs.getString("denumire"));
         recipe.setPortions(rs.getLong("portii"));
-        recipe.setData_adaugarii(new Date(rs.getTimestamp("data_adaugarii").getTime()));
+        recipe.setAddDate(new Date(rs.getTimestamp("data_adaugarii").getTime()));
         recipe.setDescription(rs.getString("descriere"));
         if (rs.getString("istutorial") == "D") {
             recipe.setIstutorial(true);
@@ -170,7 +170,7 @@ public class JDBCRecipeDAO implements RecipeDAO {
         recipe.setId(rs.getInt("id"));
         recipe.setName(rs.getString("denumire"));
         recipe.setPortions(rs.getLong("portii"));
-        recipe.setData_adaugarii(new Date(rs.getTimestamp("data_adaugarii").getTime()));
+        recipe.setAddDate(new Date(rs.getTimestamp("data_adaugarii").getTime()));
         recipe.setDescription(rs.getString("descriere"));
         if (rs.getString("istutorial") == "D") {
             recipe.setIstutorial(true);

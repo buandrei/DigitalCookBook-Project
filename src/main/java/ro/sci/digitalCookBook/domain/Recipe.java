@@ -86,13 +86,6 @@ public class Recipe extends AbstractModel{
         this.portions = portions;
     }
 
-    public Date getData_adaugarii() {
-        return addDate;
-    }
-
-    public void setData_adaugarii(Date data_adaugarii) {
-        this.addDate = data_adaugarii;
-    }
 
     public String getDescription() {
         return description;
