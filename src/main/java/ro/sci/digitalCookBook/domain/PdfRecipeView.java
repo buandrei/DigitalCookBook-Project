@@ -45,7 +45,7 @@ public class PdfRecipeView extends AbstractView {
         title.setTextAlignment(TextAlignment.CENTER);
         pdfDocument.add(title);
 
-        Paragraph recipeName = new Paragraph(recipe.getDenumire());
+        Paragraph recipeName = new Paragraph(recipe.getName());
         recipeName.setFont(PdfFontFactory.createFont(FontConstants.HELVETICA));
         recipeName.setFontSize(20f);
         recipeName.setBold();
@@ -53,7 +53,7 @@ public class PdfRecipeView extends AbstractView {
         recipeName.setItalic();
         pdfDocument.add(recipeName);
 
-        Paragraph portions = new Paragraph("Portii: " + recipe.getPortii());
+        Paragraph portions = new Paragraph("Portii: " + recipe.getPortions());
         portions.setFontSize(18f);
         pdfDocument.add(portions);
 
@@ -77,7 +77,7 @@ public class PdfRecipeView extends AbstractView {
 
 
 
-        Paragraph instructions = new Paragraph(extractText(recipeIngredient.getInstructiuni()));
+        Paragraph instructions = new Paragraph(extractText(recipeIngredient.getInstructions()));
         instructions.setFirstLineIndent(25);
 
         pdfDocument.add(instructions);

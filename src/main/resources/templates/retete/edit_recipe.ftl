@@ -35,13 +35,8 @@
 				<li class="nav-item dropdown">
 					<a class="nav-link dropdown-toggle " style="padding:0" href="#" id="dropdown03" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Retete</a>
 					<div class="dropdown-menu" style="top:30px" aria-labelledby="dropdown03">
-
-								<a class="dropdown-item" href="/retete/list_all">Cautare simpla</a>
-
-
-								<a class="dropdown-item" href="/retete/search_ingredients">Cauta dupa ingrediente specifice</a>
-
-
+						<a class="dropdown-item" href="/retete/list_all">Cautare simpla</a>
+						<a class="dropdown-item" href="/retete/search_ingredients">Cauta dupa ingrediente specifice</a>
 					</div>
 				</li>
 				<li class="nav-item"><a class="nav-link" href="/promotion">Promovare</a></li>
@@ -51,11 +46,11 @@
 			</ul>
 		</div>
 		</nav>
-<!--	BODY -->
 
-		<form  name="saveForm"  method="post" action="/retete/salvare_reteta" id="recipeForm" enctype="multipart/form-data">
+<!--	BODY -->
+		<form  name="saveForm"  method="post" action="/retete/salvare_reteta_editata" id="editForm" enctype="multipart/form-data">
 			<div class="card">
-				<h2 class="card-header text-center"><b>Incarca o reteta! Este gratis!</b></h2>
+				<h3 class="card-header text-center"><b>Editare reteta <br>${recipe.name!''}</b></h3>
 				<small><p style="margin:0" class="font-weight-lighter text-center font-italic">campurile marcate cu * sunt obligatorii</p></small>
 				<div class="card">
 					<h4 class="text-center bg-info card-header">Informatii reteta</h3>
@@ -80,13 +75,11 @@
 							<br>
 						</div>
 
-
 						<div class="row">
 							 <div class="col-lg-6">
 								<div class="form-group">
 									<label class="control-label" for="categorie_reteta">Categoria  *</label>
 									<select name="category_selection" class="form-control" id="categorie_reteta">
-										<option value="0"><font color="red">Va rugam selectati din lista o categorie </font></option>
 										<#list categories as categorii>
 										<option value="${categorii.id!''}"> ${categorii.name!''}</option>
 										</#list>
@@ -127,7 +120,7 @@
 
 						</div>
 						<div class="form-check">
-							<input  class="form-check-input" name="istutorial" value="" type="checkbox" id="istutorial" >
+							<input  class="form-check-input" name="istutorial" value="${recipe.istutorial?c}" type="checkbox" id="istutorial" >
 							<label id="istutorial_checkbox"   class="form-check-label" for="istutorial">
 							Este tutorial de gatit pentru incepatori?
 							</label>
@@ -136,21 +129,31 @@
 					<div class="card">
 						<h4 class="text-center bg-info card-header">Media</h3>
 						<div class="card-body">
-							<div class="form-group">
-								<label for="link_input">Link videoclip *</label>
+							<div class="form-group text-center col-xs-12 text-center">
+								<p><b>Clip actual</b></p>
+								<div class="w-50 embed-responsive embed-responsive-16by9 edit-clip" >
+									<iframe class="embed-responsive-item" src="${recipe.link!''}" allowfullscreen></iframe>
+								</div>
+							</div>
+							<div class="form-group text-center">
+								<label for="link_input"><b>Schimba videoclip*</b></label>
 								<input  name="link" value="${recipe.link!''}" type="text" class="form-control" id="link_input" aria-describedby="Denumire" placeholder="Link catre videoclip de pe o platforma video. Ex: https://www.youtube.com/watch?v=wX1nIIcUzgc">
 							</div>
 
-
-							<div class="input-group mb-3">
-
-								<div class="custom-file">
-									<input onchange="ValidateRecipeImageSize(this)" name="file"  accept="image/*" type="file" class="custom-file-input" id="recipe_picture">
-									<label class="custom-file-label" for="recipe_picture">Alege imagine de prezentare  *</label>
+							<div class="form-group text-center col-xs-12 text-center">
+								<p><b>Imagine actuala</b></p>
+								<div class="block1 w-100">
+									<img style="max-height:240px;" src="data:image/*;base64, ${recipePhoto}" class="img-fluid" alt="Responsive image">
 								</div>
-
 							</div>
 
+							<div class="input-group mb-3">
+								<div class="custom-file">
+									<input onchange="ValidateRecipeImageSize(this)" name="file"  accept="image/*" type="file" class="custom-file-input" id="recipe_picture_edit">
+									<label class="font-weight-bold custom-file-label" for="recipe_picture">Schimba imaginea de prezentare  *</label>
+								</div>
+							</div>
+									<input type="hidden" value="${recipe.idPoza!''}" name="idPoza">
 							<small><p style="margin:0" class="font-weight-lighter text-center font-italic">marimea imaginii nu trebuie sa depaseasca 2 MB</p></small>
 
 							<font color="red"><b><span id="fileError"></span></b></font>
@@ -176,7 +179,7 @@
 								</#list>
 
 							</div>
-							<input id ="ingredientsId" name="ingredientsId" type="hidden" value="${recipeIngredients.ingredientsId!''}"/>
+							<input id ="ingredientsId" name="ingredientsId" type="hidden" value="${ingredientArrayValue}"/>
 						</div>
 
 					<div class="card">
@@ -193,6 +196,8 @@
 						<#if recipe.id??>
 							<input name="id" type="hidden" value="${recipe.id?c}"/>
 						</#if>
+							<input name="photoId" type="hidden" value="${recipe.photoId!''}">
+							<input name="recipeId" type="hidden" value="${recipe.recipeId!''}">
 					</div>
 				</div>
 			</div>
@@ -202,8 +207,8 @@
 </div>
 
 <#include '/bootstrap_footer.ftl'>
+<script src="/js/edit_recipe.js"></script>
 <script type="text/javascript">
-
 function toggleArea1() {
     var instructiuniTextArea;
 	if(!instructiuniTextArea) {
@@ -213,7 +218,6 @@ function toggleArea1() {
 		instructiuniTextArea = null;
 	}
 }
-
 bkLib.onDomLoaded(function() { toggleArea1(); });
 </script>
 </body>
