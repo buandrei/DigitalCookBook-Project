@@ -104,3 +104,32 @@ function verifyTutorialCheckbox() {
     document.getElementById("istutorial").value = document.getElementById("istutorial").checked;
 
 }
+
+function setInputTypeValue(){
+   var radios = document.getElementsByName('typeCheckboxes');
+
+    for (var i = 0, length = radios.length; i < length; i++){
+        if (radios[i].checked){
+            document.getElementById("idTipPromovare").value = radios[i].value;
+
+            break;
+        }
+    }
+}
+
+function getInputTypeValue(){
+    if(document.getElementById("idTipPromovare").value == 0){
+        alert("Nu ati selectat nici o optiune!");
+        return false;
+    }
+    return true;
+}
+
+
+
+$(document).ready(function() {
+		$("#promoForm").on("submit", function(){
+			setInputTypeValue();
+			return getInputTypeValue();
+	   })
+});

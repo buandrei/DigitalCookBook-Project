@@ -57,19 +57,6 @@ public class ApplicationConfiguration {
     }
 
     @Bean
-    public PromovareAleasaDAO promovareAleasaDAO() {
-        return new JDBCPromovareAleasaDAO(dbHost, "5432", dbName, dbUser, dbPassword);
-    }
-
-    @Bean
-    public PromovareAleasaService promovareAleasaService() {
-        PromovareAleasaService promovareAleasaService = new PromovareAleasaService();
-
-        promovareAleasaService.setDao(promovareAleasaDAO());
-        return promovareAleasaService;
-    }
-
-    @Bean
     public TipPromovariDAO tipPromovariDAO() {
         return new JDBCTipPromovareDAO(dbHost, "5432", dbName, dbUser, dbPassword);
     }

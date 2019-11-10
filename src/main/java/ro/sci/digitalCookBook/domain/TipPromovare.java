@@ -3,7 +3,7 @@ package ro.sci.digitalCookBook.domain;
 import java.util.Objects;
 
 public class TipPromovare extends AbstractModel {
-    private int id;
+
     private String denumire;
     private int perioada;
     private String descriere;
@@ -18,14 +18,6 @@ public class TipPromovare extends AbstractModel {
         this.perioada=perioada;
         this.descriere=descriere;
         this.sumaPromovare=sumaPromovare;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public String getDenumire() {
@@ -63,7 +55,6 @@ public class TipPromovare extends AbstractModel {
     @Override
     public String toString() {
         return "TipPromovare{" +
-                "id=" + id +
                 ", denumire='" + denumire + '\'' +
                 ", perioada=" + perioada +
                 ", descriere='" + descriere + '\'' +
@@ -76,7 +67,7 @@ public class TipPromovare extends AbstractModel {
         if (this == o) return true;
         if (!(o instanceof TipPromovare)) return false;
         TipPromovare that = (TipPromovare) o;
-        return id == that.id &&
+        return
                 perioada == that.perioada &&
                 sumaPromovare == that.sumaPromovare &&
                 Objects.equals(denumire, that.denumire) &&
@@ -85,6 +76,6 @@ public class TipPromovare extends AbstractModel {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, denumire, perioada, descriere, sumaPromovare);
+        return Objects.hash( denumire, perioada, descriere, sumaPromovare);
     }
 }

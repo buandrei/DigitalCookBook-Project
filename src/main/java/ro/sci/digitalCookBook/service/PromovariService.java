@@ -1,10 +1,8 @@
 package ro.sci.digitalCookBook.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import ro.sci.digitalCookBook.dao.PromovareAleasaDAO;
 import ro.sci.digitalCookBook.dao.PromovariDAO;
 import ro.sci.digitalCookBook.dao.TipPromovariDAO;
-import ro.sci.digitalCookBook.domain.PromovareAleasa;
 import ro.sci.digitalCookBook.domain.Promovari;
 import ro.sci.digitalCookBook.domain.TipPromovare;
 
@@ -16,19 +14,17 @@ import static java.time.LocalDate.now;
 public class PromovariService {
     @Autowired
     private PromovariDAO daoPromovari;
-    private PromovareAleasaDAO daoPromovareAleasa;
+    @Autowired
     private TipPromovariDAO daoTipPromovare;
 
-    public Promovari addPromovare(PromovareAleasa model) {
-        Promovari promovare=new Promovari();
-        promovare.setDataAdaugare(extragereDatePromovare(model).getDataAdaugare());
-        promovare.setDataFinal(extragereDatePromovare(model).getDataFinal());
+    public void addPromovare(Promovari promotion, TipPromovare promotionType) {
+        promotion.setDataAdaugare(LocalDateTime.now());
+        promotion.setDataFinal(promotion.getDataAdaugare().plusDays(promotionType.getPerioada()));
         //promovare.setIdUser();
-        promovare.setStarePromovare(true);
-        promovare.setIdTipPromovare(extragereDatePromovare(model).getIdTipPromovare());
-        if (validarePromovare(promovare)){daoPromovari.add(promovare);}
-        return promovare;
+        //promotion.setStarePromovare(true);
+        if (validarePromovare(promotion)){daoPromovari.add(promotion);}
     }
+
 
     //in cazul unei promovari active, acesta se modifica doar la un tip promovare superior
     public Promovari modificareIdTipPromovare(int idPromovare, int idNouTipPromovare){
@@ -79,15 +75,6 @@ public class PromovariService {
         }*/
         return false;
     }
-
-    private Promovari extragereDatePromovare(PromovareAleasa promovareAleasa){
-        Promovari promovari = new Promovari();
-        promovari.setDataAdaugare(LocalDateTime.now());
-        promovari.setDataFinal(promovari.getDataAdaugare().plusDays(daoPromovareAleasa.findTipByName(promovareAleasa).getPerioada()));
-        promovari.setIdTipPromovare(daoPromovareAleasa.findTipByName(promovareAleasa).getId());
-        return promovari;
-    }
-
 
     public PromovariDAO getDao() {
         return daoPromovari;

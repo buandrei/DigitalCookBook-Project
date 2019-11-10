@@ -308,6 +308,25 @@ public class JDBCRecipeDAO implements RecipeDAO {
         return emdedLink;
     }
 
+ /*   public void addIdPromotion(Recipe recipe){
+        Connection conn = newConnection();
+        try {
+            System.out.println("ID reteta "+recipe.getId());
+            PreparedStatement ps1 = conn.prepareStatement("UPDATE retete SET idpromotie=? WHERE id = ?;");
+            ps1.setInt(1, id);
+            ps1.setInt(2, recipe.getId());
+            ps1.executeUpdate();
+            conn.commit();
+        } catch (SQLException ex) {
+            throw new RuntimeException("An error has occured while saving into DB!", ex);
+        } finally {
+            try {
+                conn.close();
+            } catch (Exception ex) {
+            }
+        }
+
+    }*/
 
     @Override
     public boolean delete(Recipe model) {
