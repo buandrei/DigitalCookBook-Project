@@ -56,14 +56,14 @@ public class ApplicationConfiguration {
     }
 
     @Bean
-
     public UserService userService(){
         UserService userService = new UserService();
 
         userService.setDao(userDAO());
         return userService;
     }
-  
+
+    @Bean
     public RecipePhotoDAO recipePhotoDAO() {
         return new JDBCRecipePhotoDAO(dbHost, "5432", dbName, dbUser, dbPassword);
     }
