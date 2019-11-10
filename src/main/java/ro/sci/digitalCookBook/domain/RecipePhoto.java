@@ -1,20 +1,43 @@
 package ro.sci.digitalCookBook.domain;
 
+import java.util.Arrays;
+import java.util.Base64;
+
 public class RecipePhoto extends AbstractModel{
-    private String cale_fisier;
 
-    public String getCale_fisier() {
-        return cale_fisier;
+    private byte[] content;
+    private String fileName;
+
+
+    public byte[] getContent() {
+
+        return this.content;
+
     }
 
-    public void setCale_fisier(String cale_fisier) {
-        this.cale_fisier = cale_fisier;
+    public String getEncodedContent(){
+        byte[] encode = Base64.getEncoder().encode(this.content);
+        return new String(encode);
     }
+
+    public void setContent(byte[] content)
+    {
+        this.content = content;
+    }
+
+    public String getFileName() {
+        return fileName;
+    }
+
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
+    }
+
 
     @Override
     public String toString() {
         return "RecipePhoto{" +
-                "cale_fisier='" + cale_fisier + '\'' +
+                ", fileName='" + fileName + '\'' +
                 '}';
     }
 }

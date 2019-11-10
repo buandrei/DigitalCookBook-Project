@@ -2,12 +2,12 @@
     display:block;
 }
 
-
 .navbar-nav {
     display:table;
     width:100%;
     margin: 0;
 }
+
 .navbar-nav > li {
     float:none;
     display:table-cell;
@@ -18,4 +18,43 @@
     min-width:600px;
     text-align:center;
     padding:5px;
+}
+
+.rating_checked{
+    color: #cc3300;
+}
+
+.custom-file-input ~ .custom-file-label::after {
+    content: "Adauga imagine";
+}
+
+.zoom-image {
+  transition: transform .2s;
+    z-index:99;
+}
+
+.zoom-image:hover {
+
+  transform: scale(1.2);
+}
+
+.give-rating-div{
+
+     transition: opacity 500ms;
+     opacity: 1;
+}
+
+.hideBlock{
+    display:none;
+}
+
+.edit-clip{
+  margin: 0 auto;
+}
+
+.card-group-padding{
+    padding:10px;
+}
+.card-margin{
+    margin: 0 7px;
 }

@@ -1,12 +1,11 @@
 package ro.sci.digitalCookBook.domain;
 
-import org.hibernate.validator.constraints.NotEmpty;
-import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.NotNull;
 import java.util.Date;
 import java.util.Objects;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Used to define the information needed for a Recipe.
@@ -18,58 +17,89 @@ import java.util.Objects;
 public class Recipe extends AbstractModel{
 
 
-    private String denumire;
+    private String name;
 
     @NotNull
-    private long portii;
+    private long portions;
 
     @DateTimeFormat(pattern ="dd/MM/yyyy")
-    private Date dataAdaugarii;
+    private Date addDate;
 
-    private String descriere;
+    private String description;
     private boolean istutorial;
     private String  link;
-    private int cautari;
+    private int accessCount;
     private double rating;
     private int idTipPromotie;
-    private int idUser;
+    private User user;
+    private RecipeCategory recipeCategory;
     private int idCategoria;
-    private int idPoza;
-    private int idRetetar;
+
+    private RecipePhoto photo;
+    private int photoId;
+
+    private RecipeIngredient recipeIngredient;
+    private int recipeId;
+
     private char inactiv;
-    private long timp_gatire;
-    private long timp_preparare;
+    private long cookingTime;
+    private long preparationTime;
 
-    public String getDenumire() {
-        return denumire;
+
+    public int getRecipeId() {
+        return recipeId;
     }
 
-    public void setDenumire(String denumire) {
-        this.denumire = denumire;
+    public void setRecipeId(int recipeId) {
+        this.recipeId = recipeId;
     }
 
-    public long getPortii() {
-        return portii;
+    public int getPhotoId() {
+        return photoId;
     }
 
-    public void setPortii(long portii) {
-        this.portii = portii;
+    public void setPhotoId(int photoId) {
+        this.photoId = photoId;
+    }
+
+    public int getIdCategoria() {
+        return idCategoria;
+    }
+
+    public void setIdCategoria(int idCategoria) {
+        this.idCategoria = idCategoria;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public long getPortions() {
+        return portions;
+    }
+
+    public void setPortions(long portions) {
+        this.portions = portions;
     }
 
     public Date getData_adaugarii() {
-        return dataAdaugarii;
+        return addDate;
     }
 
     public void setData_adaugarii(Date data_adaugarii) {
-        this.dataAdaugarii = data_adaugarii;
+        this.addDate = data_adaugarii;
     }
 
-    public String getDescriere() {
-        return descriere;
+    public String getDescription() {
+        return description;
     }
 
-    public void setDescriere(String descriere) {
-        this.descriere = descriere;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public boolean isIstutorial() {
@@ -88,12 +118,12 @@ public class Recipe extends AbstractModel{
         this.link = link;
     }
 
-    public int getCautari() {
-        return cautari;
+    public int getAccessCount() {
+        return accessCount;
     }
 
-    public void setCautari(int cautari) {
-        this.cautari = cautari;
+    public void setAccessCount(int accessCount) {
+        this.accessCount = accessCount;
     }
 
     public double getRating() {
@@ -112,36 +142,36 @@ public class Recipe extends AbstractModel{
         this.idTipPromotie = idTipPromotie;
     }
 
-    public int getIdUser() {
-        return idUser;
+    public User getUser() {
+        return user;
     }
 
-    public void setIdUser(int idUser) {
-        this.idUser = idUser;
+    public void setUser(User user) {
+        this.user = user;
     }
 
-    public int getIdCategoria() {
-        return idCategoria;
+    public RecipeCategory getRecipeCategory() {
+        return recipeCategory;
     }
 
-    public void setIdCategoria(int idCategoria) {
-        this.idCategoria = idCategoria;
+    public void setRecipeCategory(RecipeCategory recipeCategory) {
+        this.recipeCategory = recipeCategory;
     }
 
-    public int getIdPoza() {
-        return idPoza;
+    public RecipePhoto getPhoto() {
+        return photo;
     }
 
-    public void setIdPoza(int idPoza) {
-        this.idPoza = idPoza;
+    public void setPhoto(RecipePhoto photo) {
+        this.photo = photo;
     }
 
-    public int getIdRetetar() {
-        return idRetetar;
+    public RecipeIngredient getRecipeIngredient() {
+        return recipeIngredient;
     }
 
-    public void setIdRetetar(int idRetetar) {
-        this.idRetetar = idRetetar;
+    public void setRecipeIngredient(RecipeIngredient recipeIngredient) {
+        this.recipeIngredient = recipeIngredient;
     }
 
     public char getInactiv() {
@@ -153,47 +183,53 @@ public class Recipe extends AbstractModel{
     }
 
 
-    public Date getDataAdaugarii() {
-        return dataAdaugarii;
+    public Date getAddDate() {
+        return addDate;
     }
 
-    public void setDataAdaugarii(Date dataAdaugarii) {
-        this.dataAdaugarii = dataAdaugarii;
+    public void setAddDate(Date addDate) {
+        this.addDate = addDate;
     }
 
-    public long getTimp_gatire() {
-        return timp_gatire;
+    public long getCookingTime() {
+        return cookingTime;
     }
 
-    public void setTimp_gatire(long timp_gatire) {
-        this.timp_gatire = timp_gatire;
+    public void setCookingTime(long cookingTime) {
+        this.cookingTime = cookingTime;
     }
 
-    public long getTimp_preparare() {
-        return timp_preparare;
+    public long getPreparationTime() {
+        return preparationTime;
     }
 
-    public void setTimp_preparare(long timp_preparare) {
-        this.timp_preparare = timp_preparare;
+    public void setPreparationTime(long preparationTime) {
+        this.preparationTime = preparationTime;
     }
+
+
 
     @Override
     public String toString() {
         return "Recipe{" +
-                "denumire='" + denumire + '\'' +
-                ", portii='" + portii + '\'' +
-                ", data_adaugarii=" + dataAdaugarii +
-                ", descriere='" + descriere + '\'' +
+                "name='" + name + '\'' +
+                ", portions=" + portions +
+                ", addDate=" + addDate +
+                ", description='" + description + '\'' +
                 ", istutorial=" + istutorial +
                 ", link='" + link + '\'' +
-                ", cautari='" + cautari + '\'' +
+                ", accessCount=" + accessCount +
                 ", rating=" + rating +
                 ", idTipPromotie=" + idTipPromotie +
-                ", idUser=" + idUser +
-                ", idCategoria=" + idCategoria +
-                ", idPoza=" + idPoza +
-                ", idRetetar=" + idRetetar +
+                ", user=" + user +
+                ", recipeCategory=" + recipeCategory +
+                ", photo=" + photo +
+                ", photoId=" + photoId +
+                ", recipeIngredient=" + recipeIngredient +
                 ", inactiv=" + inactiv +
+                ", cookingTime=" + cookingTime +
+                ", preparationTime=" + preparationTime +
+                ", idCategoria=" + idCategoria +
                 '}';
     }
 
@@ -202,15 +238,15 @@ public class Recipe extends AbstractModel{
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Recipe other = (Recipe) o;
-        if (dataAdaugarii == null) {
-            if (other.dataAdaugarii != null)
+        if (addDate == null) {
+            if (other.addDate != null)
                 return false;
-        } else if (!dataAdaugarii.equals(other.dataAdaugarii))
+        } else if (!addDate.equals(other.addDate))
             return false;
-        if (descriere == null) {
-            if (other.descriere != null)
+        if (description == null) {
+            if (other.description != null)
                 return false;
-        } else if (!descriere.equals(other.descriere))
+        } else if (!description.equals(other.description))
             return false;
         if (istutorial != other.istutorial)
             return false;
@@ -221,6 +257,6 @@ public class Recipe extends AbstractModel{
 
     @Override
     public int hashCode() {
-        return Objects.hash(denumire, portii, dataAdaugarii, descriere, istutorial, link, cautari, rating, idTipPromotie, idUser, idCategoria, idPoza, idRetetar, inactiv);
+        return Objects.hash(name, portions, addDate, description, istutorial, link, accessCount, rating, idTipPromotie, user, recipeCategory, photo, recipeIngredient, inactiv);
     }
 }

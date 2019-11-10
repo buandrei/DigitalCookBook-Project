@@ -10,5 +10,6 @@ public interface RecipeDAO extends BaseDAO<Recipe> {
 
     Collection<Recipe> searchByName(String querry);
 
+    boolean giveRating(Recipe recipe, long rating);
 
 }

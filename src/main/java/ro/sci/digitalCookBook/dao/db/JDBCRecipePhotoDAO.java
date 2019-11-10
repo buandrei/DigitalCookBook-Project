@@ -5,6 +5,8 @@ import org.slf4j.LoggerFactory;
 import ro.sci.digitalCookBook.dao.RecipePhotoDAO;
 import ro.sci.digitalCookBook.domain.RecipePhoto;
 
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 import java.sql.*;
 import java.util.Collection;
 import java.util.LinkedList;
@@ -32,7 +34,8 @@ public class JDBCRecipePhotoDAO implements RecipePhotoDAO {
         RecipePhoto recipePhoto = new RecipePhoto();
 
         recipePhoto.setId(rs.getInt("id"));
-        recipePhoto.setCale_fisier(rs.getString("cale_fisier"));
+        recipePhoto.setContent(rs.getBytes("content"));
+        recipePhoto.setFileName(rs.getString("file_name"));
 
         return recipePhoto;
     }
@@ -104,20 +107,21 @@ public class JDBCRecipePhotoDAO implements RecipePhotoDAO {
             PreparedStatement ps = null;
 
             if (recipePhoto.getId() > 0) {
-                //TODO
-                ps = connection.prepareStatement( " UPDATE poze SET cale_fisier=? WHERE id = ? RETURNING id;");
+
+                ps = connection.prepareStatement( " UPDATE poze SET content=?,file_name=? WHERE id = ? RETURNING id;");
 
             } else {
                 ps = connection.prepareStatement(
-                        "INSERT INTO poze (cale_fisier) VALUES (?) RETURNING id;"
+                        "INSERT INTO poze (content,file_name) VALUES (?, ?) RETURNING id;"
                 );
 
             }
 
-            ps.setString(1, recipePhoto.getCale_fisier());
+            ps.setBytes(1, recipePhoto.getContent());
+            ps.setString(2, recipePhoto.getFileName());
 
             if (recipePhoto.getId() > 0) {
-                ps.setInt(2, recipePhoto.getId());
+                ps.setInt(3, recipePhoto.getId());
             }
 
             ResultSet rs = ps.executeQuery();

@@ -8,8 +8,6 @@ import ro.sci.digitalCookBook.dao.RecipeIngredientDAO;
 import ro.sci.digitalCookBook.domain.RecipeIngredient;
 import ro.sci.digitalCookBook.exception.ValidationException;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -55,17 +53,18 @@ public class RecipeIngredientsService {
     public void save(RecipeIngredient recipeIngredient) throws ValidationException {
         LOGGER.debug("Saving: " + recipeIngredient);
 
+
         validate(recipeIngredient);
         recipeIngredientDAO.update(recipeIngredient);
     }
 
     private void validate(RecipeIngredient recipeIngredient) throws ValidationException {
         List<String> errors = new LinkedList<String>();
-        if (recipeIngredient.getIdIngrediente().size() == 0) {
+        if (recipeIngredient.getIngredientsId().size() == 0) {
             errors.add("Nu au fost alese ingrediente!");
         }
 
-        if(StringUtils.isEmpty(recipeIngredient.getInstructiuni())){
+        if(StringUtils.isEmpty(recipeIngredient.getInstructions())){
             errors.add("Nu a fost completata descrierea!");
         }
 
