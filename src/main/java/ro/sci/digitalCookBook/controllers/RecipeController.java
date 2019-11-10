@@ -1,6 +1,5 @@
 package ro.sci.digitalCookBook.controllers;
 
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +19,6 @@ import ro.sci.digitalCookBook.exception.ValidationException;
 import ro.sci.digitalCookBook.service.*;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import java.io.*;
@@ -52,7 +50,7 @@ public class RecipeController {
     @RequestMapping(value = {"/list_all", "/list_all/{page}"}, method = RequestMethod.GET)
     public ModelAndView list(@PathVariable(required = false, name = "page") String page,
                              HttpServletRequest request) {
-        ModelAndView result = new ModelAndView();
+        ModelAndView modelAndView = new ModelAndView();
         Collection<Recipe> recipes = recipeService.getAll();
         PagedListHolder<Recipe> pagedRecipeList;
 
@@ -60,26 +58,39 @@ public class RecipeController {
             List<Recipe> recipeList = new ArrayList<>(recipes);
             pagedRecipeList = new PagedListHolder<Recipe>();
             pagedRecipeList.setSource(recipeList);
-            pagedRecipeList.setPageSize(20);
+            pagedRecipeList.setPageSize(2); // how many objects to display in one page
             request.getSession().setAttribute("recipeList", pagedRecipeList);
+
         }else if(page.equals("prev")){
             pagedRecipeList = (PagedListHolder<Recipe>)request.getSession().getAttribute("recipeList");
+            if (checkPageListSessionAttributeIfNull(modelAndView, pagedRecipeList)) return modelAndView;
             pagedRecipeList.previousPage();
         }else if(page.equals("next")){
             pagedRecipeList = (PagedListHolder<Recipe>)request.getSession().getAttribute("recipeList");
+            if (checkPageListSessionAttributeIfNull(modelAndView, pagedRecipeList)) return modelAndView;
             pagedRecipeList.nextPage();
         }else{
             int pageNr = Integer.parseInt(page);
             pagedRecipeList = (PagedListHolder<Recipe>)request.getSession().getAttribute("recipeList");
+            if (checkPageListSessionAttributeIfNull(modelAndView, pagedRecipeList)) return modelAndView;
             pagedRecipeList.setPage(pageNr - 1);
         }
 
 
-        result.addObject("recipes", recipes);
-        result.addObject("recipePageList", pagedRecipeList);
+        modelAndView.addObject("recipes", recipes);
+        modelAndView.addObject("recipePageList", pagedRecipeList);
 
-        result.setViewName("/retete/list_all");
-        return result;
+        modelAndView.setViewName("/retete/list_all");
+        return modelAndView;
+    }
+
+    private boolean checkPageListSessionAttributeIfNull(ModelAndView modelAndView, PagedListHolder<Recipe> pagedRecipeList) {
+        if (pagedRecipeList == null) {
+            RedirectView redirectView = new RedirectView("/retete/list_all");
+            modelAndView.setView(redirectView);
+            return true;
+        }
+        return false;
     }
 
     @RequestMapping("/vizualizare_reteta")
