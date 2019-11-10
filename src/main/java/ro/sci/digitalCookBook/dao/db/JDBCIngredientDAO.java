@@ -42,7 +42,7 @@ public class JDBCIngredientDAO implements IngredientDAO {
         Ingredient  ingredient = new Ingredient();
 
         ingredient.setId(rs.getInt("id"));
-        ingredient.setDenumire(rs.getString("denumire"));
+        ingredient.setName(rs.getString("denumire"));
 
         return ingredient;
 

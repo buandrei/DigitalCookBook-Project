@@ -4,30 +4,30 @@ import java.util.ArrayList;
 
 public class RecipeIngredient extends AbstractModel{
 
-    private String instructiuni;
-    private ArrayList<Integer> idIngrediente;
+    private String instructions;
+    private ArrayList<Integer> ingredientsId;
 
-    public String getInstructiuni() {
-        return instructiuni;
+    public String getInstructions() {
+        return instructions;
     }
 
-    public void setInstructiuni(String instructiuni) {
-        this.instructiuni = instructiuni;
+    public void setInstructions(String instructions) {
+        this.instructions = instructions;
     }
 
-    public ArrayList getIdIngrediente() {
-        return idIngrediente;
+    public ArrayList getIngredientsId() {
+        return ingredientsId;
     }
 
-    public void setIdIngrediente(ArrayList idIngrediente) {
-        this.idIngrediente = idIngrediente;
+    public void setIngredientsId(ArrayList ingredientsId) {
+        this.ingredientsId = ingredientsId;
     }
 
     @Override
     public String toString() {
         return "RecipeIngredients{" +
-                "instructiuni='" + instructiuni + '\'' +
-                ", idIngrediente=" + idIngrediente +
+                "instructions='" + instructions + '\'' +
+                ", ingredientsId=" + ingredientsId +
                 '}';
     }
 }

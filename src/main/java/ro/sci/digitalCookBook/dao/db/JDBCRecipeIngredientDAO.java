@@ -4,7 +4,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ro.sci.digitalCookBook.dao.RecipeIngredientDAO;
 import ro.sci.digitalCookBook.domain.RecipeIngredient;
-import ro.sci.digitalCookBook.domain.RecipePhoto;
 
 import java.sql.*;
 import java.util.*;
@@ -31,15 +30,15 @@ public class JDBCRecipeIngredientDAO implements RecipeIngredientDAO {
         RecipeIngredient recipeIngredient = new RecipeIngredient();
 
         recipeIngredient.setId(rs.getInt("id"));
-        recipeIngredient.setInstructiuni(rs.getString("instructiuni"));
+        recipeIngredient.setInstructions(rs.getString("instructiuni"));
         Array ingredientArray = rs.getArray("idingrediente");
-        if(ingredientArray == null) {
+        if (ingredientArray == null) {
             return null;
         }
         Integer[] ingredientIntArray = (Integer[]) ingredientArray.getArray();
         ArrayList<Integer> ingredientArrayList = new ArrayList<>();
         Collections.addAll(ingredientArrayList, ingredientIntArray);
-        recipeIngredient.setIdIngrediente(ingredientArrayList);
+        recipeIngredient.setIngredientsId(ingredientArrayList);
 
         return recipeIngredient;
     }
@@ -90,9 +89,10 @@ public class JDBCRecipeIngredientDAO implements RecipeIngredientDAO {
         try {
             PreparedStatement ps = null;
 
+
             if (recipeIngredient.getId() > 0) {
-                //TODO the update part
-                ps = connection.prepareStatement(" ");
+
+                ps = connection.prepareStatement( " UPDATE retetar SET idingrediente=?,instructiuni=? WHERE id = ? RETURNING id;");
 
             } else {
                 ps = connection.prepareStatement(
@@ -100,13 +100,14 @@ public class JDBCRecipeIngredientDAO implements RecipeIngredientDAO {
                 );
 
             }
-            Array ingredientArray = connection.createArrayOf("integer", recipeIngredient.getIdIngrediente().toArray());
+            Array ingredientArray = connection.createArrayOf("integer", recipeIngredient.getIngredientsId().toArray());
+
 
             ps.setArray(1, ingredientArray);
-            ps.setString(2, recipeIngredient.getInstructiuni());
+            ps.setString(2, recipeIngredient.getInstructions());
 
             if (recipeIngredient.getId() > 0) {
-                ps.setInt(2, recipeIngredient.getId());
+                ps.setInt(3, recipeIngredient.getId());
             }
 
             ResultSet rs = ps.executeQuery();
@@ -124,7 +125,7 @@ public class JDBCRecipeIngredientDAO implements RecipeIngredientDAO {
             try {
                 connection.close();
             } catch (Exception e) {
-               // System.out.println(e.getMessage());
+                // System.out.println(e.getMessage());
             }
         }
 

@@ -55,11 +55,9 @@ public class RecipePhotoService {
 
     private void validate(RecipePhoto recipePhoto) throws ValidationException {
         List<String> errors = new LinkedList<String>();
-        if (StringUtils.isEmpty(recipePhoto.getCale_fisier())) {
+        if (StringUtils.isEmpty(recipePhoto.getContent())) {
             errors.add("Nu a fost atasat nici un fisier");
         }
-
-
 
         if (!errors.isEmpty()) {
             throw new ValidationException(errors.toArray(new String[] {}));
