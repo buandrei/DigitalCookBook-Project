@@ -46,6 +46,12 @@ public class RecipeController {
     @Autowired
     private IngredientService ingredientService;
 
+    @RequestMapping("")
+    public  ModelAndView go2OtherModel(){
+        ModelAndView result = new ModelAndView("/retete/list_all");
+        return result;
+    }
+
 
     @RequestMapping(value = {"/list_all", "/list_all/{page}"}, method = RequestMethod.GET)
     public ModelAndView list(@PathVariable(required = false, name = "page") String page,
@@ -58,7 +64,7 @@ public class RecipeController {
             List<Recipe> recipeList = new ArrayList<>(recipes);
             pagedRecipeList = new PagedListHolder<Recipe>();
             pagedRecipeList.setSource(recipeList);
-            pagedRecipeList.setPageSize(2); // how many objects to display in one page
+            pagedRecipeList.setPageSize(12); // how many objects to display in one page
             request.getSession().setAttribute("recipeList", pagedRecipeList);
 
         }else if(page.equals("prev")){
