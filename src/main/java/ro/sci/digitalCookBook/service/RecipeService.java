@@ -38,6 +38,13 @@ public class RecipeService {
     }
 
 
+
+    public Collection<Recipe> getAllWherePromotionNotNull() {
+
+        return dao.getAllWherePromotionNotNull();
+    }
+
+
     public boolean delete(int id) {
         LOGGER.debug("Deleting recipe with id =  " + id);
         Recipe recipe = null;
