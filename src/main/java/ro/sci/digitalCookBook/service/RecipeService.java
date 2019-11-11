@@ -37,6 +37,8 @@ public class RecipeService {
         return dao.searchForRecipeByIngredients(ingredients, moreIngredients);
     }
 
+
+
     public Collection<Recipe> getAllWherePromotionNotNull() {
 
         return dao.getAllWherePromotionNotNull();
