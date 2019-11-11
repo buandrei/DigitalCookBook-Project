@@ -37,6 +37,11 @@ public class RecipeService {
         return dao.searchForRecipeByIngredients(ingredients, moreIngredients);
     }
 
+    public Collection<Recipe> getAllWherePromotionNotNull() {
+
+        return dao.getAllWherePromotionNotNull();
+    }
+
 
     public boolean delete(int id) {
         LOGGER.debug("Deleting recipe with id =  " + id);
