@@ -161,6 +161,7 @@ public class JDBCRecipeDAO implements RecipeDAO {
 
 
 
+
     private Recipe extractRecipeForList(ResultSet rs) throws SQLException {
         Recipe recipe = new Recipe();
         RecipePhoto recipePhoto = new RecipePhoto();
@@ -349,6 +350,47 @@ public class JDBCRecipeDAO implements RecipeDAO {
 
     }
 
+    @Override
+    public Collection<Recipe> getAllWherePromotionNotNull() {
+
+        Collection<Recipe> result = new ArrayList();
+
+        try (Connection connection = newConnection();
+             ResultSet rs = connection.createStatement()
+                     .executeQuery("" +
+                             "SELECT retete.id," +
+                             "  retete.denumire," +
+                             "  retete.portii," +
+                             "  retete.data_adaugarii," +
+                             "  retete.descriere," +
+                             "  retete.istutorial," +
+                             "  retete.rating," +
+                             "  categorii_retete.denumire AS categoria," +
+                             "  promovari.idtip_promovare AS id" +
+                             "  promovari.tip_promovare," +
+                             "  poze.content AS thumbnail," +
+                             "  COALESCE(InitCap(app_user.nume), $$$$) ||  $$ $$ || COALESCE(InitCap(app_user.prenume), $$$$) AS user," +
+                             "  1 AS unu " +
+
+                             "FROM retete " +
+                             "  LEFT JOIN poze ON poze.id = retete.idpoza" +
+                             "  LEFT JOIN categorii_retete ON categorii_retete.id = retete.idcategoria" +
+                             "  LEFT JOIN promovari ON promovari.id = retete.idpromotie " +
+                             "  LEFT JOIN app_user ON app_user.id = retete.iduser " +
+                             "WHERE" +
+                             "  retete.idTipPromovare IS NOT NULL")) {
+
+            while (rs.next()) {
+                result.add(extractRecipeForList(rs));
+            }
+            connection.commit();
+        } catch (SQLException ex) {
+
+            throw new RuntimeException("Error getting recipes.", ex);
+        }
+
+        return result;
+    }
 
     @Override
     public boolean delete(Recipe model) {

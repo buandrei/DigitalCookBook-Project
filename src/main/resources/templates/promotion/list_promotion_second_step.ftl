@@ -64,17 +64,15 @@
 
 <!-- BODY -->
 		<div class="bd-example">
-
-			<div class="list-group">
-				<#list recipe_list as recipe>
-				<a href="/promotion/add_promo_second_step?id=${recipe.id!''}" class="list-group-item list-group-item-action flex-column align-items-start">
-					<div class="d-flex w-100 justify-content-between">
-						<h5 class="mb-1">${recipe.name!''}</h5>
-						<small>${recipe.addDate?date}</small>
-					</div>
+			<div class="d-flex w-100 justify-content-between">
+					<h5 class="mb-1">${recipe.name!''}</h5>
+					<small>${recipe.addDate?date}</small>
 					<p class="mb-1">${recipe.description!''}</p>
-				</a>
-				</#list>
+                    <p class="mb-1">${promotion.id!''}</p>
+                    <p class="mb-1">${promotionType.name!''}</p>
+                    <p class="mb-1">${promotion.startDate!''}</p>
+                    <p class="mb-1">${promotion.endDate!''}</p>
+                    <p class="mb-1">${promotionType.description!''}</p>
 			</div>
 		</div>
 
@@ -84,5 +82,3 @@
 <#include '/bootstrap_footer.ftl'>
 </body>
 </html>
-
-

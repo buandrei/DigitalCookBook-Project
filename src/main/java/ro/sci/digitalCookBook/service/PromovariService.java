@@ -2,8 +2,10 @@ package ro.sci.digitalCookBook.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import ro.sci.digitalCookBook.dao.PromovariDAO;
+import ro.sci.digitalCookBook.dao.RecipeDAO;
 import ro.sci.digitalCookBook.dao.TipPromovariDAO;
 import ro.sci.digitalCookBook.domain.Promovari;
+import ro.sci.digitalCookBook.domain.Recipe;
 import ro.sci.digitalCookBook.domain.TipPromovare;
 
 import java.time.LocalDateTime;
@@ -13,16 +15,18 @@ import static java.time.LocalDate.now;
 
 public class PromovariService {
     @Autowired
+    private RecipeDAO daoRecipe;
+    @Autowired
     private PromovariDAO daoPromovari;
     @Autowired
     private TipPromovariDAO daoTipPromovare;
 
-    public void addPromovare(Promovari promotion, TipPromovare promotionType) {
+    public void addPromovare(Promovari promotion, TipPromovare promotionType, Recipe recipe) {
         promotion.setDataAdaugare(LocalDateTime.now());
         promotion.setDataFinal(promotion.getDataAdaugare().plusDays(promotionType.getPerioada()));
         //promovare.setIdUser();
         //promotion.setStarePromovare(true);
-        if (validarePromovare(promotion)){daoPromovari.add(promotion);}
+        if (validarePromovare(promotion)){daoPromovari.add(promotion, recipe);}
     }
 
 
@@ -51,8 +55,8 @@ public class PromovariService {
         return validPromovare;
     }
 
-    public Promovari list(int id) {
-        return null;
+    public Promovari findById(int id) {
+        return daoPromovari.findById(id);
     }
 
     public Collection<Promovari> listAll() {
@@ -67,12 +71,8 @@ public class PromovariService {
         return false;
     }
 
-    public boolean delete(int id) {
-/*        Promovari promovare = dao.findById(id);
-        if (promovare!=null) {
-            dao.delete(promovare);
-            return true;
-        }*/
+    public boolean delete(Promovari promovare) {
+        daoPromovari.delete(promovare);
         return false;
     }
 

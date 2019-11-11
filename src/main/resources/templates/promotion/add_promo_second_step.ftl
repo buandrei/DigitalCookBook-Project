@@ -44,7 +44,14 @@
 
 					</ul>
 				</li>
-			<li><a href="/promotion/add_promo_first_step">Promovare</a></li>
+			<li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle " style="padding:0" href="#" id="dropdown03" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Promovari</a>
+                <div class="dropdown-menu" style="top:30px" aria-labelledby="dropdown03">
+							<a class="dropdown-item" href="/promotion/add_promo_first_step">Adaugare promovare</a>
+    						<a class="dropdown-item" href="/promotion/list_promotion_first_step">Listare promovare retete</a>
+							<a class="dropdown-item" href="/promotion/delete_promotion">Stergere promovare</a>
+                </div>
+            </li>
 			<li><a href="/tutorials">Tutoriale de gatit</a></li>
 			<li><a href="/retete/upload_recipe">Incarca reteta</a></li>
 			<li><a href="/events">Evenimente</a></li>
@@ -64,15 +71,15 @@
 			<div class="jumbotron text-dark p-3 mb-0" style="min-height: 240px;">
 				<div class="row text-center">
 					<div class="col-sm-4 block1 w-100">
-							<img src="" class="img-fluid" alt="Responsive image">
+							<img src="data:image/*;base64, ${recipe.photo.getEncodedContent()!''}" class="card-img-top zoom-image" >
 					</div>
 					<div class="col-sm-8 block1 text-left">
 						<div class="row">
 							<div class="col align-self-start">
-								<h2 class="">${recipe.denumire!''}</h2>
+								<h2 class="">${recipe.name!''}</h2>
 
 								<p class="lead my-3 ">
-									${recipe.descriere!''}
+									${recipe.description!''}
 								</p>
 							</div>
 						</div>
@@ -92,6 +99,7 @@
     				</#list>
 				</div>
 				<input type="hidden" id="idTipPromovare" name="idTipPromovare" value="">
+				<input type="hidden" id="idRecipe" name="idRecipe" value="${recipe.id!''}">
 
 			</div>
 		</div>
