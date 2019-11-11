@@ -27,9 +27,14 @@ public class RecipeService {
         return dao.getAll();
     }
 
-    public Collection<Recipe> search( String query) {
-        LOGGER.debug("Searching for " + query);
-        return dao.searchByName(query);
+    public Collection<Recipe> searchRecipe(String name, String categoryId) {
+        LOGGER.debug("Searching for recipes with name " + name + " and categoryId = " + categoryId);
+        return dao.searchForRecipe(name, categoryId);
+    }
+
+    public Collection<Recipe> searchBySpecificIngredients(String ingredients, boolean moreIngredients) {
+        LOGGER.debug("Searching for recipes with ingredients " + ingredients + " and with the more ingredients option selected");
+        return dao.searchForRecipeByIngredients(ingredients, moreIngredients);
     }
 
     public boolean delete(int id) {

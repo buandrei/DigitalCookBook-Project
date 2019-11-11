@@ -83,7 +83,7 @@
 	</form>
 
 	<#if nothingFound?? >
-	<p class="text-center">${nothingFound}</p>
+		<p class="text-center">${nothingFound}</p>
 	</#if>
 
 	<#assign recipePageList = recipeList>
@@ -155,7 +155,7 @@
 
 		</ul>
 	</nav>
-<script src="/js/search_recipe.js" ></script>
+
 <#include '/bootstrap_footer.ftl'>
 </body>
 </html>

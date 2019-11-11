@@ -1,7 +1,9 @@
 package ro.sci.digitalCookBook.dao.db;
 
+import org.jsoup.internal.StringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.util.StringUtils;
 import ro.sci.digitalCookBook.dao.RecipeDAO;
 import ro.sci.digitalCookBook.domain.*;
 
@@ -35,43 +37,102 @@ public class JDBCRecipeDAO implements RecipeDAO {
         this.pass = pass;
     }
 
-
-    /**
-     * Method will return all the results from the retete db table
-     *
-     * @param querry
-     * @return
-     */
     @Override
-    public Collection<Recipe> searchByName(String querry) {
+    public Collection<Recipe> searchForRecipeByIngredients(String ingredients, boolean moreIngredients ) {
         Collection<Recipe> result = new LinkedList<>();
+        StringBuilder query = new StringBuilder();
+        query.append("" +
+                "SELECT retete.id," +
+                "  retete.denumire," +
+                "  retete.portii," +
+                "  retete.data_adaugarii," +
+                "  retete.descriere," +
+                "  retete.istutorial," +
+                "  retete.rating," +
+                "  categorii_retete.denumire AS categoria," +
+                "  promovari.idtip_promovare AS idtip_promovare," +
+                "  poze.content AS thumbnail," +
+                "  COALESCE(InitCap(app_user.nume), $$$$) ||  $$ $$ || COALESCE(InitCap(app_user.prenume), $$$$) AS user," +
+                "  1 AS unu " +
+
+                "FROM retete " +
+                "   LEFT JOIN poze ON poze.id = retete.idpoza" +
+                "   LEFT JOIN categorii_retete ON categorii_retete.id = retete.idcategoria" +
+                "   LEFT JOIN promovari ON promovari.id = retete.idpromotie " +
+                "   LEFT JOIN retetar ON retetar.id = retete.idretetar " +
+                "   LEFT JOIN app_user ON app_user.id = retete.iduser " +
+                "WHERE" +
+                "  retete.inactiv = $$N$$");
+
+
+        if (!StringUtils.isEmpty(ingredients)) {
+            if(!moreIngredients) {
+                query.append(" AND retetar.idingrediente = ARRAY[" + ingredients + "]");
+            }else{
+                query.append(" AND retetar.idingrediente @> ARRAY[" + ingredients + "]");
+            }
+        }
+        System.out.println(query);
 
         try (Connection connection = newConnection();
              ResultSet rs = connection.createStatement()
-                     .executeQuery("" +
-                             "SELECT retete.denumire," +
-                             "  retete.portii," +
-                             "  retete.data_adaugarii," +
-                             "  retete.descriere," +
-                             "  retete.istutorial," +
-                             "  retete.link," +
-                             "  retete.cautari," +
-                             "  retete.rating," +
-                             "  retete.timp_preparare," +
-                             "  retete.timp_gatire," +
-                             "  promovari.idtip_promovare AS idtip_promovare," +
-                             "  retete.idcategoria AS categoria," +
-                             "  poze.cale_fisier AS thumbnail," +
-                             "  1 AS unu" +
-
-                             "FROM retete " +
-                             "  LEFT JOIN poze ON poze.id = retete.idpoza" +
-                             "  LEFT JOIN categorii_retete ON categorii_retete.id = retete.idcategoria" +
-                             "  LEFT JOIN promovari ON promovari.id = retete.idpromotie" +
-                             "WHERE" +
-                             "  retete.inactiv = $$N$$")) {
+                     .executeQuery(query.toString())
+        ) {
             while (rs.next()) {
-                result.add(extractRecipe(rs));
+                result.add(extractRecipeForList(rs));
+            }
+            connection.commit();
+        } catch (SQLException ex) {
+
+            throw new RuntimeException("Error getting recipes.", ex);
+        }
+
+        return result;
+    }
+
+
+    @Override
+    public Collection<Recipe> searchForRecipe(String recipeName, String categoryId) {
+        Collection<Recipe> result = new LinkedList<>();
+
+        StringBuilder query = new StringBuilder();
+        query.append("" +
+                "SELECT retete.id," +
+                "  retete.denumire," +
+                "  retete.portii," +
+                "  retete.data_adaugarii," +
+                "  retete.descriere," +
+                "  retete.istutorial," +
+                "  retete.rating," +
+                "  categorii_retete.denumire AS categoria," +
+                "  promovari.idtip_promovare AS idtip_promovare," +
+                "  poze.content AS thumbnail," +
+                "  COALESCE(InitCap(app_user.nume), $$$$) ||  $$ $$ || COALESCE(InitCap(app_user.prenume), $$$$) AS user," +
+                "  1 AS unu " +
+
+                "FROM retete " +
+                "   LEFT JOIN poze ON poze.id = retete.idpoza" +
+                "   LEFT JOIN categorii_retete ON categorii_retete.id = retete.idcategoria" +
+                "   LEFT JOIN promovari ON promovari.id = retete.idpromotie " +
+                "   LEFT JOIN app_user ON app_user.id = retete.iduser " +
+                "WHERE" +
+                "  retete.inactiv = $$N$$");
+
+
+        if (!StringUtils.isEmpty(recipeName)) {
+            query.append(" AND retete.denumire ~* $$" + recipeName.replaceAll("\\s+", "|") + "$$");
+        }
+
+        if (!categoryId.equals("0")) {
+            query.append(" AND retete.idcategoria = " + categoryId);
+        }
+
+        try (Connection connection = newConnection();
+             ResultSet rs = connection.createStatement()
+                     .executeQuery(query.toString())
+        ) {
+            while (rs.next()) {
+                result.add(extractRecipeForList(rs));
             }
             connection.commit();
         } catch (SQLException ex) {
@@ -101,15 +162,15 @@ public class JDBCRecipeDAO implements RecipeDAO {
         recipe.setIdTipPromotie(rs.getInt("idtip_promovare"));
         recipe.setIdCategoria(rs.getInt("idcategoria"));
 
-        RecipePhoto recipePhoto =  new JDBCRecipePhotoDAO(host,port,dbName,userName,pass).findById(rs.getInt("idpoza"));
+        RecipePhoto recipePhoto = new JDBCRecipePhotoDAO(host, port, dbName, userName, pass).findById(rs.getInt("idpoza"));
         recipe.setPhoto(recipePhoto);
         recipe.setPhotoId(rs.getInt("idpoza"));
 
-        RecipeIngredient recipeIngredient =  new JDBCRecipeIngredientDAO(host,port,dbName,userName,pass).findById(rs.getInt("idretetar"));
+        RecipeIngredient recipeIngredient = new JDBCRecipeIngredientDAO(host, port, dbName, userName, pass).findById(rs.getInt("idretetar"));
         recipe.setRecipeIngredient(recipeIngredient);
         recipe.setRecipeId(rs.getInt("idretetar"));
 
-        RecipeCategory recipeCategory =  new JDBCRecipeCategoryDAO(host,port,dbName,userName,pass).findById(rs.getInt("idcategoria"));
+        RecipeCategory recipeCategory = new JDBCRecipeCategoryDAO(host, port, dbName, userName, pass).findById(rs.getInt("idcategoria"));
         recipe.setRecipeCategory(recipeCategory);
 
         recipe.setCookingTime(rs.getInt("timp_gatire"));
@@ -118,6 +179,7 @@ public class JDBCRecipeDAO implements RecipeDAO {
         return recipe;
 
     }
+
     @Override
     public Collection<Recipe> getAll() {
 
@@ -156,9 +218,8 @@ public class JDBCRecipeDAO implements RecipeDAO {
             throw new RuntimeException("Error getting recipes.", ex);
         }
 
-           return result;
-       }
-
+        return result;
+    }
 
 
     private Recipe extractRecipeForList(ResultSet rs) throws SQLException {
@@ -204,7 +265,8 @@ public class JDBCRecipeDAO implements RecipeDAO {
             ps = connection.prepareStatement("UPDATE retete SET cautari = cautari + 1 WHERE id = " + id);
             ps.executeQuery();
         } catch (SQLException e) {
-            System.out.println(e.getMessage());;
+            System.out.println(e.getMessage());
+            ;
         }
 
         try (ResultSet rs = connection.createStatement()
@@ -247,18 +309,18 @@ public class JDBCRecipeDAO implements RecipeDAO {
             if (recipe.getId() > 0) {
                 StringBuilder querry = new StringBuilder();
                 querry.append(" UPDATE retete SET " +
-                                "   denumire=?, " +
-                                "   portii=?, " +
-                                "   descriere=?, " +
-                                "   istutorial=?, " +
-                                "   link=?, " +
-                                "   iduser=1, " +
-                                "   idcategoria=?, " +
-                                "   idpoza=?, " +
-                                "   idretetar=?, " +
-                                "   timp_gatire=?, " +
-                                "   timp_preparare=?  " +
-                               " WHERE id = ? RETURNING id;");
+                        "   denumire=?, " +
+                        "   portii=?, " +
+                        "   descriere=?, " +
+                        "   istutorial=?, " +
+                        "   link=?, " +
+                        "   iduser=1, " +
+                        "   idcategoria=?, " +
+                        "   idpoza=?, " +
+                        "   idretetar=?, " +
+                        "   timp_gatire=?, " +
+                        "   timp_preparare=?  " +
+                        " WHERE id = ? RETURNING id;");
 
                 ps = connection.prepareStatement(querry.toString());
 
@@ -320,20 +382,20 @@ public class JDBCRecipeDAO implements RecipeDAO {
         return emdedLink;
     }
 
-    public boolean giveRating(Recipe recipe, long rating){
+    public boolean giveRating(Recipe recipe, long rating) {
         boolean result = false;
         Connection connection = newConnection();
         try {
             Statement statement = connection.createStatement();
             result = statement.execute("" +
-                            "   UPDATE retete SET nr_rating = nr_rating + 1 WHERE id = "+recipe.getId() +";"+
-                            "   UPDATE retete SET " +
-                            "   rating = " +
-                            "   CASE WHEN retete.rating = 0 " +
-                            "       THEN "+rating+" " +
-                            "       ELSE (rating + " + rating + ") / CASE WHEN nr_rating = 0 THEN 1 ELSE nr_rating END " +
-                            "   END     " +
-                            "   WHERE id = "  + recipe.getId());
+                    "   UPDATE retete SET nr_rating = nr_rating + 1 WHERE id = " + recipe.getId() + ";" +
+                    "   UPDATE retete SET " +
+                    "   rating = " +
+                    "   CASE WHEN retete.rating = 0 " +
+                    "       THEN " + rating + " " +
+                    "       ELSE (rating + " + rating + ") / CASE WHEN nr_rating = 0 THEN 1 ELSE nr_rating END " +
+                    "   END     " +
+                    "   WHERE id = " + recipe.getId());
             connection.commit();
         } catch (SQLException ex) {
 

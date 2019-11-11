@@ -35,7 +35,7 @@
 					<a class="nav-link dropdown-toggle " style="padding:0" href="#" id="dropdown03" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Retete</a>
 					<div class="dropdown-menu" style="top:30px" aria-labelledby="dropdown03">
 						<a class="dropdown-item" href="/retete/list_all">Cautare simpla</a>
-						<a class="dropdown-item" href="/retete/cauta_dupa_ingrediente">Cauta dupa ingrediente specifice</a>
+						<a class="dropdown-item" href="/retete/search_ingredients">Cauta dupa ingrediente specifice</a>
 					</div>
 				</li>
 				<li class="nav-item"><a class="nav-link" href="/promotion">Promovare</a></li>
