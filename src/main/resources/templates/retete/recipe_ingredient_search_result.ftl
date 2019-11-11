@@ -83,7 +83,7 @@
 	</form>
 
 	<#if nothingFound?? >
-	<p class="text-center">${nothingFound}</p>
+		<p class="text-center">${nothingFound}</p>
 	</#if>
 
 	<#assign recipePageList = recipeList>
@@ -108,25 +108,25 @@
 							<hr class=".hr_styled"/>
 							<h6 class="card-title text-muted font-italic" style="height:30px;">Categoria: ${recipe.recipeCategory.getName()!''}</h6>
 							<p class="card-text" style="height:120px;">${recipe.description!''}</p>
-							<div class="row  text-center" style="font-size:1.1em;height:30px" id="starDiv">
-								<span style="padding:0" class="col text-right text-muted font-italic">
-									<#assign i= recipe.rating?floor >
-									<#assign y= 5 - i>
-									<#if i == 0>
-										<#list 1..5 as i>
-											<span class="fa fa-star"></span>
-										</#list>
-									<#elseif (i > 0) >
-										<#list 1..i as z>
-											<span class="fa fa-star rating_checked"></span>
-										</#list>
-										<#list 0..<y as q>
-											<span class="fa fa-star"></span>
-										</#list>
+                            <div class="row  text-center" style="font-size:1.1em;height:30px" id="starDiv">
+                                <span style="padding:0" class="col text-right text-muted font-italic">
+                                    <#assign i= recipe.rating?floor >
+                                    <#assign y= 5 - i>
+                                    <#if i == 0>
+                                        <#list 1..5 as i>
+                                            <span class="fa fa-star"></span>
+                                        </#list>
+                                    <#elseif (i > 0) >
+                                        <#list 1..i as z>
+                                            <span class="fa fa-star rating_checked"></span>
+                                        </#list>
+                                        <#list 0..<y as q>
+                                            <span class="fa fa-star"></span>
+                                        </#list>
 
-									</#if>
-								</span>
-							</div>
+                                    </#if>
+                                </span>
+                            </div>
 						</div>
 					</a>
 					<div class="card-footer">
@@ -174,7 +174,7 @@
 
 		</ul>
 	</nav>
-<script src="/js/search_recipe.js" ></script>
+
 <#include '/bootstrap_footer.ftl'>
 </body>
 </html>

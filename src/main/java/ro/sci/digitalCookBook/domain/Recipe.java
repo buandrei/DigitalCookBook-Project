@@ -31,6 +31,8 @@ public class Recipe extends AbstractModel{
     private int accessCount;
     private double rating;
     private int idTipPromotie;
+    private int idPromotie;
+
     private User user;
     private RecipeCategory recipeCategory;
     private int idCategoria;
@@ -45,6 +47,13 @@ public class Recipe extends AbstractModel{
     private long cookingTime;
     private long preparationTime;
 
+    public int getIdPromotie() {
+        return idPromotie;
+    }
+
+    public void setIdPromotie(int idPromotie) {
+        this.idPromotie = idPromotie;
+    }
 
     public int getRecipeId() {
         return recipeId;
@@ -200,8 +209,6 @@ public class Recipe extends AbstractModel{
         this.preparationTime = preparationTime;
     }
 
-
-
     @Override
     public String toString() {
         return "Recipe{" +
@@ -214,15 +221,17 @@ public class Recipe extends AbstractModel{
                 ", accessCount=" + accessCount +
                 ", rating=" + rating +
                 ", idTipPromotie=" + idTipPromotie +
+                ", idPromotie=" + idPromotie +
                 ", user=" + user +
                 ", recipeCategory=" + recipeCategory +
+                ", idCategoria=" + idCategoria +
                 ", photo=" + photo +
                 ", photoId=" + photoId +
                 ", recipeIngredient=" + recipeIngredient +
+                ", recipeId=" + recipeId +
                 ", inactiv=" + inactiv +
                 ", cookingTime=" + cookingTime +
                 ", preparationTime=" + preparationTime +
-                ", idCategoria=" + idCategoria +
                 '}';
     }
 
