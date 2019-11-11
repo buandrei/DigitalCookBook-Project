@@ -11,7 +11,9 @@ public interface RecipeDAO extends BaseDAO<Recipe> {
 
     Collection<Recipe> searchForRecipeByIngredients(String ingredients, boolean moreIngredients);
 
+    Collection<Recipe> getAllWherePromotionNotNull();
+
     boolean giveRating(Recipe recipe, long rating);
 
-
+    Collection<Recipe> getAll(boolean isOnlyPromotedForHomepage);
 }

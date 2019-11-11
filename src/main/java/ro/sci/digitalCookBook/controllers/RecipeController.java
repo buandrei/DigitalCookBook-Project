@@ -134,7 +134,7 @@ public class RecipeController {
     public ModelAndView list(@PathVariable(required = false, name = "page") String page,
                              HttpServletRequest request) {
         ModelAndView modelAndView = new ModelAndView();
-        Collection<Recipe> recipes = recipeService.getAll();
+        Collection<Recipe> recipes = recipeService.getAll(false);
         Collection<RecipeCategory> recipeCategories = recipeCategoryService.listAll();
         modelAndView.addObject("categories", recipeCategories);
 
@@ -151,7 +151,7 @@ public class RecipeController {
             List<Recipe> recipeList = new ArrayList<>(recipes);
             pagedRecipeList = new PagedListHolder<>();
             pagedRecipeList.setSource(recipeList);
-            pagedRecipeList.setPageSize(3); // how many objects to display in one page
+            pagedRecipeList.setPageSize(12); // how many objects to display in one page
             request.getSession().setAttribute("recipeList", pagedRecipeList);
 
         } else if (page.equals("prev")) {

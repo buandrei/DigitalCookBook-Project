@@ -37,6 +37,7 @@ public class JDBCRecipeDAO implements RecipeDAO {
         this.pass = pass;
     }
 
+
     @Override
     public Collection<Recipe> searchForRecipeByIngredients(String ingredients, boolean moreIngredients ) {
         Collection<Recipe> result = new LinkedList<>();
@@ -51,6 +52,7 @@ public class JDBCRecipeDAO implements RecipeDAO {
                 "  retete.rating," +
                 "  categorii_retete.denumire AS categoria," +
                 "  promovari.idtip_promovare AS idtip_promovare," +
+                "  retete.idpromotie AS idpromotie," +
                 "  poze.content AS thumbnail," +
                 "  COALESCE(InitCap(app_user.nume), $$$$) ||  $$ $$ || COALESCE(InitCap(app_user.prenume), $$$$) AS user," +
                 "  1 AS unu " +
@@ -106,6 +108,7 @@ public class JDBCRecipeDAO implements RecipeDAO {
                 "  retete.rating," +
                 "  categorii_retete.denumire AS categoria," +
                 "  promovari.idtip_promovare AS idtip_promovare," +
+                "  retete.idpromotie AS idpromotie," +
                 "  poze.content AS thumbnail," +
                 "  COALESCE(InitCap(app_user.nume), $$$$) ||  $$ $$ || COALESCE(InitCap(app_user.prenume), $$$$) AS user," +
                 "  1 AS unu " +
@@ -181,33 +184,44 @@ public class JDBCRecipeDAO implements RecipeDAO {
     }
 
     @Override
-    public Collection<Recipe> getAll() {
+    public Collection<Recipe> getAll(boolean isOnlyPromotedForHomepage) {
 
         Collection<Recipe> result = new ArrayList();
 
+        StringBuilder query = new StringBuilder();
+        query.append("SELECT retete.id," +
+                "  retete.denumire," +
+                "  retete.portii," +
+                "  retete.data_adaugarii," +
+                "  retete.descriere," +
+                "  retete.istutorial," +
+                "  retete.rating," +
+                "  categorii_retete.denumire AS categoria," +
+                "  promovari.idtip_promovare AS idtip_promovare," +
+                "  retete.idpromotie AS idpromotie," +
+                "  poze.content AS thumbnail," +
+                "  COALESCE(InitCap(app_user.nume), $$$$) ||  $$ $$ || COALESCE(InitCap(app_user.prenume), $$$$) AS user," +
+                "  1 AS unu " +
+
+                "FROM retete " +
+                "  LEFT JOIN poze ON poze.id = retete.idpoza" +
+                "  LEFT JOIN categorii_retete ON categorii_retete.id = retete.idcategoria" +
+                "  LEFT JOIN promovari ON promovari.id = retete.idpromotie " +
+                "  LEFT JOIN app_user ON app_user.id = retete.iduser " +
+                "WHERE" +
+                "  retete.inactiv = $$N$$ ");
+
+        if(isOnlyPromotedForHomepage){
+            query.append(" AND retete.idpromotie IS NOT NULL");
+            query.append(" AND promovari.data_final > CURRENT_DATE");
+            query.append(" ORDER BY promovari.idtip_promovare, promovari.data_final");
+        }
+
+
+
         try (Connection connection = newConnection();
              ResultSet rs = connection.createStatement()
-                     .executeQuery("" +
-                             "SELECT retete.id," +
-                             "  retete.denumire," +
-                             "  retete.portii," +
-                             "  retete.data_adaugarii," +
-                             "  retete.descriere," +
-                             "  retete.istutorial," +
-                             "  retete.rating," +
-                             "  categorii_retete.denumire AS categoria," +
-                             "  promovari.idtip_promovare AS idtip_promovare," +
-                             "  poze.content AS thumbnail," +
-                             "  COALESCE(InitCap(app_user.nume), $$$$) ||  $$ $$ || COALESCE(InitCap(app_user.prenume), $$$$) AS user," +
-                             "  1 AS unu " +
-
-                             "FROM retete " +
-                             "  LEFT JOIN poze ON poze.id = retete.idpoza" +
-                             "  LEFT JOIN categorii_retete ON categorii_retete.id = retete.idcategoria" +
-                             "  LEFT JOIN promovari ON promovari.id = retete.idpromotie " +
-                             "  LEFT JOIN app_user ON app_user.id = retete.iduser " +
-                             "WHERE" +
-                             "  retete.inactiv = $$N$$")) {
+                     .executeQuery(query.toString())) {
 
             while (rs.next()) {
                 result.add(extractRecipeForList(rs));
@@ -233,6 +247,9 @@ public class JDBCRecipeDAO implements RecipeDAO {
         recipe.setPortions(rs.getLong("portii"));
         recipe.setAddDate(new Date(rs.getTimestamp("data_adaugarii").getTime()));
         recipe.setDescription(rs.getString("descriere"));
+        recipe.setIdPromotie(rs.getInt("idpromotie"));
+
+
         if (rs.getString("istutorial") == "D") {
             recipe.setIstutorial(true);
         } else {
@@ -252,6 +269,11 @@ public class JDBCRecipeDAO implements RecipeDAO {
 
         return recipe;
 
+    }
+
+    @Override
+    public Collection<Recipe> getAll() {
+        return null;
     }
 
     @Override
@@ -368,6 +390,50 @@ public class JDBCRecipeDAO implements RecipeDAO {
 
         return recipe;
     }
+
+    @Override
+    public Collection<Recipe> getAllWherePromotionNotNull() {
+
+        Collection<Recipe> result = new ArrayList();
+
+        try (Connection connection = newConnection();
+             ResultSet rs = connection.createStatement()
+                     .executeQuery("" +
+                             "SELECT retete.id," +
+                             "  retete.denumire," +
+                             "  retete.portii," +
+                             "  retete.data_adaugarii," +
+                             "  retete.descriere," +
+                             "  retete.istutorial," +
+                             "  retete.rating," +
+                             "  categorii_retete.denumire AS categoria," +
+                             "  promovari.idtip_promovare AS id" +
+                             "  promovari.tip_promovare," +
+                             "  poze.content AS thumbnail," +
+                             "  COALESCE(InitCap(app_user.nume), $$$$) ||  $$ $$ || COALESCE(InitCap(app_user.prenume), $$$$) AS user," +
+                             "  1 AS unu " +
+
+                             "FROM retete " +
+                             "  LEFT JOIN poze ON poze.id = retete.idpoza" +
+                             "  LEFT JOIN categorii_retete ON categorii_retete.id = retete.idcategoria" +
+                             "  LEFT JOIN promovari ON promovari.id = retete.idpromotie " +
+                             "  LEFT JOIN app_user ON app_user.id = retete.iduser " +
+                             "WHERE" +
+                             "  retete.idTipPromovare IS NOT NULL")) {
+
+            while (rs.next()) {
+                result.add(extractRecipeForList(rs));
+            }
+            connection.commit();
+        } catch (SQLException ex) {
+
+            throw new RuntimeException("Error getting recipes.", ex);
+        }
+
+        return result;
+    }
+
+
 
     private String setEmbedOnlyLink(String link) {
         Pattern p = Pattern.compile("src=\"(.*?)\"");

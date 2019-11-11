@@ -22,9 +22,9 @@ public class RecipeService {
     @Autowired
     private RecipeDAO dao;
 
-    public Collection<Recipe> getAll() {
+    public Collection<Recipe> getAll(boolean isOnlyPromotedForHomePage) {
 
-        return dao.getAll();
+        return dao.getAll(isOnlyPromotedForHomePage);
     }
 
     public Collection<Recipe> searchRecipe(String name, String categoryId) {
@@ -36,6 +36,7 @@ public class RecipeService {
         LOGGER.debug("Searching for recipes with ingredients " + ingredients + " and with the more ingredients option selected");
         return dao.searchForRecipeByIngredients(ingredients, moreIngredients);
     }
+
 
     public boolean delete(int id) {
         LOGGER.debug("Deleting recipe with id =  " + id);
