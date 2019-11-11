@@ -35,7 +35,7 @@
 							<a href="/retete">Cautare simpla</a>
 						</li>
 						<li>
-							<a href="/specific_ingredients">Cauta dupa idIngrediente specifice</a>
+							<a href="/specific_ingredients">Cauta dupa ingrediente specifice</a>
 						</li>
 
 					</ul>

@@ -9,12 +9,13 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import javax.sql.DataSource;
 
+/**
+ * Created by sebi on 4/19/17.
+ */
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(jsr250Enabled = true)
@@ -32,7 +33,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Value("${spring.queries.roles-query}")
     private String rolesQuery;
 
-    @Override
+        @Override
     protected void configure(AuthenticationManagerBuilder auth)
             throws Exception {
         auth.
@@ -42,6 +43,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .dataSource(dataSource)
                 .passwordEncoder(bCryptPasswordEncoder);
 
+
+//        auth.inMemoryAuthentication()
+//                .withUser("a@a.a")./*password("admin").*/roles("ADMIN")
+//        .and()
+//                .withUser("user").password("user").roles("USER");
     }
 
     @Override
@@ -51,7 +57,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/", "/file").permitAll()
 
-
+//                 .antMatchers("/events/admin").hasRole("ADMIN")
                 .anyRequest().authenticated()
 
                 .and()

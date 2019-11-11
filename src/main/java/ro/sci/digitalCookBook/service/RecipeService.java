@@ -53,11 +53,11 @@ public class RecipeService {
         return dao.findById(id);
     }
 
-    public void save(Recipe recipe) throws ValidationException {
-        LOGGER.debug("Saving: " + recipe);
-        validate(recipe);
+    public void save(Recipe employee) throws ValidationException {
+        LOGGER.debug("Saving: " + employee);
+        validate(employee);
 
-        dao.update(recipe);
+        dao.update(employee);
     }
 
     private void validate(Recipe recipe) throws ValidationException {

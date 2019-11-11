@@ -27,7 +27,7 @@
 
 		<ol class="breadcrumb">
 			<li><a href="/">Home</a></li>
-			<li><a href="/employee">Employees</a></li>
+			<li><a href="/events">Events</a></li>
 			<li class="active">Login</li>
 		</ol>
 

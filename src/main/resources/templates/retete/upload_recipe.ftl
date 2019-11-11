@@ -1,10 +1,31 @@
-<#ftl>
-<#import "/spring.ftl" as spring />
-<html lang="ro">
+[#ftl]
+[#import "/spring.ftl" as spring /]
+<html lang="en">
 <head>
-  <#include '/bootstrap_header.ftl'>
-</head>
+  [#include '/bootstrap_header.ftl']
+  <script type="text/javascript">
 
+$(function (){
+		var nMaxLength = 250;
+		$('.remaining').text(nMaxLength);
+		$("#description").keydown(function (event) {
+			LimitCharacters($(this));
+		});
+		$("#description").keyup(function (event) {
+			LimitCharacters($(this));
+		});
+
+		function LimitCharacters(description){
+			if(description.val().length > nMaxLength){
+				description.val(description.val().substring(0, nMaxLength));
+			}else{
+				var nRemaining = nMaxLength - description.val().length;
+				$('.remaining').text(nRemaining);
+			}
+		}
+});
+</script>
+</head>
 <body >
 	<div class="container">
 		<div class="page-header">
@@ -52,136 +73,50 @@
 <!--	BODY -->
 
 		<div class="panel panel-default">
-			<div class="panel-heading text-center panel-relative">
-				<h2 class="panel-title"><b>Incarca o reteta! Este gratis!</b></h2>
+			<div class="panel-heading">
+				<h3 class="panel-title">Incarcare reteta</h3>
 			</div>
-			<div class="panel panel-info">
-				<div class="panel-heading panel-relative">
-					<h3 class="panel-title">Informatii reteta</h3>
-				</div>
-				<form  method="post" action="/retete/salvare_reteta" id="recipeForm" enctype="multipart/form-data">
-					<div class="panel-body">
-					<#if errors??>
-						<#list errors as error>
-						<span style="color:red"> ${error}</span>
-						<br>
-						</#list>
-					</#if>
+			<div class="panel-body">
 
-						<div class="form-group">
-							<label for="denumire_input">Denumire</label>
-							<input name="denumire" value="${recipe.denumire!''}" type="text" class="form-control" id="denumire_input" aria-describedby="Denumire" placeholder="Denumirea retetei" >
-							<b><span class="denumire_remaining" style="color:#1d91d1;"></span></b> caractere ramase
-							<br>
-						</div>
+				[#if errors??]
+					[#list errors as error]
+					<span style="color:red"> ${error}</span>
+					<br>
+					[/#list]
+				[/#if]
 
 
-						<div class="row">
-							 <div class="col-lg-6">
-								<div class="form-group">
-									<label class="control-label" for="categorie_reteta">Categoria</label>
-									<select name="category_selection" class="form-control" id="categorie_reteta">
-										<option><font color="red">Va rugam selectati din lista o categorie </font></option>
-										<#list categories as categorii>
-										<option value="${categorii.id!''}"> ${categorii.denumire!''}</option>
-										</#list>
-									</select>
-								</div>
-							</div>
-							<input id ="idCategoria" name="idCategoria" type="hidden" value="${recipe.idCategoria!''}"/>
+				<form method="post" action="/retete/save">
 
-
-						<div class="col-lg-6">
-								<div class="form-group">
-							<label class="control-label"  for="portii_input">Portii</label>
-							<input name="portii" value="${recipe.portii!''}" type="number" class="form-control" id="portii_input" placeholder="Ex: 2" min="1">
-						</div>
-							</div>
-							<script language="text/javascript">
-								document.getElementById("portii_input").defaultValue = "1";
-							</script>
-
-						</div>
-
-
-						<div class="form-group">
-							<label for="description">Descriere scurta</label>
-							<textarea value="${recipe.descriere!''}" name ="descriere" rows="2" class="form-control" id="description" placeholder="Descriere scurta a retetei. Maxim 150 de caractere" >${recipe.descriere!''}</textarea>
-							<b><span class="descriere_remaining" style="color:#1d91d1;"></span></b> caractere ramase
-							<br/>
-
-						</div>
-						<div class="form-check">
-							<input  class="form-check-input" name="istutorial" value="" type="checkbox" id="istutorial" >
-							<label id="istutorial_checkbox"   class="form-check-label" for="istutorial">
-							Este tutorial de gatit pentru incepatori?
-							</label>
-						</div>
-					</div>
-					<div class="panel-heading panel-relative">
-						<h3 class="panel-title">Media</h3>
-					</div>
-					<div class="panel-body">
-						<div class="form-group">
-							<label for="link_input">Link videoclip</label>
-							<input name="link" value="${recipe.link!''}" type="text" class="form-control" id="link_input" aria-describedby="Denumire" placeholder="Link catre videoclip de pe o platforma video. Ex: https://www.youtube.com/watch?v=wX1nIIcUzgc">
-						</div>
-
-
-						<div class="input-group">
-							<div class="custom-file">
-								<input onchange="ValidateRecipeImageSize(this);" name="file" type="file" class="custom-file-input" id="recipe_picture" aria-describedby="inputGroupFileAddon01">
-								<label class="custom-file-label" for="recipe_picture">Choose file</label>
-							</div>
-						</div>
-						<font color="red"<span id="fileError"></span></font>
+					<div class="form-group">
+						<label for="denumire_input">Denumire</label>
+						<input  type="text" class="form-control" id="denumire_input" aria-describedby="Denumire" placeholder="Denumirea retetei" >
 
 					</div>
 
-					<div class="panel-heading panel-relative">
-						<h3 class="panel-title">Ingrediente</h3>
-					</div>
-					<div class="panel-body">
-						<div id="ingredient_checkboxes" class="control-group">
-							<#assign i = 0>
-							<#list ingredients as ingredients>
-								<#if i==3>
-									<br>
-									<#assign i =0>
-								</#if>
-								<div class="form-check form-check-inline">
-									<label class="checbox" for="checkbox_${ingredients.id!''}">${ingredients.denumire!''}
-										<input type="checkbox"  id="checkbox_${ingredients.id!''}" value="${ingredients.id!''}">
-									</label>
-								</div>
-								<#assign i++>
-							</#list>
+					<div class="form-group">
+						<label for="description">Descriere</label>
+						<textarea  name ="description" onload="checkRemainingChars(); rows="3" onDrop="return false" class="form-control" id="description" aria-describedby="Descriere" placeholder="Descriere scurta a retetei. Maxim 250 de caractere"></textarea>
+						<b><span class="remaining" style="color:#1d91d1;"></span></b> caractere ramase
 
-						</div>
+						<label for="portii_input">Portii</label>
+						<input  type="number" class="form-control" id="portii_input" placeholder="Ex: 2" >
 
-					<input id ="idIngrediente" name="idIngrediente" type="hidden" value="${recipeIngredients.idingrediente!''}"/>
+						<label for="link_input">Link videoclip</label>
+						<input type="text" class="form-control" id="link_input" aria-describedby="Denumire" placeholder="Link catre videoclip de pe platforma o platforma video." value="${recipe.denumire!''}">
 					</div>
-					<div class="panel-heading panel-relative">
-						<h3 class="panel-title">Instructiuni reteta</h3>
+					<div class="form-check">
+						<input  class="form-check-input" type="checkbox" id="istutorial" >
+						<label class="form-check-label" for="istutorial">
+						Este tutorial de gatit pentru incepatori?
+						</label>
 					</div>
-					<div class="panel-body">
-						<div class="form-group">
-							<textarea value="${recipeIngredients.instructiuni!''}" name ="instructiuni" rows="30" class="form-control" id="instructiuni" placeholder="Instructiunile retetei." >${recipeIngredients.instructiuni!''}</textarea>
-						<br/>
-
-						</div>
-					</div>
-
-					<input value="save" type="submit"/>
-						<#if recipe.id??>
-							<input name="id" type="hidden" value="${recipe.id?c}"/>
-						</#if>
+				<input value="save" type="submit"/>
 				</form>
 			</div>
 		</div>
-	</div>
 </div>
-<#include '/bootstrap_footer.ftl'>
+[#include '/bootstrap_footer.ftl']
 </body>
 </html>
 

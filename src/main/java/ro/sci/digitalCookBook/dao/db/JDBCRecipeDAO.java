@@ -2,8 +2,6 @@ package ro.sci.digitalCookBook.dao.db;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import ro.sci.digitalCookBook.dao.RecipeDAO;
 import ro.sci.digitalCookBook.domain.Recipe;
 
@@ -38,7 +36,6 @@ public class JDBCRecipeDAO implements RecipeDAO {
         this.userName = userName;
         this.pass = pass;
     }
-
 
     /**
      * Method will return all the results from the retete db table
@@ -215,34 +212,19 @@ public class JDBCRecipeDAO implements RecipeDAO {
         try {
             PreparedStatement ps = null;
 
-            if (recipe.getId() > 0) {
-                //TODO update part
-                StringBuilder querry = new StringBuilder();
-                querry.append(" UPDATE retete SET denumire=?, portii=?, data_adaugarii=data_adaugarii, descriere=?, istutorial=?,link=?, iduser=1, idcategoria=? idpoza=?"
-                                 + "WHERE id = ? RETURNING id;");
-
-                ps = connection.prepareStatement(querry.toString());
-
-            } else {
                 ps = connection.prepareStatement(
-                        "INSERT INTO retete (denumire, portii, data_adaugarii, descriere, istutorial, link, iduser, idcategoria, idpoza, idretetar) "
-                                + "VALUES(?, ?, now(), ?, ?, ?, 1 , ?, ?, ?) RETURNING id;"
-                               );
+                        "   UPDATE retete SET denumire=?, portii=?, descriere=?, istutorial=?, link=?, idcategoria=? "
+                                + "WHERE id = ? RETURNING id;");
 
-            }
 
             ps.setString(1, recipe.getDenumire());
             ps.setLong(2, recipe.getPortii());
             ps.setString(3, recipe.getDescriere());
-            ps.setString(4, (recipe.isIstutorial() ? "D" : "N"));
+            ps.setString(4, (recipe.isIstutorial() ? "N" : "D"));
             ps.setString(5, recipe.getLink());
             ps.setInt(6, recipe.getIdCategoria());
-            ps.setInt(7, recipe.getIdPoza());
-            ps.setInt(8, recipe.getIdRetetar());
+            ps.setInt(7, recipe.getId());
 
-            if (recipe.getId() > 0) {
-                ps.setInt(8, recipe.getId());
-            }
 
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
@@ -252,6 +234,42 @@ public class JDBCRecipeDAO implements RecipeDAO {
 
             connection.commit();
 
+        } catch (SQLException e) {
+
+            throw new RuntimeException("Error getting recipes.", e);
+        } finally {
+            try {
+                connection.close();
+            } catch (Exception e) {
+
+            }
+        }
+
+        return recipe;
+    }
+
+
+    public Recipe save(Recipe recipe) {
+        Connection connection = newConnection();
+
+        try {
+            PreparedStatement ps = null;
+
+                ps = connection.prepareStatement(
+                        "INSERT INTO retete (denumire, portii, data_adaugarii, descriere, istutorial, link, iduser, idcategoria) "
+                                + "VALUES(?, ?, now(), ?, ?, ?, 1 , ?) RETURNING id");
+
+
+            ps.setString(1, recipe.getDenumire());
+            ps.setLong(2, recipe.getPortii());
+            ps.setString(3, recipe.getDescriere().toString());
+            ps.setString(4, (recipe.isIstutorial() ? "N" : "D"));
+            ps.setString(5, recipe.getLink());
+            ps.setInt(6,recipe.getIdCategoria());
+
+            ResultSet rs = ps.executeQuery();
+            rs.close();
+            connection.commit();
         } catch (SQLException ex) {
 
             throw new RuntimeException("Error getting recipe.", ex);
@@ -266,7 +284,27 @@ public class JDBCRecipeDAO implements RecipeDAO {
         return recipe;
     }
 
-
+    /**
+     * This method will upload a photo, asign it to the DB and then return the ID of the row
+     * @param connection
+     * @param isAdd
+     * @return
+     */
+//    public int addPhotoTargetToDB(Connection connection, String isAdd){
+//        int id = 1;
+//        try{
+//            PreparedStatement ps = null;
+//            if(isAdd == "D"){
+//                ps = connection.prepareStatement("UPDATE poze SET cale_fisier = ? WHERE id = ?");
+//            }
+//
+//        }
+//
+//
+//
+//
+//        return id;
+//    }
 
 
     @Override

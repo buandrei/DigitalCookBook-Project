@@ -8,21 +8,16 @@ import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.RequestMapping;
-
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
-import ro.sci.digitalCookBook.domain.*;
-
+import ro.sci.digitalCookBook.domain.Recipe;
 import ro.sci.digitalCookBook.exception.ValidationException;
-import ro.sci.digitalCookBook.service.*;
+import ro.sci.digitalCookBook.service.RecipeService;
 
 import javax.validation.Valid;
-
-import java.io.*;
-import java.util.*;
+import java.util.Collection;
+import java.util.LinkedList;
+import java.util.List;
 
 @Controller
 @RequestMapping("/retete")
@@ -33,20 +28,7 @@ public class RecipeController {
     @Autowired
     private RecipeService recipeService;
 
-    @Autowired
-    private RecipePhotoService recipePhotoService;
-
-    @Autowired
-    private RecipeCategoryService recipeCategoryService;
-
-    @Autowired
-    private RecipeIngredientsService recipeIngredientsService;
-
-    @Autowired
-    private IngredientService ingredientService;
-
-
-    @RequestMapping("/list_all")
+    @RequestMapping("")
     public ModelAndView list() {
         ModelAndView result = new ModelAndView("retete/list_all");
 
@@ -59,72 +41,41 @@ public class RecipeController {
 
     @RequestMapping("/upload_recipe")
     public ModelAndView add() {
-        ModelAndView modelAndView = new ModelAndView("retete/upload_recipe");
-        modelAndView.addObject("photo", new RecipePhoto());
-        modelAndView.addObject("recipe", new Recipe());
-
-        Collection<RecipeCategory> recipeCategories = recipeCategoryService.listAll();
-        modelAndView.addObject("categories", recipeCategories);
-
-        modelAndView.addObject("recipeIngredients", new RecipeIngredient());
-        List<Ingredient> ingredientList = new ArrayList<>(ingredientService.listAll());
-        ingredientList.sort(Comparator.comparing(Ingredient::getDenumire));
-        modelAndView.addObject("ingredients", ingredientList);
-
-        return modelAndView;
-    }
-
-
-
-
-    @RequestMapping("/view")
-    public ModelAndView view() {
-        ModelAndView modelAndView = new ModelAndView("retete/view");
+        ModelAndView modelAndView = new ModelAndView("recipe/upload_recipe");
         modelAndView.addObject("recipe", new Recipe());
         return modelAndView;
     }
 //
-    @RequestMapping("/edit_recipe")
-    public ModelAndView edit(int id) {
-        Recipe recipe = recipeService.get(id);
-        ModelAndView modelAndView = new ModelAndView("retete/salvare_reteta");
-        modelAndView.addObject("recipe", recipe);
-        return modelAndView;
-    }
-
-    @RequestMapping("/delete")
-    public String delete(int id) {
-        recipeService.delete(id);
-        return "redirect:/retete";
-    }
-
-
-
-    @RequestMapping(value = "/salvare_reteta", method =  RequestMethod.POST)
+//    @RequestMapping("/view")
+//    public ModelAndView view() {
+//        ModelAndView modelAndView = new ModelAndView("employee/view");
+//        modelAndView.addObject("employee", new Employee());
+//        return modelAndView;
+//    }
+//
+//    @RequestMapping("/edit")
+//    public ModelAndView edit(long id) {
+//        Employee employee = employeeService.get(id);
+//        ModelAndView modelAndView = new ModelAndView("employee/add");
+//        modelAndView.addObject("employee", employee);
+//        return modelAndView;
+//    }
+//
+//    @RequestMapping("/delete")
+//    public String delete(long id) {
+//        employeeService.delete(id);
+//        return "redirect:/employee";
+//    }
+//
+    @RequestMapping("/save")
     public ModelAndView save(@Valid Recipe recipe,
-                             @Valid RecipePhoto recipePhoto,
-                             @Valid RecipeIngredient recipeIngredient,
-                             BindingResult bindingResult,
-                             @RequestParam("file") MultipartFile file
-                             ) {
+                             BindingResult bindingResult) {
+
         ModelAndView modelAndView = new ModelAndView();
-        String imageName = uploadFile(file);
-
         if (!bindingResult.hasErrors()) {
-            if (imageName != null) {
-                recipePhoto.setCale_fisier(imageName);
-            }
-
             try {
-                recipePhotoService.save(recipePhoto);
-                recipe.setIdPoza(recipePhoto.getId());
-                recipeIngredientsService.save(recipeIngredient);
-                recipe.setIdRetetar(recipeIngredient.getId());
                 recipeService.save(recipe);
-
-                System.out.println(recipe.isIstutorial());
-
-                RedirectView redirectView = new RedirectView("/retete/list_all");
+                RedirectView redirectView = new RedirectView("/");
                 modelAndView.setView(redirectView);
             } catch (ValidationException e) {
 
@@ -132,16 +83,8 @@ public class RecipeController {
 
                 List<String> errors = new LinkedList<>();
                 errors.add(e.getMessage());
-
                 modelAndView = new ModelAndView("retete/upload_recipe");
-                Collection<RecipeCategory> recipeCategories = recipeCategoryService.listAll();
-                List<Ingredient> ingredientList = new ArrayList<>(ingredientService.listAll());
-                ingredientList.sort(Comparator.comparing(Ingredient::getDenumire));
-
-                modelAndView.addObject("ingredients", ingredientList);
-                modelAndView.addObject("categories", recipeCategories);
                 modelAndView.addObject("errors", errors);
-                modelAndView.addObject("recipeIngredients", recipeIngredient);
                 modelAndView.addObject("recipe", recipe);
             }
 
@@ -161,27 +104,4 @@ public class RecipeController {
         return modelAndView;
     }
 
-    private String uploadFile(MultipartFile file){
-        if(!file.isEmpty()){
-            try{
-                byte[] bytes = file.getBytes();
-                String path = System.getProperty("user.dir") + "/src/main/resources/static/";
-                File dir = new File(path + File.separator + "recipe_images");
-                if(!dir.exists())
-                    dir.mkdirs();
-
-                String name = String.valueOf(new Date().getTime()) + ".jpeg";
-                File serverFile = new File(dir.getAbsolutePath() + File.separator + name);
-                BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(serverFile));
-                stream.write(bytes);
-                stream.close();
-                return name;
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }else{
-
-        }
-        return null;
-    }
 }
