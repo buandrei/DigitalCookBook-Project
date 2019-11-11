@@ -64,7 +64,6 @@ public class JDBCTipPromovareDAO implements TipPromovariDAO {
     @Override
     public Collection<TipPromovare> getAll() {
         Collection<TipPromovare> result = new LinkedList<>();
-
         try (Connection connection = newConnection();
              ResultSet rs = connection.createStatement()
                      .executeQuery("" +
@@ -75,10 +74,8 @@ public class JDBCTipPromovareDAO implements TipPromovariDAO {
             }
             connection.commit();
         } catch (SQLException ex) {
-
             throw new RuntimeException("Couldn't get promotion types!.", ex);
         }
-
         return result;
     }
 

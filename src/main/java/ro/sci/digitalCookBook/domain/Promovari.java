@@ -12,6 +12,8 @@ public class Promovari extends AbstractModel{
     private int idUser;
     private boolean starePromovare;
     private int idTipPromovare;
+    private TipPromovare tipPromovare;
+
 
     public Promovari() { }
 
@@ -22,6 +24,16 @@ public class Promovari extends AbstractModel{
         this.idUser=idUser;
         this.starePromovare=starePromovare;
         this.idTipPromovare=idTipPromovare;
+
+
+    }
+
+    public TipPromovare getTipPromovare() {
+        return tipPromovare;
+    }
+
+    public void setTipPromovare(TipPromovare tipPromovare) {
+        this.tipPromovare = tipPromovare;
     }
 
     public int getId() {

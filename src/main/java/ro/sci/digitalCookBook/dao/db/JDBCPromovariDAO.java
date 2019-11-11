@@ -3,6 +3,8 @@ package ro.sci.digitalCookBook.dao.db;
 import ro.sci.digitalCookBook.dao.PromovariDAO;
 import ro.sci.digitalCookBook.domain.Promovari;
 import ro.sci.digitalCookBook.domain.Recipe;
+import ro.sci.digitalCookBook.domain.TipPromovare;
+import ro.sci.digitalCookBook.service.TipPromovariService;
 
 import java.sql.*;
 import java.util.Collection;
@@ -83,10 +85,19 @@ public class JDBCPromovariDAO implements PromovariDAO {
     }
 
     private Promovari extragerePromovari(ResultSet rs) throws SQLException {
+        System.out.println("Intrat in extragere promo");
+        TipPromovare tipPromovare = new TipPromovare();
+        tipPromovare.setId(new TipPromovariService().get(rs.getInt("idtip_promovare")).getId());
+        tipPromovare.setDenumire(new TipPromovariService().get(rs.getInt("idtip_promovare")).getDenumire());
+        tipPromovare.setDescriere(new TipPromovariService().get(rs.getInt("idtip_promovare")).getDescriere());
+        tipPromovare.setPerioada(new TipPromovariService().get(rs.getInt("idtip_promovare")).getPerioada());
+        tipPromovare.setSumaPromovare(new TipPromovariService().get(rs.getInt("idtip_promovare")).getSumaPromovare());
         Promovari promovare = new Promovari();
         promovare.setId(rs.getInt("id"));
         promovare.setDataAdaugare((rs.getTimestamp("data_adaugare")).toLocalDateTime());
         promovare.setDataFinal((rs.getTimestamp("data_final")).toLocalDateTime());
+        promovare.setTipPromovare(tipPromovare);
+
         return promovare;
     }
 
@@ -120,16 +131,12 @@ public class JDBCPromovariDAO implements PromovariDAO {
     public boolean delete(Promovari promotion) {
         Connection conn=newConnection();
         try {
-            PreparedStatement ps1 = conn.prepareStatement("DELETE FROM promovari WHERE id=?;");
-            ps1.setInt(1, promotion.getId());
+            StringBuilder query = new StringBuilder();
+            query.append(" UPDATE retete SET idpromotie = DEFAULT WHERE idpromotie = " + promotion.getId() + ";");
+            query.append(" DELETE FROM promovari WHERE id = " + promotion.getId() + ";");
+            PreparedStatement ps1 = conn.prepareStatement(query.toString());
+            System.out.println(query.toString());
             ps1.executeUpdate();
-            try {
-                    PreparedStatement ps2 = conn.prepareStatement("UPDATE retete SET idpromotie = DEFAULT WHERE idpromotie = ?");
-                    ps2.setInt(1, promotion.getId());
-                    ps2.executeUpdate();
-            } catch (SQLException ex) {
-                throw new RuntimeException("Eroare stergere promovare", ex);
-            }
             conn.commit();
         } catch (SQLException ex) {
             throw new RuntimeException("Eroare stergere promovare", ex);

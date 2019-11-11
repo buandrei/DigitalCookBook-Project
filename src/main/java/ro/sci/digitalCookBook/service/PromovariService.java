@@ -60,7 +60,7 @@ public class PromovariService {
     }
 
     public Collection<Promovari> listAll() {
-        return null;
+        return daoPromovari.getAll();
     }
 
     public boolean modificaDataFinal(int id) {
@@ -83,4 +83,5 @@ public class PromovariService {
     public void setDao(PromovariDAO dao) {
         this.daoPromovari = dao;
     }
+
 }

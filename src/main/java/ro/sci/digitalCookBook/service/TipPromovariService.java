@@ -11,12 +11,12 @@ import java.util.EnumSet;
 public class TipPromovariService {
     private TipPromovariDAO daoTipPromovare;
 
-        public Collection<TipPromovare> listAll() {
+    public Collection<TipPromovare> listAll() {
             return daoTipPromovare.getAll();
     }
 
     public TipPromovariDAO getDao() {
-    return daoTipPromovare;
+            return daoTipPromovare;
 }
 
     public void setDao(TipPromovariDAO dao) {
@@ -24,6 +24,6 @@ public class TipPromovariService {
     }
 
     public TipPromovare get(int id) {
-        return daoTipPromovare.findTipById(id);
+            return daoTipPromovare.findTipById(id);
     }
 }

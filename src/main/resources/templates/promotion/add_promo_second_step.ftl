@@ -25,40 +25,38 @@
 		</div>
 	</div>
 
-	<!--navbar -->
-	<nav class="navbar navbar-inverse .navbar-fixed-top">
-	  <div class="container-fluid">
-		<ul class="nav navbar-nav">
-			<li class="active"><a href="/">Home</a></li>
-			<li class="dropdown">
-				<a class="dropdown-toggle"  href="/retete">Cautare retete
-				<span class="caret"></span></a>
-					<ul class="dropdown-menu list-inline dropdown-menu-modified">
+	<nav style="margin-bottom:15px" class="navbar navbar-expand-sm navbar-dark bg-dark">
+		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExample03" aria-controls="navbarsExample03" aria-expanded="false" aria-label="Toggle navigation">
+			<span class="navbar-toggler-icon"></span>
+		</button>
 
-							<li>
-								<a href="../retete/list_all">Cautare simpla</a>
-							</li>
-							<li>
-								<a href="/specific_ingredients">Cauta dupa ingrediente specifice</a>
-							</li>
-
-					</ul>
+		<div class="collapse navbar-collapse" id="navbarsExample03">
+			<ul class="navbar-nav mr-auto">
+				<li class="nav-item">
+					<a class="nav-link" href="/">Home</a>
 				</li>
-			<li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle " style="padding:0" href="#" id="dropdown03" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Promovari</a>
-                <div class="dropdown-menu" style="top:30px" aria-labelledby="dropdown03">
-							<a class="dropdown-item" href="/promotion/add_promo_first_step">Adaugare promovare</a>
-    						<a class="dropdown-item" href="/promotion/list_promotion_first_step">Listare promovare retete</a>
-							<a class="dropdown-item" href="/promotion/delete_promotion">Stergere promovare</a>
-                </div>
-            </li>
-			<li><a href="/tutorials">Tutoriale de gatit</a></li>
-			<li><a href="/retete/upload_recipe">Incarca reteta</a></li>
-			<li><a href="/events">Evenimente</a></li>
-		</ul>
-	  </div>
+				<li class="nav-item dropdown ">
+					<a class="nav-link dropdown-toggle " style="padding:0" href="#" id="dropdown03" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Retete</a>
+					<div class="dropdown-menu" style="top:30px" aria-labelledby="dropdown03">
+						<a class="dropdown-item" href="/retete/list_all">Cautare simpla</a>
+						<a class="dropdown-item" href="/retete/cauta_dupa_ingrediente">Cauta dupa ingrediente specifice</a>
+					</div>
+				</li>
+                <li class="nav-item dropdown active">
+                    <a class="nav-link dropdown-toggle " style="padding:0" href="#" id="dropdown03" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Promovari</a>
+                    <div class="dropdown-menu" style="top:30px" aria-labelledby="dropdown03">
+                        <a class="dropdown-item" href="/promotion/add_promo_first_step">Adaugare promovare</a>
+                        <a class="dropdown-item" href="/promotion/list_all_promotions">Listare toate promovarile de retete</a>
+                        <a class="dropdown-item" href="/promotion/delete_promotion">Stergere promovare</a>
+                    </div>
+                </li>
+				<li class="nav-item" ><a class="nav-link" href="/retete/tutorials">Tutoriale de gatit</a></li>
+				<li class="nav-item "><a  class="nav-link" href="/retete/upload_recipe">Incarca reteta</a></li>
+				<li class="nav-item"><a class="nav-link" href="/events">Evenimente</a></li>
+			</ul>
+		</div>
 	</nav>
-</div>
+
 </header>
 
 

@@ -63,17 +63,16 @@
 <!-- BODY -->
 		<div class="bd-example">
 			<div class="list-group">
-				<#list recipe_list as recipe>
-				<div class="d-flex w-100 justify-content-between">
-					<h5 class="mb-1">${recipe.name!''}</h5>
-					<small>${recipe.addDate?date}</small>
-				</div>
-				<p class="mb-1">${recipe.description!''}</p>
-				<a id="promo_delete_button" onclick="alertDeletePromotion(${recipe.idPromotie})""><button type="button" class="btn btn-danger float-right">Danger</button></a>
-				</#list>
+				<#list promotion_list as promotion>
+					<div class="d-flex w-100 justify-content-between">
+						<h5 class="mb-1">${promotion.id!''}</h5>
+						<small>${promotion.idTipPromovare!.denumire''}</small>
+                        <small>${promotion.dataAdaugare?date}</small>
+						<small>${promotion.dataFinal?date}</small>
+						<small>${promotion.idTipPromovare!.sumaPromovare''}</small>
+					</div>
 			</div>
 		</div>
-
 </div>
 </main>
 
