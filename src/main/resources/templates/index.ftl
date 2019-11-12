@@ -8,20 +8,7 @@
 <body>
 <div class="container">
 	<header>
-		<div class="page-header">
-        		<!-- TOP (top part, navbar)-->
-
-			<div class="row">
-			<!--logo-->
-			  <div class="col-8" >
-				<h1>Aici o sa avem logo</h1>
-			  </div>
-
-			   <div class="col-4" >
-				<p>Aici o sa punem buton sign up si login .</p>
-			  </div>
-			</div>
-		</div>
+        <#include '/top_of_pages.ftl'>
 
         <nav style="margin-bottom:15px" class="navbar navbar-expand-sm navbar-dark bg-dark">
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExample03" aria-controls="navbarsExample03" aria-expanded="false" aria-label="Toggle navigation">
@@ -41,7 +28,7 @@
                         </div>
                     </li>
                     <li class="nav-item"><a class="nav-link" href="/promotion">Promovare</a></li>
-                    <li class="nav-item" ><a class="nav-link" href="/retete/tutorials">Tutoriale de gatit</a></li>
+                    <li class="nav-item" ><a class="nav-link" href="/retete/tutoriale_incepatori">Tutoriale de gatit</a></li>
                     <li class="nav-item "><a  class="nav-link" href="/retete/upload_recipe">Incarca reteta</a></li>
                     <li class="nav-item"><a class="nav-link" href="/events">Evenimente</a></li>
                 </ul>
@@ -50,67 +37,65 @@
 	</header>
 	<main role="main">
 
-	<section class="jumbotron text-center">
-        <div class="container">
-			<h1 class="jumbotron-heading">Bine ati venit!</h1>
-			<p class="lead text-muted">Suntem bucurosi sa va prezentam site-ul de retete DigitalCookBook. Un site in care dvs puteti sa impartasiti retetele proprii cu alti utilizatori, sa le promovati sau sa promovati evenimente!</p>
-        </div>
-	</section>
-	<section class="jumbotron text-center">
-        <div class="container">
-			<h3 class="jumbotron-heading">Avem o selectie de retete promovate!</h3>
-        </div>
-		<hr style="hr_styled">
-
-		<#list recipeMap?keys as key>
-			${key}
-			<div class="card-deck" style="margin-bottom:15px;">
-			<#assign x = 0>
-			<#list recipeMap[key] as recipe>
-
-				<#if x==3>
-					</div>
-					<div class="card-deck" style="margin-bottom:15px;">
-					<#assign x = 0>
-				</#if>
-					<div class="card
-						<#if recipe.idTipPromotie == 1>
-							platinum_card
-						<#elseif recipe.idTipPromotie == 2>
-							golden_card
-						<#elseif recipe.idTipPromotie == 3>
-							bronze_card
-						<#else>
-						</#if>
-					" style="width: 16rem; max-width:350px;">
-						<div style="height:195px;">
-							<a class="text-dark " href="/retete/vizualizare_reteta?id=${recipe.id?c}">
-								<img style="max-height:195px;" src="data:image/*;base64, ${recipe.photo.getEncodedContent()!''}" class="card-img-top zoom-image" >
-							</a>
-						</div>
-						<a class="text-dark " href="/retete/vizualizare_reteta?id=${recipe.id?c}">
-							<div class="card-body">
-								<h5 class="card-title" style="height:40px;">${recipe.name!''}</h5>
-								<hr class=".hr_styled"/>
-								<h6 class="card-title text-muted font-italic" style="height:30px;">Categoria: ${recipe.recipeCategory.getName()!''}</h6>
-								<p class="card-text" style="height:140px;">${recipe.description!''}</p>
-							</div>
-						</a>
-						<div class="card-footer">
-							 <small class="text-muted">Author: ${recipe.user.getNume()!''} </small>
-						</div>
-					</div>
-				<#assign x++>
-			</#list>
+		<section class="jumbotron text-center">
+			<div class="container">
+				<h1 class="jumbotron-heading">Bine ati venit!</h1>
+				<p class="lead text-muted">Suntem bucurosi sa va prezentam site-ul de retete DigitalCookBook. Un site in care dvs puteti sa impartasiti retetele proprii cu alti utilizatori, sa le promovati sau sa promovati evenimente!</p>
 			</div>
-		</#list>
-	</section>
+		</section>
+		<section class="jumbotron text-center">
+			<div class="container">
+				<h3 class="jumbotron-heading">Avem o selectie de retete promovate!</h3>
+			</div>
+			<hr style="hr_styled">
+			<#if recipeMap?size != 0>
+			<#list recipeMap?keys as key>
 
+				<h4 class="text-center custom_header_for_${key}"></span><b>${key}</b></h4>
+				<div class="card-deck" style="margin-bottom:15px;">
+				<#assign x = 0>
+				<#list recipeMap[key] as recipe>
 
+					<#if x==3>
+						</div>
+						<div class="card-deck" style="margin-bottom:15px;">
+						<#assign x = 0>
+					</#if>
+						<div class="card
+							<#if recipe.idTipPromotie == 1>
+								platinum_card
+							<#elseif recipe.idTipPromotie == 2>
+								golden_card
+							<#elseif recipe.idTipPromotie == 3>
+								bronze_card
+							<#else>
+							</#if>
+						" style="width: 16rem; max-width:350px;">
+							<div style="height:195px;">
+								<a class="text-dark " href="/retete/vizualizare_reteta?id=${recipe.id?c}">
+									<img style="max-height:195px;" src="data:image/*;base64, ${recipe.photo.getEncodedContent()!''}" class="card-img-top zoom-image" >
+								</a>
+							</div>
+							<a class="text-dark " href="/retete/vizualizare_reteta?id=${recipe.id?c}">
+								<div class="card-body">
+									<h5 class="card-title" style="height:40px;">${recipe.name!''}</h5>
+									<hr class=".hr_styled"/>
+									<h6 class="card-title text-muted font-italic" style="height:30px;">Categoria: ${recipe.recipeCategory.getName()!''}</h6>
+									<p class="card-text" style="height:140px;">${recipe.description!''}</p>
+								</div>
+							</a>
+							<div class="card-footer">
+								 <small class="text-muted">Author: ${recipe.user.getNume()!''} </small>
+							</div>
+						</div>
+					<#assign x++>
+				</#list>
+				</div>
+			</#list>
+			</#if>
+		</section>
 	</main>
-	<footer>
-<#include '/bootstrap_footer.ftl'>
-	</footer>
+	<#include '/bootstrap_footer.ftl'>
 </div>
 </body>
 </html>

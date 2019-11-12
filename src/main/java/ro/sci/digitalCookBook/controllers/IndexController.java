@@ -31,31 +31,31 @@ public class IndexController {
 	public ModelAndView index() {
 
 		ModelAndView modelAndView = new ModelAndView();
-		List<Recipe> recipesMappedByPromotion = new ArrayList<>(recipeService.getAll(true));
+		List<Recipe> recipesMappedByPromotion = new ArrayList<>(recipeService.getAll(true, false));
 		System.out.println(recipesMappedByPromotion);
-		Map<String, List<Recipe>> recipeMap = new HashMap<>();
+		Map<String, List<Recipe>> recipeUnsortedMap = new HashMap<>();
 
 		for(Recipe recipe : recipesMappedByPromotion){
 			String promotionType;
 			if(recipe.getIdTipPromotie() == 1){
-				promotionType = "Platinum";
+				promotionType = "PLATINUM";
 			}else if(recipe.getIdTipPromotie() == 2){
-				promotionType = "Gold";
+				promotionType = "GOLD";
 			}else{
-				promotionType = "Bronze";
+				promotionType = "BRONZE";
 			}
 
-			if(recipeMap.get(promotionType) == null){
-				recipeMap.put(promotionType, new ArrayList<>(Arrays.asList(recipe)));
+			if(recipeUnsortedMap.get(promotionType) == null){
+				recipeUnsortedMap.put(promotionType, new ArrayList<>(Arrays.asList(recipe)));
 			}else{
-				recipeMap.get(promotionType).add(recipe);
+				recipeUnsortedMap.get(promotionType).add(recipe);
 			}
 		}
 
-		System.out.println(recipeMap);
+		Map<String, List<Recipe>> reverseSortedMap = new TreeMap<>(Collections.reverseOrder());
+		reverseSortedMap.putAll(recipeUnsortedMap);
 
-		modelAndView.addObject("recipeMap", recipeMap);
-
+		modelAndView.addObject("recipeMap", reverseSortedMap);
 		modelAndView.setViewName("index");
 		return modelAndView;
 	}
