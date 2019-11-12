@@ -27,7 +27,7 @@
                         </div>
                     </li>
                     <li class="nav-item"><a class="nav-link" href="/promotion">Promovare</a></li>
-                    <li class="nav-item" ><a class="nav-link" href="/retete/tutoriale_incepatori">Tutoriale de gatit</a></li>
+                    <li class="nav-item" ><a class="nav-link" href="/retete/tutorials">Tutoriale de gatit</a></li>
                     <li class="nav-item "><a  class="nav-link" href="/retete/upload_recipe">Incarca reteta</a></li>
                     <li class="nav-item"><a class="nav-link" href="/events">Evenimente</a></li>
                 </ul>
@@ -35,6 +35,7 @@
         </nav>
 	</header>
 	<main role="main">
+
 		<div id="block_error">
 			<div>
 				<h2>Oops. &nbsp Ati intampinat o eroare :-( </h2>
@@ -45,7 +46,7 @@
 			</div>
 		</div>
 	</main>
-<#include '/bootstrap_footer.ftl'>
+	<#include '/bootstrap_footer.ftl'>
 </div>
 </body>
 </html>

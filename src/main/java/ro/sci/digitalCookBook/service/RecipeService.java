@@ -22,15 +22,31 @@ public class RecipeService {
     @Autowired
     private RecipeDAO dao;
 
-    public Collection<Recipe> getAll() {
+    public Collection<Recipe> getAll(boolean isOnlyPromotedForHomePage, boolean onlyTutorialRecipes) {
 
-        return dao.getAll();
+        return dao.getAll(isOnlyPromotedForHomePage , onlyTutorialRecipes);
     }
 
-    public Collection<Recipe> search( String query) {
-        LOGGER.debug("Searching for " + query);
-        return dao.searchByName(query);
+    public Collection<Recipe> searchRecipe(String name, String categoryId) {
+        LOGGER.debug("Searching for recipes with name " + name + " and categoryId = " + categoryId);
+        return dao.searchForRecipe(name, categoryId);
     }
+
+    public Collection<Recipe> searchBySpecificIngredients(String ingredients, boolean moreIngredients) {
+        LOGGER.debug("Searching for recipes with ingredients " + ingredients + " and with the more ingredients option selected");
+        return dao.searchForRecipeByIngredients(ingredients, moreIngredients);
+    }
+
+
+
+    public Collection<Recipe> getAllWherePromotionNotNull() {
+        return dao.getAllWherePromotionNotNull();
+    }
+
+    public Collection<Recipe> getRecipesByUser(String email) {
+        return dao.getRecipesByUser(email);
+    }
+
 
     public boolean delete(int id) {
         LOGGER.debug("Deleting recipe with id =  " + id);
