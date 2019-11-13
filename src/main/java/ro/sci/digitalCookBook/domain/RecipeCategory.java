@@ -1,20 +1,20 @@
 package ro.sci.digitalCookBook.domain;
 
 public class RecipeCategory extends AbstractModel{
-    private String denumire;
+    private String name;
 
-    public String getDenumire() {
-        return denumire;
+    public String getName() {
+        return name;
     }
 
     public void setName(String name) {
-        this.denumire = name;
+        this.name = name;
     }
 
     @Override
     public String toString() {
         return "RecipeCategory{" +
-                "name='" + denumire + '\'' +
+                "name='" + name + '\'' +
                 '}';
     }
 }

@@ -1,78 +1,87 @@
-[#ftl]
-
-[#import "/spring.ftl" as spring /]
+<#ftl>
+<#import "/spring.ftl" as spring />
+<html lang="ro">
 <head>
- <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Login</title>
-    <link  href="[@spring.url '/css/bootstrap.min.css' /]" rel="stylesheet">
-	<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-    <!-- Include all compiled plugins (below), or include individual files as needed -->
-    <script src="[@spring.url '/js/bootstrap.min.js' /] "></script>
-	
-	
-	
+<#include '/bootstrap_header.ftl'>
 </head>
-[#escape x as x?html]
+<body>
+<div class="container">
+	<div class="page-header">
+	<!-- TOP (top part, navbar)-->
 
-	<div class="container">
-		<a href="/"> <img src="[@spring.url '/images/logo.png' /]" width="100"/>
+		<div class="row">
+		<!--logo-->
+		  <div class="col-8" >
+			<h1>Aici o sa avem logo</h1>
+		  </div>
 
-
-		<ol class="breadcrumb">
-			<li><a href="/">Home</a></li>
-			<li><a href="/employee">Employees</a></li>
-			<li class="active">Login</li>
-		</ol>
-
-		<div class="panel panel-default" style="margin-left:auto; margin-right:auto; width:400px">
-		
-
-			<div class="panel-body">
-			
-			    [#if RequestParameters.error??]
-				    <div>
-				        <ul>
-				                <b style="color:red">
-								[@spring.message 'invalid.username'/]
-				                </b>
-
-				        </ul>
-				    </div>
-				[/#if]
-
-			    
-				<form action="/login" method="POST">
-					<div class="form-group">
-						<label for="firstName">Username</label> 
-						<input type="text"
-							class="form-control" id="username" name="username"
-							placeHolder="Username" "/>
-					</div>
-					<div class="form-group">
-						<label for="lastName">Password</label> 
-						<input type="password"
-							class="form-control" id="password" name="password"
-							placeHolder="Password" />
-					</div>
-
-
-					<div class="container-fluid">
-						<div class="collapse navbar-collapse">
-							<ul class="nav navbar-nav navbar-right">
-								
-								<li><button type="submit" class="btn btn-default">LOGIN</button></li>
-							</ul>
-						</div>
-					</div>
-					<br /> <input type="hidden" class="form-control" id="id" value="0" />
-			</form>
-			</div>
+		   <div class="col-4" >
+			<p>Aici o sa punem buton sign up si login .</p>
+		  </div>
 		</div>
 	</div>
 
+	<nav style="margin-bottom:15px" class="navbar navbar-expand-sm navbar-dark bg-dark">
+		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExample03" aria-controls="navbarsExample03" aria-expanded="false" aria-label="Toggle navigation">
+			<span class="navbar-toggler-icon"></span>
+		</button>
+
+		<div class="collapse navbar-collapse" id="navbarsExample03">
+			<ul class="navbar-nav mr-auto">
+				<li class="nav-item">
+					<a class="nav-link" href="/">Home</a>
+				</li>
+				<li class="nav-item dropdown">
+					<a class="nav-link dropdown-toggle " style="padding:0" href="#" id="dropdown03" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Retete</a>
+					<div class="dropdown-menu" style="top:30px" aria-labelledby="dropdown03">
+						<a class="dropdown-item" href="/retete/list_all">Cautare simpla</a>
+						<a class="dropdown-item" href="/retete/cauta_dupa_ingrediente">Cauta dupa ingrediente specifice</a>
+					</div>
+				</li>
+				<li class="nav-item"><a class="nav-link" href="/promotion">Promovare</a></li>
+				<li class="nav-item" ><a class="nav-link" href="/retete/tutoriale_incepatori">Tutoriale de gatit</a></li>
+				<li class="nav-item "><a  class="nav-link" href="/retete/upload_recipe">Incarca reteta</a></li>
+				<li class="nav-item"><a class="nav-link" href="/events">Evenimente</a></li>
+			</ul>
+		</div>
+	</nav>
+
+	<div class="container">
 
 
-[/#escape]
+		<div class="row">
+			<div class="col-sm-9 col-md-7 col-lg-5 mx-auto">
+				<div class="card card-signin my-5">
+					<div class="card-body">
+					<#if RequestParameters.error??>
+						<div>
+							<ul>
+								<b style="color:red">
+								<@spring.message 'invalid.username'/>
+								</b>
+							</ul>
+						</div>
+					</#if>
+						<h5 class="card-title text-center">Salut!</h5>
+						<form class="form-signin" action="/login" method="POST">
+							<div class="form-label-group">
+								<input type="email" id="username" name="username" class="form-control" placeholder="Adresa de email" required autofocus>
+								<label for="username">Email</label>
+							</div>
+
+							<div class="form-label-group">
+								<input type="password" id="password" name="password" class="form-control" placeholder="Parola" required>
+								<label for="password">Parola</label>
+							</div>
+							<button class="btn btn-lg btn-primary btn-block text-uppercase" type="submit">Continua</button>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script src="/js/search_recipe.js" ></script>
+<#include '/bootstrap_footer.ftl'>
+</body>
+</html>

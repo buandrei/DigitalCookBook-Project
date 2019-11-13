@@ -72,7 +72,7 @@
 		</form>
 
 		<#if nothingFound?? >
-		<p class="text-center">${nothingFound}</p>
+			<p class="text-center">${nothingFound}</p>
 		</#if>
 
 		<#assign recipePageList = recipeList>
@@ -160,13 +160,12 @@
 					</li>
 
 				</#if>
+
 			</ul>
 		</nav>
 	</main>
-
-<#include '/bootstrap_footer.ftl'>
+	<#include '/bootstrap_footer.ftl'>
 </div>
-<script src="/js/search_recipe.js" ></script>
 </body>
 </html>
 

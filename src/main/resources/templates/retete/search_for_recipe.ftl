@@ -160,11 +160,11 @@
 					</li>
 
 				</#if>
+
 			</ul>
 		</nav>
 	</main>
-
-<#include '/bootstrap_footer.ftl'>
+	<#include '/bootstrap_footer.ftl'>
 </div>
 <script src="/js/search_recipe.js" ></script>
 </body>

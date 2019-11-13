@@ -22,14 +22,31 @@ public class RecipeService {
     @Autowired
     private RecipeDAO dao;
 
-    public Collection<Recipe> listAll() {
-        return dao.getAll();
+    public Collection<Recipe> getAll(boolean isOnlyPromotedForHomePage, boolean onlyTutorialRecipes) {
+
+        return dao.getAll(isOnlyPromotedForHomePage , onlyTutorialRecipes);
     }
 
-    public Collection<Recipe> search( String query) {
-        LOGGER.debug("Searching for " + query);
-        return dao.searchByName(query);
+    public Collection<Recipe> searchRecipe(String name, String categoryId) {
+        LOGGER.debug("Searching for recipes with name " + name + " and categoryId = " + categoryId);
+        return dao.searchForRecipe(name, categoryId);
     }
+
+    public Collection<Recipe> searchBySpecificIngredients(String ingredients, boolean moreIngredients) {
+        LOGGER.debug("Searching for recipes with ingredients " + ingredients + " and with the more ingredients option selected");
+        return dao.searchForRecipeByIngredients(ingredients, moreIngredients);
+    }
+
+
+
+    public Collection<Recipe> getAllWherePromotionNotNull() {
+        return dao.getAllWherePromotionNotNull();
+    }
+
+    public Collection<Recipe> getRecipesByUser(String email) {
+        return dao.getRecipesByUser(email);
+    }
+
 
     public boolean delete(int id) {
         LOGGER.debug("Deleting recipe with id =  " + id);
@@ -37,7 +54,7 @@ public class RecipeService {
         try {
             recipe = dao.findById(id);
         } catch (EmptyResultDataAccessException e) {
-            LOGGER.warn("There is no recipe with id = ");
+            LOGGER.warn("Nu s-a putut sterge.Nu am gasit  ID: " + id +" .Contactati suport!");
             return false;
         }
         if (recipe != null) {
@@ -61,12 +78,12 @@ public class RecipeService {
     }
 
     private void validate(Recipe recipe) throws ValidationException {
-        List<String> errors = new LinkedList<String>();
-        if (StringUtils.isEmpty(recipe.getDenumire())) {
+        List<String> errors = new LinkedList<>();
+        if (StringUtils.isEmpty(recipe.getName())) {
             errors.add("Nu s-a completat denumirea! ");
         }
 
-        if (StringUtils.isEmpty(recipe.getDescriere())) {
+        if (StringUtils.isEmpty(recipe.getDescription())) {
             errors.add("Nu s-a completat descrierea!");
         }
 
@@ -78,9 +95,36 @@ public class RecipeService {
             errors.add("Reteta nu are link!");
         }
 
+
+        if (StringUtils.isEmpty(recipe.getCookingTime())) {
+            errors.add("Nu a fost completat timpul de gatire!");
+        }
+
+        if (StringUtils.isEmpty(recipe.getLink())) {
+            errors.add("Nu a fost completat timpul de preparare!");
+        }
+
         if (!errors.isEmpty()) {
             throw new ValidationException(errors.toArray(new String[] {}));
         }
+    }
+
+    public boolean giveRating(int id, long rating) {
+        LOGGER.debug("Giving a rating to the recipe with id =  " + id);
+        Recipe recipe = null;
+
+        try {
+            recipe = dao.findById(id);
+        } catch (EmptyResultDataAccessException e) {
+            LOGGER.warn("Nu s-a putut sterge.Nu am gasit  ID: " + id +" .Contactati suport!");
+            return false;
+        }
+        if (recipe != null) {
+            dao.giveRating(recipe, rating);
+            return true;
+        }
+
+        return false;
     }
 
     public RecipeDAO getDao() {

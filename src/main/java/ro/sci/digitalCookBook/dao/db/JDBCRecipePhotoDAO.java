@@ -5,8 +5,12 @@ import org.slf4j.LoggerFactory;
 import ro.sci.digitalCookBook.dao.RecipePhotoDAO;
 import ro.sci.digitalCookBook.domain.RecipePhoto;
 
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 import java.sql.*;
 import java.util.Collection;
+import java.util.LinkedList;
+import java.util.List;
 
 public class JDBCRecipePhotoDAO implements RecipePhotoDAO {
     private static final Logger LOGGER = LoggerFactory.getLogger(JDBCRecipeDAO.class);
@@ -26,20 +30,74 @@ public class JDBCRecipePhotoDAO implements RecipePhotoDAO {
     }
 
 
-    private RecipePhoto extractRecipe(ResultSet rs) throws SQLException {
-        return null;
+    private RecipePhoto extractPhoto(ResultSet rs) throws SQLException {
+        RecipePhoto recipePhoto = new RecipePhoto();
+
+        recipePhoto.setId(rs.getInt("id"));
+        recipePhoto.setContent(rs.getBytes("content"));
+        recipePhoto.setFileName(rs.getString("file_name"));
+
+        return recipePhoto;
     }
 
 
 
     @Override
     public Collection<RecipePhoto> getAll() {
-        return null;
+        Collection<RecipePhoto> result = new LinkedList<>();
+
+        try (Connection connection = newConnection();
+             ResultSet rs = connection.createStatement()
+                     .executeQuery("" +
+                             "SELECT poze.* " +
+                             "  1 AS unu " +
+                             "FROM poze ")) {
+
+            while (rs.next()) {
+                result.add(extractPhoto(rs));
+            }
+            connection.commit();
+        } catch (SQLException ex) {
+
+            throw new RuntimeException("Error getting photos.", ex);
+        }
+
+        return result;
     }
 
     @Override
     public RecipePhoto findById(int id) {
-     return null;
+        Connection connection = newConnection();
+
+        List<RecipePhoto> result = new LinkedList<>();
+
+        try (ResultSet rs = connection.createStatement()
+                .executeQuery("SELECT poze.*," +
+                        "         1 AS unu " +
+                        "   FROM poze " +
+
+
+                        "   WHERE poze.id = " + id)) {
+
+            while (rs.next()) {
+                result.add(extractPhoto(rs));
+            }
+            connection.commit();
+        } catch (SQLException ex) {
+
+            throw new RuntimeException("Error getting photo!", ex);
+        } finally {
+            try {
+                connection.close();
+            } catch (Exception ex) {
+
+            }
+        }
+
+        if (result.size() > 1) {
+            throw new IllegalStateException("Multiple photos for the ID: " + id);
+        }
+        return result.isEmpty() ? null : result.get(0);
     }
 
     @Override
@@ -49,20 +107,21 @@ public class JDBCRecipePhotoDAO implements RecipePhotoDAO {
             PreparedStatement ps = null;
 
             if (recipePhoto.getId() > 0) {
-                //TODO
-                ps = connection.prepareStatement( " UPDATE poze SET cale_fisier=? WHERE id = ? RETURNING id;");
+
+                ps = connection.prepareStatement( " UPDATE poze SET content=?,file_name=? WHERE id = ? RETURNING id;");
 
             } else {
                 ps = connection.prepareStatement(
-                        "INSERT INTO poze (cale_fisier) VALUES (?) RETURNING id;"
+                        "INSERT INTO poze (content,file_name) VALUES (?, ?) RETURNING id;"
                 );
 
             }
 
-            ps.setString(1, recipePhoto.getCale_fisier());
+            ps.setBytes(1, recipePhoto.getContent());
+            ps.setString(2, recipePhoto.getFileName());
 
             if (recipePhoto.getId() > 0) {
-                ps.setInt(2, recipePhoto.getId());
+                ps.setInt(3, recipePhoto.getId());
             }
 
             ResultSet rs = ps.executeQuery();

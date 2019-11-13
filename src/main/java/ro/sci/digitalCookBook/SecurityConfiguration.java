@@ -41,26 +41,20 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .authoritiesByUsernameQuery(rolesQuery)
                 .dataSource(dataSource)
                 .passwordEncoder(bCryptPasswordEncoder);
-
     }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 
         http
+                .csrf().disable().headers().disable()
                 .authorizeRequests()
-                .antMatchers("/", "/file").permitAll()
+                    .antMatchers("/retete/list_all/**").permitAll()
+                    .antMatchers("/retete/upload_recipe/**").authenticated()
+                    .and()
 
-
-                .anyRequest().authenticated()
-
-                .and()
-                .csrf().disable()
                 .formLogin()
-                .loginPage("/login")
-                .permitAll()
-
-
+                    .loginPage("/login").permitAll()
                 .and()
                 .logout().logoutSuccessUrl("/").permitAll()
                 .and().exceptionHandling()

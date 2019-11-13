@@ -42,10 +42,10 @@ public class RecipePhotoService {
 //        return false;
 //    }
 
-//    public Recipe get(int id) {
-//        LOGGER.debug("Getting recipe for id: " + id);
-//        return dao.findById(id);
-//    }
+    public RecipePhoto get(int id) {
+        LOGGER.debug("Getting photo for id: " + id);
+        return recipePhotoDAO.findById(id);
+    }
 
     public void save(RecipePhoto recipePhoto ) throws ValidationException {
         LOGGER.debug("Saving: " + recipePhoto);
@@ -55,11 +55,9 @@ public class RecipePhotoService {
 
     private void validate(RecipePhoto recipePhoto) throws ValidationException {
         List<String> errors = new LinkedList<String>();
-        if (StringUtils.isEmpty(recipePhoto.getCale_fisier())) {
+        if (StringUtils.isEmpty(recipePhoto.getContent())) {
             errors.add("Nu a fost atasat nici un fisier");
         }
-
-
 
         if (!errors.isEmpty()) {
             throw new ValidationException(errors.toArray(new String[] {}));

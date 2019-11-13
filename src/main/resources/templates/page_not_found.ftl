@@ -9,6 +9,7 @@
 <div class="container">
 	<header>
         <#include '/top_of_pages.ftl'>
+
         <nav style="margin-bottom:15px" class="navbar navbar-expand-sm navbar-dark bg-dark">
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExample03" aria-controls="navbarsExample03" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -35,15 +36,18 @@
         </nav>
 	</header>
 	<main role="main">
-		<div id="block_error">
-			<div>
-				<h2>Oops. &nbsp Ati intampinat o eroare :-( </h2>
-				<p>
-				Se pare ca ati intampinat o problema sau pagina cautata nu mai exista!<br />
-				Incercati mai tarziu sau daca eroarea persista, va rugam sa ne contactati via e-mail!
-				</p>
-			</div>
-		</div>
+
+    <div id="block_error">
+        <div>
+			<h2>Oops. &nbsp Ati intampinat o eroare :-( </h2>
+			<p>
+			Se pare ca ati intampinat o problema sau pagina cautata nu mai exista!<br />
+			Incercati mai tarziu sau daca eroarea persista, va rugam sa ne contactati via e-mail!
+			</p>
+        </div>
+    </div>
+
+
 	</main>
 <#include '/bootstrap_footer.ftl'>
 </div>
