@@ -1,9 +1,7 @@
 package ro.sci.digitalCookBook.dao.db;
 
-import ro.sci.digitalCookBook.dao.TipPromovariDAO;
-import ro.sci.digitalCookBook.domain.Promovari;
-import ro.sci.digitalCookBook.domain.RecipeCategory;
-import ro.sci.digitalCookBook.domain.TipPromovare;
+import ro.sci.digitalCookBook.dao.PromotionTypeDAO;
+import ro.sci.digitalCookBook.domain.PromotionType;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -13,7 +11,7 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
-public class JDBCTipPromovareDAO implements TipPromovariDAO {
+public class JDBCPromotionTypeDAO implements PromotionTypeDAO {
     private String host;
     private String port;
     private String dbName;
@@ -21,7 +19,7 @@ public class JDBCTipPromovareDAO implements TipPromovariDAO {
     private String pass;
 
 
-    public JDBCTipPromovareDAO(String host, String port, String dbName, String userName, String pass) {
+    public JDBCPromotionTypeDAO(String host, String port, String dbName, String userName, String pass) {
         this.host = host;
         this.userName = userName;
         this.pass = pass;
@@ -31,13 +29,13 @@ public class JDBCTipPromovareDAO implements TipPromovariDAO {
 
 
     @Override
-    public TipPromovare findById(int id) {
+    public PromotionType findById(int id) {
 
         Connection conn = newConnection();
-        List<TipPromovare> result = new LinkedList<>();
+        List<PromotionType> result = new LinkedList<>();
         try (ResultSet rs = conn.createStatement().executeQuery("SELECT * FROM tip_promovari WHERE id = " + id)) {
             while (rs.next()) {
-                result.add(extragereTipPromovari(rs));
+                result.add(extractPromotionType(rs));
             }
             conn.commit();
         } catch (SQLException ex) {
@@ -54,26 +52,26 @@ public class JDBCTipPromovareDAO implements TipPromovariDAO {
         return result.isEmpty() ? null : result.get(0);
     }
 
-    private TipPromovare extragereTipPromovari(ResultSet rs) throws SQLException {
-        TipPromovare tipPromovare = new TipPromovare();
-        tipPromovare.setId(rs.getInt("id"));
-        tipPromovare.setDenumire(rs.getString("denumire"));
-        tipPromovare.setPerioada(rs.getInt("perioada"));
-        tipPromovare.setDescriere(rs.getString("descriere"));
-        tipPromovare.setSumaPromovare(rs.getLong("suma"));
-        return tipPromovare;
+    private PromotionType extractPromotionType(ResultSet rs) throws SQLException {
+        PromotionType promotionType = new PromotionType();
+        promotionType.setId(rs.getInt("id"));
+        promotionType.setName(rs.getString("denumire"));
+        promotionType.setPeriod(rs.getInt("perioada"));
+        promotionType.setDescription(rs.getString("descriere"));
+        promotionType.setSumPromotion(rs.getLong("suma"));
+        return promotionType;
     }
 
     @Override
-    public Collection<TipPromovare> getAll() {
-        Collection<TipPromovare> result = new LinkedList<>();
+    public Collection<PromotionType> getAll() {
+        Collection<PromotionType> result = new LinkedList<>();
         try (Connection connection = newConnection();
              ResultSet rs = connection.createStatement()
                      .executeQuery("" +
                              "SELECT tip_promovari.* FROM tip_promovari ")) {
 
             while (rs.next()) {
-                result.add(extragereTipPromovari(rs));
+                result.add(extractPromotionType(rs));
             }
             connection.commit();
         } catch (SQLException ex) {
@@ -83,12 +81,12 @@ public class JDBCTipPromovareDAO implements TipPromovariDAO {
     }
 
     @Override
-    public TipPromovare update(TipPromovare model) {
+    public PromotionType update(PromotionType model) {
         return null;
     }
 
     @Override
-    public boolean delete(TipPromovare model) {
+    public boolean delete(PromotionType model) {
         return false;
     }
 

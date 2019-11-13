@@ -3,9 +3,7 @@ package ro.sci.digitalCookBook.controllers;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,10 +13,8 @@ import org.springframework.web.servlet.view.RedirectView;
 import ro.sci.digitalCookBook.domain.*;
 import ro.sci.digitalCookBook.service.*;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import javax.validation.ValidationException;
-import java.util.Base64;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
@@ -30,13 +26,13 @@ public class PromovariController {
     private static Logger LOGGER = LoggerFactory.getLogger("Promovari Controller");
 
     @Autowired
-    private PromovariService promovariService;
+    private PromotionService promotionService;
 
     @Autowired
     private RecipeService recipeService;
 
     @Autowired
-    private TipPromovariService tipPromovariService;
+    private PromotionTypeService promotionTypeService;
 
     @Autowired
     private RecipePhotoService recipePhotoService;
@@ -60,34 +56,34 @@ public class PromovariController {
     public ModelAndView add_promo_second_step(int id) {
         Recipe selectedRecipe = recipeService.get(id);
         RecipePhoto recipePhoto = recipePhotoService.get(selectedRecipe.getPhotoId());
-        Collection<TipPromovare> promotionTypes = tipPromovariService.listAll();
+        Collection<PromotionType> promotionTypes = promotionTypeService.listAll();
         ModelAndView result = new ModelAndView("promotion/add_promo_second_step");
         result.addObject("recipe", selectedRecipe);
         result.addObject("recipePhoto", recipePhoto);
         result.addObject("promotionTypes", promotionTypes);
-        result.addObject("promotion", new Promovari());
+        result.addObject("promotion", new Promotion());
         return result;
     }
 
 
     @RequestMapping("/savePromotion")
     public ModelAndView savePromotion(@Valid Recipe recipe,
-                                      @Valid Promovari promotion, BindingResult bindingResult,
+                                      @Valid Promotion promotion, BindingResult bindingResult,
                                       @RequestParam("idRecipe") Integer idRecipe) {
         recipe.setId(idRecipe);
         ModelAndView modelAndView = new ModelAndView();
         if (!bindingResult.hasErrors()) {
             try {
-                TipPromovare tipPromovare = new TipPromovare();
-                tipPromovare = tipPromovariService.get(promotion.getIdTipPromovare());
-                promovariService.addPromovare(promotion, tipPromovare, recipe);
+                PromotionType promotionType = new PromotionType();
+                promotionType = promotionTypeService.get(promotion.getIdPromotionType());
+                promotionService.addPromotion(promotion, promotionType, recipe);
                 RedirectView redirectView = new RedirectView("../");
                 modelAndView = new ModelAndView(redirectView);
             } catch (ValidationException e) {
                 List<String> errors = new LinkedList<>();
                 errors.add(e.getMessage());
                 modelAndView = new ModelAndView("../");
-                Collection<TipPromovare> promotionTypes = tipPromovariService.listAll();
+                Collection<PromotionType> promotionTypes = promotionTypeService.listAll();
                 modelAndView.addObject("errors", errors);
                 modelAndView.addObject("promotionTypes", promotionTypes);
                 modelAndView.addObject("recipe", recipe);
@@ -108,8 +104,8 @@ public class PromovariController {
     @RequestMapping("/list_all_promotions")
     public ModelAndView list_all_promotions() {
         ModelAndView result = new ModelAndView("promotion/list_all_promotions");
-        Collection<Promovari> lista_promovari = promovariService.listAll();
-        result.addObject("listPromovari", lista_promovari);
+        Collection<Promotion> lista_promotion = promotionService.listAll();
+        result.addObject("listPromovari", lista_promotion);
         return result;
     }
 
@@ -129,11 +125,13 @@ public class PromovariController {
 
     @RequestMapping("/delete_promotion_by_id")
     public ModelAndView delete_promotion_second_step(int id) {
-        Promovari promotion = promovariService.findById(id);
-        promovariService.delete(promotion);
+        Promotion promotion = promotionService.findById(id);
+        promotionService.delete(promotion);
+        ModelAndView modelAndView = new ModelAndView();
+        RedirectView redirectView = new RedirectView("../");
+        modelAndView = new ModelAndView(redirectView);
 
-        ModelAndView result = new ModelAndView("index");
-        return result;
+        return modelAndView;
     }
 
 }

@@ -27,7 +27,15 @@
                             <a class="dropdown-item" href="/retete/cauta_dupa_ingrediente">Cauta dupa ingrediente specifice</a>
                         </div>
                     </li>
-                    <li class="nav-item"><a class="nav-link" href="/promotion">Promovare</a></li>
+                    <li class="nav-item dropdown active">
+                        <a class="nav-link dropdown-toggle " style="padding:0" href="#" id="dropdown03" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Promovari</a>
+                        <div class="dropdown-menu" style="top:30px" aria-labelledby="dropdown03">
+                            <a class="dropdown-item" href="/promotion/add_promo_first_step">Adaugare promovare</a>
+                            <a class="dropdown-item" href="/promotion/list_all_promotions">Listare toate promovarile de retete</a>
+                            <a class="dropdown-item" href="/promotion/delete_promotion">Stergere promovare</a>
+                        </div>
+                    </li>
+
                     <li class="nav-item" ><a class="nav-link" href="/retete/tutoriale_incepatori">Tutoriale de gatit</a></li>
                     <li class="nav-item "><a  class="nav-link" href="/retete/upload_recipe">Incarca reteta</a></li>
                     <li class="nav-item"><a class="nav-link" href="/events">Evenimente</a></li>

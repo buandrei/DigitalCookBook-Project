@@ -5,78 +5,72 @@
 <#include '/bootstrap_header.ftl'>
 </head>
 <body>
-
 <header>
 <div class="container">
-	<div class="page-header">
-	<!-- TOP (top part, navbar)-->
+	<header>
+        <#include '/top_of_pages.ftl'>
+		<nav style="margin-bottom:15px" class="navbar navbar-expand-sm navbar-dark bg-dark">
+			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExample03" aria-controls="navbarsExample03" aria-expanded="false" aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"></span>
+			</button>
 
-		<div class="row">
-		<!--logo-->
-		  <div class="col-8" >
-			<h1>Aici o sa avem logo</h1>
-		  </div>
+			<div class="collapse navbar-collapse" id="navbarsExample03">
+				<ul class="navbar-nav mr-auto">
+					<li class="nav-item">
+						<a class="nav-link" href="/">Home</a>
+					</li>
+					<li class="nav-item dropdown active">
+						<a class="nav-link dropdown-toggle " style="padding:0" href="#" id="dropdown03" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Retete</a>
+						<div class="dropdown-menu" style="top:30px" aria-labelledby="dropdown03">
+							<a class="dropdown-item" href="/retete/list_all">Cautare simpla</a>
+							<a class="dropdown-item" href="/retete/cauta_dupa_ingrediente">Cauta dupa ingrediente specifice</a>
+						</div>
+					</li>
+                    <li class="nav-item dropdown active">
+                        <a class="nav-link dropdown-toggle " style="padding:0" href="#" id="dropdown03" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Promovari</a>
+                        <div class="dropdown-menu" style="top:30px" aria-labelledby="dropdown03">
+                            <a class="dropdown-item" href="/promotion/add_promo_first_step">Adaugare promovare</a>
+                            <a class="dropdown-item" href="/promotion/list_all_promotions">Listare toate promovarile de retete</a>
+                            <a class="dropdown-item" href="/promotion/delete_promotion">Stergere promovare</a>
+                        </div>
+                    </li>
 
-		   <div class="col-4" >
-			<p>Aici o sa punem buton sign up si login .</p>
-		  </div>
-		</div>
-	</div>
+					<li class="nav-item" ><a class="nav-link" href="/retete/tutoriale_incepatori">Tutoriale de gatit</a></li>
+					<li class="nav-item "><a  class="nav-link" href="/retete/upload_recipe">Incarca reteta</a></li>
+					<li class="nav-item"><a class="nav-link" href="/events">Evenimente</a></li>
+				</ul>
+			</div>
+		</nav>
+	</header>
 
-	<nav style="margin-bottom:15px" class="navbar navbar-expand-sm navbar-dark bg-dark">
-		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExample03" aria-controls="navbarsExample03" aria-expanded="false" aria-label="Toggle navigation">
-			<span class="navbar-toggler-icon"></span>
-		</button>
 
-		<div class="collapse navbar-collapse" id="navbarsExample03">
-			<ul class="navbar-nav mr-auto">
-				<li class="nav-item">
-					<a class="nav-link" href="/">Home</a>
-				</li>
-				<li class="nav-item dropdown ">
-					<a class="nav-link dropdown-toggle " style="padding:0" href="#" id="dropdown03" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Retete</a>
-					<div class="dropdown-menu" style="top:30px" aria-labelledby="dropdown03">
-						<a class="dropdown-item" href="/retete/list_all">Cautare simpla</a>
-						<a class="dropdown-item" href="/retete/cauta_dupa_ingrediente">Cauta dupa ingrediente specifice</a>
-					</div>
-				</li>
-                <li class="nav-item dropdown active">
-                    <a class="nav-link dropdown-toggle " style="padding:0" href="#" id="dropdown03" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Promovari</a>
-                    <div class="dropdown-menu" style="top:30px" aria-labelledby="dropdown03">
-                        <a class="dropdown-item" href="/promotion/add_promo_first_step">Adaugare promovare</a>
-                        <a class="dropdown-item" href="/promotion/list_all_promotions">Listare toate promovarile de retete</a>
-                        <a class="dropdown-item" href="/promotion/delete_promotion">Stergere promovare</a>
-                    </div>
-                </li>
-				<li class="nav-item" ><a class="nav-link" href="/retete/tutorials">Tutoriale de gatit</a></li>
-				<li class="nav-item "><a  class="nav-link" href="/retete/upload_recipe">Incarca reteta</a></li>
-				<li class="nav-item"><a class="nav-link" href="/events">Evenimente</a></li>
-			</ul>
-		</div>
-	</nav>
-
-</header>
-
-<main role="main">
-<div class="container">
-
-<!-- BODY -->
+    <main role="main">
 		<div class="bd-example">
+		    <div class="d-flex w-100 justify-content-between">
+                <h6 class="mb-1">ID promotie</h5>
+                <h6 class="mb-1">Tip promovare</h5>
+                <h6 class="mb-1">Perioada promovare</h5>
+                <h6 class="mb-1">ID user</h5>
+                <h6 class="mb-1">Suma promovare</h5>
+            </div>
+            <hr/>
 			<div class="list-group">
 				<#list listPromovari as promotion>
 					<div class="d-flex w-100 justify-content-between">
-						<h5 class="mb-1">ID promotie: ${promotion.id!''}</h5>
-						<small>Tip promovare: ${promotion.tipPromovare.denumire!''}</small>
-						<small>Perioada promovare: ${promotion.tipPromovare.perioada!''} zile</small>
+						<small>ID promotie: ${promotion.id!''}</small>
+						<small>Tip promovare: ${promotion.promotionType.name!''}</small>
+						<small>Perioada promovare: ${promotion.promotionType.period!''} zile</small>
 						<small>ID user: ${promotion.idUser!''}</small>
-						<small>Suma promovare: ${promotion.tipPromovare.sumaPromovare!''}</small>
+						<small>Suma promovare: ${promotion.promotionType.sumPromotion!''} RON</small>
 					</div>
 				</#list>
+			<br/>
 			</div>
 		</div>
-</div>
+
 </main>
 
 <#include '/bootstrap_footer.ftl'>
+</div>
 </body>
 </html>

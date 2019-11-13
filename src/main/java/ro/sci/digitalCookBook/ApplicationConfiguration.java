@@ -47,29 +47,29 @@ public class ApplicationConfiguration {
     }
 
     @Bean
-    public PromovariDAO promovariDAO() {
-        return new JDBCPromovariDAO(dbHost, "5432", dbName, dbUser, dbPassword);
+    public PromotionDAO promotionDAO() {
+        return new JDBCPromotionDAO(dbHost, "5432", dbName, dbUser, dbPassword);
     }
 
     @Bean
-    public PromovariService promovariService() {
-        PromovariService promovariService = new PromovariService();
+    public PromotionService promotionService() {
+        PromotionService promotionService = new PromotionService();
 
-        promovariService.setDao(promovariDAO());
-        return promovariService;
+        promotionService.setDao(promotionDAO());
+        return promotionService;
     }
 
     @Bean
-    public TipPromovariDAO tipPromovariDAO() {
-        return new JDBCTipPromovareDAO(dbHost, "5432", dbName, dbUser, dbPassword);
+    public PromotionTypeDAO promotionTypeDAO() {
+        return new JDBCPromotionTypeDAO(dbHost, "5432", dbName, dbUser, dbPassword);
     }
 
     @Bean
-    public TipPromovariService tipPromovariService() {
-        TipPromovariService tipPromovariService = new TipPromovariService();
+    public PromotionTypeService promotionTypeService() {
+        PromotionTypeService promotionTypeService = new PromotionTypeService();
 
-        tipPromovariService.setDao(tipPromovariDAO());
-        return tipPromovariService;
+        promotionTypeService.setDao(promotionTypeDAO());
+        return promotionTypeService;
     }
 
 

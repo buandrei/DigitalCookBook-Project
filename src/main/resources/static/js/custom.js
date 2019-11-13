@@ -300,7 +300,7 @@ function setInputTypeValue(){
 
     for (var i = 0, length = radios.length; i < length; i++){
         if (radios[i].checked){
-            document.getElementById("idTipPromovare").value = radios[i].value;
+            document.getElementById("idPromotionType").value = radios[i].value;
 
             break;
         }
@@ -308,7 +308,7 @@ function setInputTypeValue(){
 }
 
 function getInputTypeValue(){
-    if(document.getElementById("idTipPromovare").value == 0){
+    if(document.getElementById("idPromotionType").value == 0){
         alert("Nu ati selectat nici o optiune!");
         return false;
     }
