@@ -63,14 +63,15 @@
 <!-- BODY -->
 		<div class="bd-example">
 			<div class="list-group">
-				<#list promotion_list as promotion>
+				<#list listPromovari as promotion>
 					<div class="d-flex w-100 justify-content-between">
-						<h5 class="mb-1">${promotion.id!''}</h5>
-						<small>${promotion.idTipPromovare!.denumire''}</small>
-                        <small>${promotion.dataAdaugare?date}</small>
-						<small>${promotion.dataFinal?date}</small>
-						<small>${promotion.idTipPromovare!.sumaPromovare''}</small>
+						<h5 class="mb-1">ID promotie: ${promotion.id!''}</h5>
+						<small>Tip promovare: ${promotion.tipPromovare.denumire!''}</small>
+						<small>Perioada promovare: ${promotion.tipPromovare.perioada!''} zile</small>
+						<small>ID user: ${promotion.idUser!''}</small>
+						<small>Suma promovare: ${promotion.tipPromovare.sumaPromovare!''}</small>
 					</div>
+				</#list>
 			</div>
 		</div>
 </div>

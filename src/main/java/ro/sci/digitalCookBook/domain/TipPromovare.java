@@ -3,7 +3,7 @@ package ro.sci.digitalCookBook.domain;
 import java.util.Objects;
 
 public class TipPromovare extends AbstractModel {
-
+    private int id;
     private String denumire;
     private int perioada;
     private String descriere;
@@ -13,11 +13,21 @@ public class TipPromovare extends AbstractModel {
     public TipPromovare() {
     }
 
-    public TipPromovare(String denumire, int perioada, String descriere, long sumaPromovare){
-        this.denumire=denumire;
-        this.perioada=perioada;
-        this.descriere=descriere;
-        this.sumaPromovare=sumaPromovare;
+    public TipPromovare(String denumire, int perioada, String descriere, long sumaPromovare) {
+        this.denumire = denumire;
+        this.perioada = perioada;
+        this.descriere = descriere;
+        this.sumaPromovare = sumaPromovare;
+    }
+
+    @Override
+    public int getId() {
+        return id;
+    }
+
+    @Override
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getDenumire() {
@@ -69,13 +79,13 @@ public class TipPromovare extends AbstractModel {
         TipPromovare that = (TipPromovare) o;
         return
                 perioada == that.perioada &&
-                sumaPromovare == that.sumaPromovare &&
-                Objects.equals(denumire, that.denumire) &&
-                Objects.equals(descriere, that.descriere);
+                        sumaPromovare == that.sumaPromovare &&
+                        Objects.equals(denumire, that.denumire) &&
+                        Objects.equals(descriere, that.descriere);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash( denumire, perioada, descriere, sumaPromovare);
+        return Objects.hash(denumire, perioada, descriere, sumaPromovare);
     }
 }

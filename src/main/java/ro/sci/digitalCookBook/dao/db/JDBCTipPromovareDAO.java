@@ -29,11 +29,13 @@ public class JDBCTipPromovareDAO implements TipPromovariDAO {
         this.dbName = dbName;
     }
 
+
     @Override
-    public TipPromovare findTipById(int id) {
+    public TipPromovare findById(int id) {
+
         Connection conn = newConnection();
         List<TipPromovare> result = new LinkedList<>();
-        try (ResultSet rs = conn.createStatement().executeQuery("select * from tip_promovari where id = " +id)) {
+        try (ResultSet rs = conn.createStatement().executeQuery("SELECT * FROM tip_promovari WHERE id = " + id)) {
             while (rs.next()) {
                 result.add(extragereTipPromovari(rs));
             }
@@ -43,7 +45,8 @@ public class JDBCTipPromovareDAO implements TipPromovariDAO {
         } finally {
             try {
                 conn.close();
-            } catch (Exception ex) {}
+            } catch (Exception ex) {
+            }
         }
         if (result.size() > 1) {
             throw new IllegalStateException("Mai multe tipuri de promovari cu acelasi ID: " + id);
@@ -51,13 +54,13 @@ public class JDBCTipPromovareDAO implements TipPromovariDAO {
         return result.isEmpty() ? null : result.get(0);
     }
 
-    private TipPromovare extragereTipPromovari(ResultSet rs) throws SQLException{
+    private TipPromovare extragereTipPromovari(ResultSet rs) throws SQLException {
         TipPromovare tipPromovare = new TipPromovare();
         tipPromovare.setId(rs.getInt("id"));
         tipPromovare.setDenumire(rs.getString("denumire"));
         tipPromovare.setPerioada(rs.getInt("perioada"));
         tipPromovare.setDescriere(rs.getString("descriere"));
-        tipPromovare.setSumaPromovare(rs.getLong(   "suma"));
+        tipPromovare.setSumaPromovare(rs.getLong("suma"));
         return tipPromovare;
     }
 
@@ -77,11 +80,6 @@ public class JDBCTipPromovareDAO implements TipPromovariDAO {
             throw new RuntimeException("Couldn't get promotion types!.", ex);
         }
         return result;
-    }
-
-    @Override
-    public TipPromovare findById(int id) {
-        return null;
     }
 
     @Override

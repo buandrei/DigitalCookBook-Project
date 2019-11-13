@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.Objects;
 
-public class Promovari extends AbstractModel{
+public class Promovari extends AbstractModel {
     private int id;
     private LocalDateTime dataAdaugare;
     private LocalDateTime dataFinal;
@@ -15,15 +15,16 @@ public class Promovari extends AbstractModel{
     private TipPromovare tipPromovare;
 
 
-    public Promovari() { }
+    public Promovari() {
+    }
 
     public Promovari(int id, LocalDateTime dataAdaugare, LocalDateTime dataFinal, int idUser, boolean starePromovare, int idTipPromovare) {
-        this.id=id;
-        this.dataAdaugare=dataAdaugare;
-        this.dataFinal=dataFinal;
-        this.idUser=idUser;
-        this.starePromovare=starePromovare;
-        this.idTipPromovare=idTipPromovare;
+        this.id = id;
+        this.dataAdaugare = dataAdaugare;
+        this.dataFinal = dataFinal;
+        this.idUser = idUser;
+        this.starePromovare = starePromovare;
+        this.idTipPromovare = idTipPromovare;
 
 
     }
@@ -105,8 +106,8 @@ public class Promovari extends AbstractModel{
         return id == promovari.id &&
                 idUser == promovari.idUser &&
                 starePromovare == promovari.starePromovare &&
-                dataAdaugare== promovari.dataAdaugare &&
-                dataFinal== promovari.dataFinal &&
+                dataAdaugare == promovari.dataAdaugare &&
+                dataFinal == promovari.dataFinal &&
                 idTipPromovare == promovari.idTipPromovare;
     }
 

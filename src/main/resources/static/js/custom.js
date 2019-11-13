@@ -265,3 +265,13 @@ $(document).ready(function() {
 			return getInputTypeValue();
 	   })
 });
+
+
+function alertDeletePromotion(idPromo){
+    var promotionDeleteButton = document.getElementById("promo_delete_button");
+    if(!confirm("Sunteti sigur ca doriti sa stergeti promovarea?")){
+    	return false;
+    }else{
+    	promotionDeleteButton.href = "/promotion/delete_promotion_by_id?id="+idPromo;
+    }
+}

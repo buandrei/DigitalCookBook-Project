@@ -26,17 +26,19 @@ public class PromovariService {
         promotion.setDataFinal(promotion.getDataAdaugare().plusDays(promotionType.getPerioada()));
         //promovare.setIdUser();
         //promotion.setStarePromovare(true);
-        if (validarePromovare(promotion)){daoPromovari.add(promotion, recipe);}
+
+        daoPromovari.add(promotion, recipe);
+
     }
 
 
     //in cazul unei promovari active, acesta se modifica doar la un tip promovare superior
-    public Promovari modificareIdTipPromovare(int idPromovare, int idNouTipPromovare){
-        Promovari promovare=daoPromovari.findById(idPromovare);
-        if(validareModificare(promovare)){
+    public Promovari modificareIdTipPromovare(int idPromovare, int idNouTipPromovare) {
+        Promovari promovare = daoPromovari.findById(idPromovare);
+        if (validareModificare(promovare, idNouTipPromovare)) {
             promovare.setIdTipPromovare(idNouTipPromovare);
             promovare.setDataAdaugare(LocalDateTime.now());
-            promovare.setDataFinal(promovare.getDataAdaugare().plusDays(daoTipPromovare.findTipById(idNouTipPromovare).getPerioada()));
+            promovare.setDataFinal(promovare.getDataAdaugare().plusDays(daoTipPromovare.findById(idNouTipPromovare).getPerioada()));
             //promovare.setIdUser();
             promovare.setStarePromovare(true);
         }
@@ -44,15 +46,10 @@ public class PromovariService {
         return promovare;
     }
 
-    private boolean validareModificare(Promovari promovare) {
-        boolean updateValid=true;
+    private boolean validareModificare(Promovari promovare, int idNouTipPromovare) {
+        boolean updateValid = true;
+
         return updateValid;
-    }
-
-
-    private boolean validarePromovare(Promovari promovare) {
-        boolean validPromovare=true;
-        return validPromovare;
     }
 
     public Promovari findById(int id) {
@@ -61,14 +58,6 @@ public class PromovariService {
 
     public Collection<Promovari> listAll() {
         return daoPromovari.getAll();
-    }
-
-    public boolean modificaDataFinal(int id) {
-        return false;
-    }
-
-    public boolean modificaTipPromovare(int id) {
-        return false;
     }
 
     public boolean delete(Promovari promovare) {

@@ -12,18 +12,19 @@ public class TipPromovariService {
     private TipPromovariDAO daoTipPromovare;
 
     public Collection<TipPromovare> listAll() {
-            return daoTipPromovare.getAll();
+        return daoTipPromovare.getAll();
     }
 
     public TipPromovariDAO getDao() {
-            return daoTipPromovare;
-}
+        return daoTipPromovare;
+    }
 
     public void setDao(TipPromovariDAO dao) {
         this.daoTipPromovare = dao;
     }
 
+
     public TipPromovare get(int id) {
-            return daoTipPromovare.findTipById(id);
+        return daoTipPromovare.findById(id);
     }
 }

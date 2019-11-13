@@ -42,15 +42,15 @@ public class PromovariController {
     private RecipePhotoService recipePhotoService;
 
     @RequestMapping("")
-    public ModelAndView reroute(){
-        ModelAndView modelAndView= add_promo_first_step();
+    public ModelAndView reroute() {
+        ModelAndView modelAndView = add_promo_first_step();
         return modelAndView;
     }
 
     @RequestMapping("/add_promo_first_step")
     public ModelAndView add_promo_first_step() {
         ModelAndView result = new ModelAndView("promotion/add_promo_first_step");
-        Collection<Recipe> recipes = recipeService.getAll(false);
+        Collection<Recipe> recipes = recipeService.getAllWherePromotion(true);
         result.addObject("recipe_list", recipes);
         return result;
     }
@@ -113,30 +113,23 @@ public class PromovariController {
         return result;
     }
 
-    @RequestMapping("/list_promotion_second_step")
-    public ModelAndView list_promotion_second_step(int id) {
-        Recipe selectedRecipe = recipeService.get(id);
-        RecipePhoto recipePhoto = recipePhotoService.get(selectedRecipe.getPhotoId());
-        Promovari promovare=promovariService.findById(selectedRecipe.getIdTipPromotie());
-        ModelAndView result = new ModelAndView("promotion/list_promotion_second_step");
-/*        result.addObject("recipe", selectedRecipe);
-        result.addObject("recipePhoto", recipePhoto);
-        result.addObject("promotionTypes", promotionTypes);
-        result.addObject("promotion", new Promovari());*/
+    @RequestMapping("/list_promotion_userId")
+    public ModelAndView list_promotion_userId() {
+        ModelAndView result = new ModelAndView("promotion/list_promotion_userId");
         return result;
     }
 
     @RequestMapping("/delete_promotion")
     public ModelAndView delete_promotion_first_step() {
         ModelAndView result = new ModelAndView("promotion/delete_promotion_first_step");
-        Collection<Recipe> recipes = recipeService.getAllWherePromotionNotNull();
+        Collection<Recipe> recipes = recipeService.getAllWherePromotion(false);
         result.addObject("recipe_list", recipes);
         return result;
     }
 
     @RequestMapping("/delete_promotion_by_id")
     public ModelAndView delete_promotion_second_step(int id) {
-        Promovari promotion=promovariService.findById(id);
+        Promovari promotion = promovariService.findById(id);
         promovariService.delete(promotion);
 
         ModelAndView result = new ModelAndView("index");

@@ -69,7 +69,7 @@
 					<small>${recipe.addDate?date}</small>
 				</div>
 				<p class="mb-1">${recipe.description!''}</p>
-				<a id="promo_delete_button" onclick="alertDeletePromotion(${recipe.idPromotie})""><button type="button" class="btn btn-danger float-right">Danger</button></a>
+				<a id="promo_delete_button" onclick="alertDeletePromotion(${recipe.idPromotie})""><button type="button" class="btn btn-danger float-right">Sterge promovare</button></a>
 				</#list>
 			</div>
 		</div>

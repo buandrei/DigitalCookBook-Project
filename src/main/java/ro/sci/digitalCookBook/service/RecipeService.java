@@ -39,9 +39,8 @@ public class RecipeService {
 
 
 
-    public Collection<Recipe> getAllWherePromotionNotNull() {
-
-        return dao.getAllWherePromotionNotNull();
+    public Collection<Recipe> getAllWherePromotion(boolean isNull) {
+        return dao.getAllWherePromotion(isNull);
     }
 
 

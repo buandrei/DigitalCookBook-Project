@@ -1,12 +1,15 @@
 package ro.sci.digitalCookBook.dao.db;
 
+import org.springframework.context.annotation.Bean;
 import ro.sci.digitalCookBook.dao.PromovariDAO;
+import ro.sci.digitalCookBook.dao.TipPromovariDAO;
 import ro.sci.digitalCookBook.domain.Promovari;
 import ro.sci.digitalCookBook.domain.Recipe;
 import ro.sci.digitalCookBook.domain.TipPromovare;
 import ro.sci.digitalCookBook.service.TipPromovariService;
 
 import java.sql.*;
+import java.time.format.DateTimeFormatter;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
@@ -29,18 +32,19 @@ public class JDBCPromovariDAO implements PromovariDAO {
         this.dbName = dbName;
     }
 
+
     @Override
     public void add(Promovari promotion, Recipe recipe) {
         Connection conn = newConnection();
         try {
             PreparedStatement ps1 = conn.prepareStatement(
-                    "INSERT INTO promovari (data_adaugare, data_final, idtip_promovare, iduser) VALUES (now(),?,?,1) RETURNING id;" , Statement.RETURN_GENERATED_KEYS
+                    "INSERT INTO promovari (data_adaugare, data_final, idtip_promovare, iduser) VALUES (now(),?,?,1) RETURNING id;", Statement.RETURN_GENERATED_KEYS
             );
             Timestamp timestamp = Timestamp.valueOf(promotion.getDataFinal());
             ps1.setTimestamp(1, timestamp);
             ps1.setInt(2, promotion.getIdTipPromovare());
 //            ps1.setLong(1, promotion.getIdUser());
-            ps1.executeUpdate();
+
             int result = ps1.executeUpdate();
             if (result == 0) {
                 throw new SQLException("Inserarea datelor a esuat!");
@@ -52,8 +56,7 @@ public class JDBCPromovariDAO implements PromovariDAO {
                     ps2.setInt(1, promotion.getId());
                     ps2.setInt(2, recipe.getId());
                     ps2.executeUpdate();
-                }
-                else {
+                } else {
                     throw new SQLException("ID lipsa. Nu s-a modificate reteta!");
                 }
             }
@@ -68,12 +71,21 @@ public class JDBCPromovariDAO implements PromovariDAO {
         }
     }
 
+
+
     @Override
     public Collection<Promovari> getAll() {
         List<Promovari> result = new LinkedList<>();
         try (Connection conn = newConnection();
              ResultSet rs = conn.createStatement()
-                     .executeQuery("SELECT * FROM promovari")) {
+                     .executeQuery("SELECT promovari.*, " +
+                             " tip_promovari.denumire AS tip_promo_denumire," +
+                             "    tip_promovari.descriere AS tip_promo_descriere," +
+                             "    tip_promovari.perioada AS tip_promo_perioada," +
+                             "    tip_promovari.suma AS tip_promo_suma" +
+                             "" +
+                             " FROM promovari" +
+                             "  LEFT JOIN tip_promovari ON tip_promovari.id = promovari.idtip_promovare")) {
             while (rs.next()) {
                 result.add(extragerePromovari(rs));
             }
@@ -84,26 +96,43 @@ public class JDBCPromovariDAO implements PromovariDAO {
         return result;
     }
 
+    public Collection<Promovari> getByUserId(int id) {
+        List<Promovari> result = new LinkedList<>();
+        try (Connection conn = newConnection();
+             ResultSet rs = conn.createStatement()
+                     .executeQuery("SELECT promovari.*, " +
+                             " tip_promovari.denumire AS tip_promo_denumire," +
+                             "    tip_promovari.descriere AS tip_promo_descriere," +
+                             "    tip_promovari.perioada AS tip_promo_perioada," +
+                             "    tip_promovari.suma AS tip_promo_suma" +
+                             "" +
+                             " FROM promovari" +
+                             "  LEFT JOIN tip_promovari ON tip_promovari.id = promovari.idtip_promovare WHERE iduser=" + id + ";")) {
+            while (rs.next()) {
+                result.add(extragerePromovari(rs));
+            }
+            conn.commit();
+        } catch (SQLException ex) {
+            throw new RuntimeException("Eroare extragere promovare!", ex);
+        }
+        return result;
+    }
+
+
     private Promovari extragerePromovari(ResultSet rs) throws SQLException {
-        System.out.println("Intrat in extragere promo");
         TipPromovare tipPromovare = new TipPromovare();
-        tipPromovare.setId(new TipPromovariService().get(rs.getInt("idtip_promovare")).getId());
-        tipPromovare.setDenumire(new TipPromovariService().get(rs.getInt("idtip_promovare")).getDenumire());
-        tipPromovare.setDescriere(new TipPromovariService().get(rs.getInt("idtip_promovare")).getDescriere());
-        tipPromovare.setPerioada(new TipPromovariService().get(rs.getInt("idtip_promovare")).getPerioada());
-        tipPromovare.setSumaPromovare(new TipPromovariService().get(rs.getInt("idtip_promovare")).getSumaPromovare());
+        tipPromovare.setId(rs.getInt("idtip_promovare"));
+        tipPromovare.setDenumire(rs.getString("tip_promo_denumire"));
+        tipPromovare.setDescriere(rs.getString("tip_promo_descriere"));
+        tipPromovare.setPerioada(rs.getInt("tip_promo_perioada"));
+        tipPromovare.setSumaPromovare(rs.getLong("tip_promo_suma"));
         Promovari promovare = new Promovari();
         promovare.setId(rs.getInt("id"));
         promovare.setDataAdaugare((rs.getTimestamp("data_adaugare")).toLocalDateTime());
         promovare.setDataFinal((rs.getTimestamp("data_final")).toLocalDateTime());
+        promovare.setIdUser(rs.getInt("iduser"));
         promovare.setTipPromovare(tipPromovare);
-
         return promovare;
-    }
-
-    @Override
-    public Promovari listById(int id) {
-        return findById(id);
     }
 
     @Override
@@ -129,7 +158,7 @@ public class JDBCPromovariDAO implements PromovariDAO {
     // doar pt administrator e accesibil actiunea delete
     @Override
     public boolean delete(Promovari promotion) {
-        Connection conn=newConnection();
+        Connection conn = newConnection();
         try {
             StringBuilder query = new StringBuilder();
             query.append(" UPDATE retete SET idpromotie = DEFAULT WHERE idpromotie = " + promotion.getId() + ";");
@@ -149,6 +178,7 @@ public class JDBCPromovariDAO implements PromovariDAO {
         return false;
     }
 
+    @Override
     public Promovari findById(int id) {
         Connection conn = newConnection();
         List<Promovari> result = new LinkedList<>();
