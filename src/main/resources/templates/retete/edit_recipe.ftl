@@ -180,7 +180,7 @@
 							<small><p style="margin:0" class="font-weight-lighter text-center font-italic">Va rugam sa furnizati instructiuni! </p></small>
 						 <div class="card-body">
 							<div class="form-group">
-								<textarea value="${recipeIngredients.instructions!''}" name ="instructions" rows="30" class="form-control" id="instructions" placeholder="Instructiunile retetei." >${recipeIngredients.instructions!''}</textarea>
+								<textarea  name ="instructions" rows="30" class="form-control" id="instructions" placeholder="Instructiunile retetei." >${recipeIngredients.instructions!''}</textarea>
 								<br>
 							</div>
 						</div>
