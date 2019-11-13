@@ -2,22 +2,22 @@
 <#import "/spring.ftl" as spring />
 <html lang="ro">
 <head>
-<#include '/bootstrap_header.ftl'>
+	<#include '/bootstrap_header.ftl'>
 </head>
 <body>
 <div class="container">
 	<div class="page-header">
-	<!-- TOP (top part, navbar)-->
+		<!-- TOP (top part, navbar)-->
 
 		<div class="row">
-		<!--logo-->
-		  <div class="col-8" >
-			<h1>Aici o sa avem logo</h1>
-		  </div>
+			<!--logo-->
+			<div class="col-8" >
+				<h1>Aici o sa avem logo</h1>
+			</div>
 
-		   <div class="col-4" >
-			<p>Aici o sa punem buton sign up si login .</p>
-		  </div>
+			<div class="col-4" >
+				<p>Aici o sa punem buton sign up si login .</p>
+			</div>
 		</div>
 	</div>
 
@@ -53,20 +53,20 @@
 			<div class="col-sm-9 col-md-7 col-lg-5 mx-auto">
 				<div class="card card-signin my-5">
 					<div class="card-body">
-					<#if RequestParameters.error??>
-						<div>
-							<ul>
-								<b style="color:red">
-								<@spring.message 'invalid.username'/>
-								</b>
-							</ul>
-						</div>
-					</#if>
+						<#if RequestParameters.error??>
+							<div>
+								<ul>
+									<b style="color:red">
+										<@spring.message 'invalid.username'/>
+									</b>
+								</ul>
+							</div>
+						</#if>
 						<h5 class="card-title text-center">Salut!</h5>
 						<form class="form-signin" action="/login" method="POST">
 							<div class="form-label-group">
 								<input type="email" id="username" name="username" class="form-control" placeholder="Adresa de email" required autofocus>
-								<label for="username">Email</label>
+								<label for="email">Email</label>
 							</div>
 
 							<div class="form-label-group">
