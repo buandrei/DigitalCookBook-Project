@@ -48,6 +48,7 @@ public class RecipeController {
     @Autowired
     private IngredientService ingredientService;
 
+
     @RequestMapping(method = RequestMethod.GET)
     public ModelAndView redirectIfNotAValidLink() {
         ModelAndView modelAndView = new ModelAndView();
@@ -352,7 +353,7 @@ public class RecipeController {
     @RequestMapping("/delete")
     public String delete(int id) {
         recipeService.delete(id);
-        return "redirect:/retete";
+        return "redirect:/retete/list_all";
     }
 
 

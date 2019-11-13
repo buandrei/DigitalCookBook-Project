@@ -193,6 +193,7 @@
 			<br>
 			<a  class="btn btn-secondary btn-lg btn-block" href="/retete/list_all">Inapoi</a>
 			<a  class="btn btn-secondary btn-lg btn-block" href="/retete/editare_reteta?id=${recipe.id?c}">Editare</a>
+			<a  class="btn btn-secondary btn-lg btn-block" href="/retete/delete?id=${recipe.id?c}">Stergere</a>
 		</div>
 	</main>
 	<#include '/bootstrap_footer.ftl'>

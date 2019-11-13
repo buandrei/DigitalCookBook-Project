@@ -533,8 +533,24 @@ public class JDBCRecipeDAO implements RecipeDAO {
 
 
     @Override
-    public boolean delete(Recipe model) {
-        return false;
+    public boolean delete(Recipe recipe) {
+        boolean result = false;
+        Connection connection = newConnection();
+        try {
+            Statement statement = connection.createStatement();
+            result = statement.execute("DELETE FROM retete WHERE id  = " + recipe.getId());
+            connection.commit();
+        } catch (SQLException ex) {
+
+            throw new RuntimeException("Error deleting from DB recipe", ex);
+        } finally {
+            try {
+                connection.close();
+            } catch (Exception ex) {
+
+            }
+        }
+        return result;
     }
 
     /**
