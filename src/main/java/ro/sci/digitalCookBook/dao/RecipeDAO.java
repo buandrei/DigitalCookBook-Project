@@ -15,5 +15,8 @@ public interface RecipeDAO extends BaseDAO<Recipe> {
 
     boolean giveRating(Recipe recipe, long rating);
 
-    Collection<Recipe> getAll(boolean isOnlyPromotedForHomepage);
+    Collection<Recipe> getAll(boolean isOnlyPromotedForHomepage, boolean getOnlyTutorialRecipes);
+
+    Collection<Recipe> getRecipesByUser(String userEmail);
+
 }

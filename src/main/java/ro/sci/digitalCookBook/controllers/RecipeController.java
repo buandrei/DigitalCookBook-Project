@@ -4,6 +4,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.support.PagedListHolder;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -46,6 +48,7 @@ public class RecipeController {
     @Autowired
     private IngredientService ingredientService;
 
+
     @RequestMapping(method = RequestMethod.GET)
     public ModelAndView redirectIfNotAValidLink() {
         ModelAndView modelAndView = new ModelAndView();
@@ -58,23 +61,19 @@ public class RecipeController {
     public ModelAndView searchForRecipeBySpecificIngredients() {
 
         ModelAndView modelAndView = new ModelAndView();
-
         List<Ingredient> ingredientList = new ArrayList<>(ingredientService.listAll());
-
         Map<String, List<Ingredient>> ingredientMap = new HashMap<>();
-        for(Ingredient i : ingredientList){
+        for (Ingredient i : ingredientList) {
 
             String firstCharKey = String.valueOf(i.getName().charAt(0));
-            if(ingredientMap.get(firstCharKey) == null){
+            if (ingredientMap.get(firstCharKey) == null) {
                 ingredientMap.put(firstCharKey, new ArrayList(Arrays.asList(i)));
-            }
-            else{
+            } else {
                 ingredientMap.get(firstCharKey).add(i);
             }
         }
 
         modelAndView.addObject("ingredientsMap", ingredientMap);
-
         modelAndView.setViewName("/retete/search_by_ingredients");
         return modelAndView;
     }
@@ -84,14 +83,13 @@ public class RecipeController {
     public ModelAndView getAndShowRecipesForSpecificIngredients(@PathVariable(required = false, name = "page") String page,
                                                                 HttpServletRequest request,
                                                                 @RequestParam("ingredientsId") String ingredientIds,
-                                                                @RequestParam("isMoreIngredientsChecked") String  moreIngredients) {
+                                                                @RequestParam("isMoreIngredientsChecked") String moreIngredients) {
 
         boolean isMoreIngredients = moreIngredients.contains("yes");
-
         ModelAndView modelAndView = new ModelAndView();
-        Collection<Recipe> recipes = recipeService.searchBySpecificIngredients(ingredientIds,isMoreIngredients);
+        Collection<Recipe> recipes = recipeService.searchBySpecificIngredients(ingredientIds, isMoreIngredients);
         Collection<RecipeCategory> recipeCategories = recipeCategoryService.listAll();
-        System.out.println(recipes);
+
         if (recipes.size() == 0) {
             String nothingFound = "Nu au fost gasite retete! <a href=\"/retete/cauta_dupa_ingrediente\"> Inapoi la lista! </a>";
             modelAndView.addObject("nothingFound", nothingFound);
@@ -107,9 +105,9 @@ public class RecipeController {
 
     @RequestMapping(value = {"/cauta_retete", "/cauta_retete/{page}"}, method = RequestMethod.POST)
     public ModelAndView searchForRecipeByNameOrAndCategory(@PathVariable(required = false, name = "page") String page,
-                                        HttpServletRequest request,
-                                        @RequestParam("name_search") String name,
-                                        @RequestParam("category_search") String categoryId) {
+                                                           HttpServletRequest request,
+                                                           @RequestParam("name_search") String name,
+                                                           @RequestParam("category_search") String categoryId) {
 
         ModelAndView modelAndView = new ModelAndView();
         Collection<Recipe> recipes = recipeService.searchRecipe(name, categoryId);
@@ -129,15 +127,46 @@ public class RecipeController {
 
     }
 
+    @RequestMapping(value = {"/my_recipes", "/list_all/{page}"}, method = RequestMethod.GET)
+    public ModelAndView listByUser(@PathVariable(required = false, name = "page") String page,
+                             HttpServletRequest request) {
+//        ModelAndView modelAndView = new ModelAndView();
+//        Collection<Recipe> recipes = recipeService.getAll(false);
+//        Collection<RecipeCategory> recipeCategories = recipeCategoryService.listAll();
+//        modelAndView.addObject("categories", recipeCategories);
+
+        //if (setAndGetRecipePage(page, request, modelAndView, recipes)) return modelAndView;
+
+       // modelAndView.setViewName("/retete/list_all");
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String currentUserName = authentication.getName();
+
+        Collection<Recipe> recipes = recipeService.getRecipesByUser(currentUserName);
+
+        return null;
+    }
+
+    @RequestMapping(value = {"/tutoriale_incepatori", "/tutoriale_incepatori/{page}"}, method = RequestMethod.GET)
+    public ModelAndView listRecipeTutorials(@PathVariable(required = false, name = "page") String page,
+                             HttpServletRequest request) {
+
+        ModelAndView modelAndView = new ModelAndView();
+        Collection<Recipe> recipes = recipeService.getAll(false, true);
+
+        if (setAndGetRecipePage(page, request, modelAndView, recipes)) return modelAndView;
+
+        modelAndView.setViewName("/retete/tutorials");
+        return modelAndView;
+    }
 
     @RequestMapping(value = {"/list_all", "/list_all/{page}"}, method = RequestMethod.GET)
     public ModelAndView list(@PathVariable(required = false, name = "page") String page,
                              HttpServletRequest request) {
         ModelAndView modelAndView = new ModelAndView();
-        Collection<Recipe> recipes = recipeService.getAll(false);
+        Collection<Recipe> recipes = recipeService.getAll(false, false);
         Collection<RecipeCategory> recipeCategories = recipeCategoryService.listAll();
         modelAndView.addObject("categories", recipeCategories);
-
 
         if (setAndGetRecipePage(page, request, modelAndView, recipes)) return modelAndView;
 
@@ -221,17 +250,16 @@ public class RecipeController {
         List<Ingredient> ingredientList = new ArrayList<>(ingredientService.listAll());
 
         Map<String, List<Ingredient>> ingredientMap = new HashMap<>();
-        for(Ingredient i : ingredientList){
+        for (Ingredient i : ingredientList) {
 
             String firstCharKey = String.valueOf(i.getName().charAt(0));
-            if(ingredientMap.get(firstCharKey) == null){
+            if (ingredientMap.get(firstCharKey) == null) {
                 ingredientMap.put(firstCharKey, new ArrayList(Arrays.asList(i)));
-            }
-            else{
+            } else {
                 ingredientMap.get(firstCharKey).add(i);
             }
         }
-        modelAndView.addObject("ingredientsMap" , ingredientMap);
+        modelAndView.addObject("ingredientsMap", ingredientMap);
         return modelAndView;
     }
 
@@ -247,9 +275,6 @@ public class RecipeController {
 
         RecipeIngredient recipeIngredient = recipeIngredientsService.get(recipe.getRecipeIngredient().getId());
 
-        List<Ingredient> ingredients = new ArrayList<>(ingredientService.listAll());
-        ingredients.sort(Comparator.comparing(Ingredient::getName));
-
         String ingredientIdArrayToString = "";
 
         for (int i = 0; i <= recipeIngredient.getIngredientsId().size(); i++) {
@@ -259,6 +284,19 @@ public class RecipeController {
                     .replace(" ", "");
         }
 
+        List<Ingredient> ingredientList = new ArrayList<>(ingredientService.listAll());
+
+        Map<String, List<Ingredient>> ingredientMap = new HashMap<>();
+        for (Ingredient i : ingredientList) {
+
+            String firstCharKey = String.valueOf(i.getName().charAt(0));
+            if (ingredientMap.get(firstCharKey) == null) {
+                ingredientMap.put(firstCharKey, new ArrayList(Arrays.asList(i)));
+            } else {
+                ingredientMap.get(firstCharKey).add(i);
+            }
+        }
+
         ModelAndView modelAndView = new ModelAndView("retete/edit_recipe");
         modelAndView.addObject("recipe", recipe);
         modelAndView.addObject("photo", recipePhoto);
@@ -266,8 +304,7 @@ public class RecipeController {
         modelAndView.addObject("recipeIngredients", recipeIngredient);
         modelAndView.addObject("recipePhoto", new String(encode));
         modelAndView.addObject("ingredientArrayValue", ingredientIdArrayToString);
-
-        modelAndView.addObject("ingredients", ingredients);
+        modelAndView.addObject("ingredientsMap", ingredientMap);
         return modelAndView;
 
     }
@@ -316,7 +353,7 @@ public class RecipeController {
     @RequestMapping("/delete")
     public String delete(int id) {
         recipeService.delete(id);
-        return "redirect:/retete";
+        return "redirect:/retete/list_all";
     }
 
 
@@ -336,7 +373,6 @@ public class RecipeController {
     }
 
     private void getAndSaveRecipeObjects(Recipe recipe, RecipeIngredient recipeIngredient, RecipePhoto recipePhoto) throws ValidationException {
-        System.out.println(recipeIngredient.getId());
         recipePhotoService.save(recipePhoto);
         recipe.setPhoto(recipePhoto);
         recipeIngredientsService.save(recipeIngredient);
@@ -352,7 +388,7 @@ public class RecipeController {
                              BindingResult bindingResult,
                              @RequestParam("file") MultipartFile file
     ) {
-        System.out.println(recipe);
+
         RecipePhoto recipePhoto = createRecipePhoto(file);
 
         ModelAndView modelAndView = new ModelAndView();

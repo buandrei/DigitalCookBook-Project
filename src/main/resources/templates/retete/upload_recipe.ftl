@@ -6,21 +6,9 @@
 </head>
 
 <body >
-	<div class="container">
-		<div class="page-header">
-		<!-- TOP (top part, navbar)-->
-
-			<div class="row">
-			<!--logo-->
-			  <div class="col-8" >
-				<h1>Aici o sa avem logo</h1>
-			  </div>
-
-			   <div class="col-4" >
-				<p>Aici o sa punem buton sign up si login .</p>
-			  </div>
-			</div>
-		</div>
+<div class="container">
+	<header>
+        <#include '/top_of_pages.ftl'>
 
 		<nav style="margin-bottom:15px" class="navbar navbar-expand-sm navbar-dark bg-dark">
 			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExample03" aria-controls="navbarsExample03" aria-expanded="false" aria-label="Toggle navigation">
@@ -40,14 +28,14 @@
 						</div>
 					</li>
 					<li class="nav-item"><a class="nav-link" href="/promotion">Promovare</a></li>
-					<li class="nav-item" ><a class="nav-link" href="/retete/tutorials">Tutoriale de gatit</a></li>
+					<li class="nav-item" ><a class="nav-link" href="/retete/tutoriale_incepatori">Tutoriale de gatit</a></li>
 					<li class="nav-item active"><a  class="nav-link" href="/retete/upload_recipe">Incarca reteta</a></li>
 					<li class="nav-item"><a class="nav-link" href="/events">Evenimente</a></li>
 				</ul>
 			</div>
 		</nav>
-<!--	BODY -->
-
+	</header>
+	<main role="main">
 		<form  name="saveForm"  method="post" action="/retete/salvare_reteta" id="recipeForm" enctype="multipart/form-data">
 			<div class="card">
 				<h2 class="card-header text-center"><b>Incarca o reteta! Este gratis!</b></h2>
@@ -95,6 +83,8 @@
 							<div class="form-group">
 								<label class="control-label"  for="portions_input">Portii  *</label>
 								<input name="portions" value="${recipe.portions!''}" type="number" class="form-control" id="portions_input" placeholder="Ex: 2" min="1">
+								<b><span class="portii_remaining" style="color:#1d91d1;"></span></b> numere ramase
+								<br>
 							</div>
 							</div>
 						</div>
@@ -104,12 +94,16 @@
 								<div class="form-group">
 									<label class="control-label" for="cookingTime">Timp gatire (in minute)  *</label>
 									<input name="cookingTime" value="${recipe.cookingTime!''}" type="number" class="form-control" id="cookingTime" placeholder="Ex: 120" min="1">
+									<b><span class="cookingTime_remaining" style="color:#1d91d1;"></span></b> numere ramase
+									<br>
 								</div>
 							</div>
 						<div class="col-lg-6">
 							<div class="form-group">
 								<label class="control-label"  for="preparationTime ">Timp preparare (in minute)  *</label>
-								<input name="preparationTime" value="${recipe.preparationTime !''}" type="number" class="form-control" id="preparationTime " placeholder="Ex: 30" min="1">
+								<input name="preparationTime" value="${recipe.preparationTime !''}" type="number" class="form-control" id="preparationTime" placeholder="Ex: 30" min="1">
+								<b><span class="preparationTime_remaining" style="color:#1d91d1;"></span></b> numere ramase
+								<br>
 							</div>
 							</div>
 						</div>
@@ -195,10 +189,10 @@
 				</div>
 			</div>
 		</form>
-	</div>
+	</main>
+<#include '/bootstrap_footer.ftl'>
 </div>
 
-<#include '/bootstrap_footer.ftl'>
 <script type="text/javascript">
 
 function toggleArea1() {

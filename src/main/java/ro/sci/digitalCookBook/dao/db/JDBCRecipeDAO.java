@@ -3,6 +3,8 @@ package ro.sci.digitalCookBook.dao.db;
 import org.jsoup.internal.StringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.util.StringUtils;
 import ro.sci.digitalCookBook.dao.RecipeDAO;
 import ro.sci.digitalCookBook.domain.*;
@@ -74,7 +76,6 @@ public class JDBCRecipeDAO implements RecipeDAO {
                 query.append(" AND retetar.idingrediente @> ARRAY[" + ingredients + "]");
             }
         }
-        System.out.println(query);
 
         try (Connection connection = newConnection();
              ResultSet rs = connection.createStatement()
@@ -184,7 +185,7 @@ public class JDBCRecipeDAO implements RecipeDAO {
     }
 
     @Override
-    public Collection<Recipe> getAll(boolean isOnlyPromotedForHomepage) {
+    public Collection<Recipe> getAll(boolean isOnlyPromotedForHomepage, boolean onlyTutorialRecipes) {
 
         Collection<Recipe> result = new ArrayList();
 
@@ -210,6 +211,9 @@ public class JDBCRecipeDAO implements RecipeDAO {
                 "  LEFT JOIN app_user ON app_user.id = retete.iduser " +
                 "WHERE" +
                 "  retete.inactiv = $$N$$ ");
+        if(onlyTutorialRecipes){
+            query.append(" AND retete.istutorial = $$D$$");
+        }
 
         if(isOnlyPromotedForHomepage){
             query.append(" AND retete.idpromotie IS NOT NULL");
@@ -278,6 +282,53 @@ public class JDBCRecipeDAO implements RecipeDAO {
     }
 
     @Override
+    public Collection<Recipe> getRecipesByUser(String email) {
+        Collection<Recipe> result = new ArrayList();
+
+        StringBuilder query = new StringBuilder();
+        query.append("SELECT retete.id," +
+                "  retete.denumire," +
+                "  retete.portii," +
+                "  retete.data_adaugarii," +
+                "  retete.descriere," +
+                "  retete.istutorial," +
+                "  retete.rating," +
+                "  categorii_retete.denumire AS categoria," +
+                "  promovari.idtip_promovare AS idtip_promovare," +
+                "  retete.idpromotie AS idpromotie," +
+                "  poze.content AS thumbnail," +
+                "  COALESCE(InitCap(app_user.nume), $$$$) ||  $$ $$ || COALESCE(InitCap(app_user.prenume), $$$$) AS user," +
+                "  1 AS unu " +
+
+                "FROM retete " +
+                "  LEFT JOIN poze ON poze.id = retete.idpoza" +
+                "  LEFT JOIN categorii_retete ON categorii_retete.id = retete.idcategoria" +
+                "  LEFT JOIN promovari ON promovari.id = retete.idpromotie " +
+                "  LEFT JOIN app_user ON app_user.id = retete.iduser " +
+                "WHERE" +
+                "  retete.inactiv = $$N$$ " +
+                "  AND retete.iduser = (SELECT id FROM app_user WHERE email = $$" + email + "$$)" +
+                "");
+
+
+        try (Connection connection = newConnection();
+             ResultSet rs = connection.createStatement()
+                     .executeQuery(query.toString())) {
+
+            while (rs.next()) {
+                result.add(extractRecipeForList(rs));
+            }
+            connection.commit();
+        } catch (SQLException ex) {
+
+            throw new RuntimeException("Error getting recipes.", ex);
+        }
+
+        return result;
+    }
+
+
+    @Override
     public Recipe findById(int id) {
         Connection connection = newConnection();
 
@@ -326,6 +377,10 @@ public class JDBCRecipeDAO implements RecipeDAO {
     @Override
     public Recipe update(Recipe recipe) {
         Connection connection = newConnection();
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String currentUserEmail = authentication.getName();
+
         try {
             PreparedStatement ps = null;
 
@@ -350,9 +405,8 @@ public class JDBCRecipeDAO implements RecipeDAO {
             } else {
                 ps = connection.prepareStatement(
                         "INSERT INTO retete (denumire, portii, data_adaugarii, descriere, istutorial, link, iduser, idcategoria, idpoza, idretetar, timp_gatire, timp_preparare) "
-                                + "VALUES(?, ?, now(), ?, ?, ?, 1 , ?, ?, ?, ?, ?) RETURNING id;"
+                                + "VALUES(?, ?, now(), ?, ?, ?,(SELECT id FROM app_user WHERE email = $$"+ currentUserEmail +"$$) , ?, ?, ?, ?, ?) RETURNING id;"
                 );
-
             }
 
             ps.setString(1, recipe.getName());
@@ -484,8 +538,24 @@ public class JDBCRecipeDAO implements RecipeDAO {
     }
 
     @Override
-    public boolean delete(Recipe model) {
-        return false;
+    public boolean delete(Recipe recipe) {
+        boolean result = false;
+        Connection connection = newConnection();
+        try {
+            Statement statement = connection.createStatement();
+            result = statement.execute("DELETE FROM retete WHERE id  = " + recipe.getId());
+            connection.commit();
+        } catch (SQLException ex) {
+
+            throw new RuntimeException("Error deleting from DB recipe", ex);
+        } finally {
+            try {
+                connection.close();
+            } catch (Exception ex) {
+
+            }
+        }
+        return result;
     }
 
     /**
@@ -517,8 +587,6 @@ public class JDBCRecipeDAO implements RecipeDAO {
         } catch (Exception e) {
             throw new RuntimeException("No DB Connection!", e);
         }
-
     }
-
 }
 

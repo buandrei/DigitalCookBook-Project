@@ -22,9 +22,9 @@ public class RecipeService {
     @Autowired
     private RecipeDAO dao;
 
-    public Collection<Recipe> getAll(boolean isOnlyPromotedForHomePage) {
+    public Collection<Recipe> getAll(boolean isOnlyPromotedForHomePage, boolean onlyTutorialRecipes) {
 
-        return dao.getAll(isOnlyPromotedForHomePage);
+        return dao.getAll(isOnlyPromotedForHomePage , onlyTutorialRecipes);
     }
 
     public Collection<Recipe> searchRecipe(String name, String categoryId) {
@@ -41,6 +41,10 @@ public class RecipeService {
 
     public Collection<Recipe> getAllWherePromotion(boolean isNull) {
         return dao.getAllWherePromotion(isNull);
+    }
+
+    public Collection<Recipe> getRecipesByUser(String email) {
+        return dao.getRecipesByUser(email);
     }
 
 

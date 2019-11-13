@@ -9,12 +9,10 @@ $(document).ready(function() {
 			getSelectedIngredients();
 			verifyTutorialCheckbox();
 			document.getElementById('idCategoria').value = getSelectedRecipeCategory();
-
 	    	return validateRecipeFormOnSubmit();
-
 	   });
 
-});
+})
 
 function getSelectedRecipeCategory(){
 	var categoryInput = document.getElementById("categorie_reteta");
@@ -113,7 +111,7 @@ function validateRecipeFormOnSubmit() {
 $("#recipe_picture").on("change", function() {
       var fileName = $(this).val().split("\\").pop();
       $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
-});
+})
 
 
 
@@ -135,7 +133,69 @@ $(function (){
 				$('.description_remaining').text(nRemaining);
 			}
 		}
-});
+})
+
+$(function (){
+		var nMaxLength = 8;
+		$('.portii_remaining').text(nMaxLength);
+		$("#portions_input").keydown(function (event) {
+			LimitCharacters($(this));
+		});
+		$("#portions_input").keyup(function (event) {
+			LimitCharacters($(this));
+		});
+
+		function LimitCharacters(portions){
+			if(portions.val().length > nMaxLength){
+				portions.val(portions.val().substring(0, nMaxLength));
+			}else{
+				var nRemaining = nMaxLength - portions.val().length;
+				$('.portii_remaining').text(nRemaining);
+			}
+		}
+})
+
+$(function (){
+		var nMaxLength = 8;
+		$('.cookingTime_remaining').text(nMaxLength);
+		$("#cookingTime").keydown(function (event) {
+			LimitCharacters($(this));
+		});
+		$("#cookingTime").keyup(function (event) {
+			LimitCharacters($(this));
+		});
+
+		function LimitCharacters(cookingTime){
+			if(cookingTime.val().length > nMaxLength){
+				cookingTime.val(cookingTime.val().substring(0, nMaxLength));
+			}else{
+				var nRemaining = nMaxLength - cookingTime.val().length;
+				$('.cookingTime_remaining').text(nRemaining);
+			}
+		}
+})
+
+$(function (){
+		var nMaxLength = 8;
+		$('.preparationTime_remaining').text(nMaxLength);
+		$("#preparationTime").keydown(function (event) {
+			LimitCharacters($(this));
+		});
+		$("#preparationTime").keyup(function (event) {
+			LimitCharacters($(this));
+		});
+
+		function LimitCharacters(preparationTime){
+			if(preparationTime.val().length > nMaxLength){
+				preparationTime.val(preparationTime.val().substring(0, nMaxLength));
+			}else{
+				var nRemaining = nMaxLength - preparationTime.val().length;
+				$('.preparationTime_remaining').text(nRemaining);
+			}
+		}
+})
+
+
 
 //validate upload filesize
 function ValidateRecipeImageSize(file) {
@@ -168,7 +228,7 @@ $(function (){
 				$('.name_remaining').text(nRemaining1);
 			}
 		}
-});
+})
 
 
 function getSelectedIngredients() {
@@ -186,12 +246,11 @@ function getSelectedIngredients() {
 	if (selected.length > 0) {
 		document.getElementById("ingredientsId").value = selected;
 	}
-};
+}
 
 function verifyTutorialCheckbox() {
     document.getElementById("istutorial").value = document.getElementById("istutorial").checked;
 }
-
 
 function doAjaxPost() {
 	var id = $('#recipeId').val();
@@ -232,8 +291,7 @@ function sleep(milliseconds) {
   }
 }
 
-function updateDiv()
-{
+function updateDiv(){
   $("#starDiv").load(location.href + " #starDiv>*", "");
 }
 
