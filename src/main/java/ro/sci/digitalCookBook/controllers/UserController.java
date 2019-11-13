@@ -3,6 +3,7 @@ package ro.sci.digitalCookBook.controllers;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
@@ -74,7 +75,7 @@ public class UserController {
         ModelAndView modelAndView = new ModelAndView();
         if (!bindingResult.hasErrors()) {
             userService.save(user);
-            RedirectView redirectView = new RedirectView("/user");
+            RedirectView redirectView = new RedirectView("/");
             modelAndView.setView(redirectView);
 
         } else {
@@ -92,4 +93,5 @@ public class UserController {
 
         return modelAndView;
     }
+
 }

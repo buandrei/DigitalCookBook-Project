@@ -17,7 +17,7 @@
             </div>
 
             <div class="col-4" >
-                <p>Aici o sa punem buton sign up si login .</p>
+                <p><button>SIGN UP</button> <BUTTON>LOG IN</BUTTON></p>
             </div>
         </div>
     </div>
@@ -71,25 +71,50 @@
                     </#if>
 
                     <div class="form-group">
-                        <label for="denumire_input">Username *</label>
-                        <input name="userName" value="${user.userName!''}" type="text" class="form-control" id="denumire_input" aria-describedby="Username" placeholder="Username" >
+                        <label for="userName">Username *</label>
+                        <input name="userName" value="${user.userName!''}" type="input" class="form-control" id="userName" aria-describedby="Username" placeholder="Username" >
                     </div>
 
                     <div class="form-group">
-                        <label for="exampleInputEmail1">Email address *</label>
-                        <input name="email" value="${user.email!''}" type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Email utilizator">
-                        <small id="emailHelp" class="form-text text-muted">Nu va vom publica e-mailul unor terte parti niciodata</small>
+                        <label for="email">Email address *</label>
+                        <input name="email" value="${user.email!''}" type="input" class="form-control" id="email" aria-describedby="emailHelp" placeholder="Email">
+                        <small id="email" class="form-text text-muted">Nu va vom publica e-mailul unor terte parti niciodata</small>
                     </div>
 
                     <div class="form-group">
-                        <label for="denumire_input">Nume *</label>
-                        <input name="nume" value="${user.nume!''}" type="text" class="form-control" id="denumire_input" aria-describedby="Username" placeholder="Nume" >
+                        <label for="nume">Nume *</label>
+                        <input name="nume" value="${user.nume!''}" type="input" class="form-control" id="nume" aria-describedby="Nume" placeholder="Nume" >
                     </div>
 
                     <div class="form-group">
-                        <label for="denumire_input">Prenume *</label>
-                        <input name="prenume" value="${user.prenume!''}" type="text" class="form-control" id="denumire_input" aria-describedby="Username" placeholder="Prenume" >
+                        <label for="prenume">Prenume *</label>
+                        <input name="prenume" value="${user.prenume!''}" type="input" class="form-control" id="prenume" aria-describedby="Prenume" placeholder="Prenume" >
                     </div>
+
+                    <div class="form-group">
+                        <label for="isbucatar">Esti bucatar ? d sau n *</label>
+                        <input name="isbucatar" value="${user.isbucatar!''}" type="input" class="form-control" id="isbucatar" aria-describedby="IsBucatar" placeholder="IsBucatar" >
+                    </div>
+
+                    <div class="form-group">
+                        <label for="parola">Parola *</label>
+                        <input name="parola" value="${user.parola!''}" type="password" class="form-control" id="parola" aria-describedby="Parola" placeholder="Parola" >
+                    </div>
+
+                    <#--picture-->
+
+                    <#--<div class="input-group mb-3">
+
+                        <div class="custom-file">
+                            <input onchange="ValidateUserImageSize(this)" name="file"  accept="image/*" type="file" class="custom-file-input" id="recipe_picture">
+                            <label class="custom-file-label" for="recipe_picture">Alege imagine de utilizator  *</label>
+                        </div>
+
+                    </div>-->
+
+                    <small><p style="margin:0" class="font-weight-lighter text-center font-italic">marimea imaginii nu trebuie sa depaseasca 2 MB</p></small>
+
+
                 </div>
                 <input value="save" class="btn btn-primary btn-lg btn-block" type="submit"/>
             </div>
