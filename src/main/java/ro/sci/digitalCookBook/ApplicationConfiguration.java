@@ -8,7 +8,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import ro.sci.digitalCookBook.dao.RecipeDAO;
 import ro.sci.digitalCookBook.dao.UserDAO;
 import ro.sci.digitalCookBook.dao.db.JDBCRecipeDAO;
-import ro.sci.digitalCookBook.dao.db.JDBCuserDAO;
 import ro.sci.digitalCookBook.service.RecipeService;
 import ro.sci.digitalCookBook.service.UserService;
 import org.springframework.web.servlet.ViewResolver;
@@ -44,7 +43,7 @@ public class ApplicationConfiguration {
 
     @Bean
     public UserDAO userDAO() {
-        return new JDBCuserDAO(dbHost, "5432", dbName, dbUser, dbPassword);
+        return new JDBCUserDAO(dbHost, "5432", dbName, dbUser, dbPassword);
     }
 
     @Bean
