@@ -22,7 +22,7 @@ public interface RecipeDAO extends BaseDAO<Recipe> {
 
     Collection<Recipe> getAll(boolean isOnlyPromotedForHomepage, boolean getOnlyTutorialRecipes);
 
-    Collection<Recipe> getRecipesByUser(String userEmail);
+    Collection<Recipe> getRecipesByUser();
 
     boolean inactivate(Recipe recipe);
 

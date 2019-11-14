@@ -335,8 +335,11 @@ public class JDBCRecipeDAO implements RecipeDAO {
     }
 
     @Override
-    public Collection<Recipe> getRecipesByUser(String email) {
+    public Collection<Recipe> getRecipesByUser() {
         Collection<Recipe> result = new ArrayList();
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String currentUserName = authentication.getName();
 
         StringBuilder query = new StringBuilder();
         query.append("SELECT retete.id," +
@@ -349,6 +352,7 @@ public class JDBCRecipeDAO implements RecipeDAO {
                 "  categorii_retete.denumire AS categoria," +
                 "  promovari.idtip_promovare AS idtip_promovare," +
                 "  retete.idpromotie AS idpromotie," +
+                "  retete.inactiv," +
                 "  poze.content AS thumbnail," +
                 "  COALESCE(InitCap(app_user.nume), $$$$) ||  $$ $$ || COALESCE(InitCap(app_user.prenume), $$$$) AS user," +
                 "  1 AS unu " +
@@ -360,7 +364,7 @@ public class JDBCRecipeDAO implements RecipeDAO {
                 "  LEFT JOIN app_user ON app_user.id = retete.iduser " +
                 "WHERE" +
                 "  retete.inactiv = $$N$$ " +
-                "  AND retete.iduser = (SELECT id FROM app_user WHERE email = $$" + email + "$$)" +
+                "  AND retete.iduser = (SELECT id FROM app_user WHERE email = $$" + currentUserName + "$$)" +
                 "");
 
 

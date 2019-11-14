@@ -133,25 +133,19 @@ public class RecipeController {
 
     }
 
+
     @RequestMapping(value = {"/my_recipes", "/my_recipes/{page}"}, method = RequestMethod.GET)
     public ModelAndView listByUser(@PathVariable(required = false, name = "page") String page,
                                    HttpServletRequest request) {
-//        ModelAndView modelAndView = new ModelAndView();
-//        Collection<Recipe> recipes = recipeService.getAll(false);
-//        Collection<RecipeCategory> recipeCategories = recipeCategoryService.listAll();
-//        modelAndView.addObject("categories", recipeCategories);
+        ModelAndView modelAndView = new ModelAndView();
+        Collection<Recipe> recipes = recipeService.getRecipesByUser();
 
-        //if (setAndGetRecipePage(page, request, modelAndView, recipes)) return modelAndView;
+        if (setAndGetRecipePage(page, request, modelAndView, recipes)) return modelAndView;
 
-        // modelAndView.setViewName("/retete/list_all");
-
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String currentUserName = authentication.getName();
-
-        Collection<Recipe> recipes = recipeService.getRecipesByUser(currentUserName);
-
-        return null;
+        modelAndView.setViewName("/retete/my_recipe_list");
+        return modelAndView;
     }
+
 
     @RequestMapping(value = {"/tutoriale_incepatori", "/tutoriale_incepatori/{page}"}, method = RequestMethod.GET)
     public ModelAndView listRecipeTutorials(@PathVariable(required = false, name = "page") String page,

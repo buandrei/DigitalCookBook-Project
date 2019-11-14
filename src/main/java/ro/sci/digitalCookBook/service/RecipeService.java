@@ -9,6 +9,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.util.StringUtils;
 
 import ro.sci.digitalCookBook.dao.RecipeDAO;
@@ -51,8 +53,10 @@ public class RecipeService {
         return dao.getAllWherePromotionNotNull();
     }
 
-    public Collection<Recipe> getRecipesByUser(String email) {
-        return dao.getRecipesByUser(email);
+    public Collection<Recipe> getRecipesByUser(){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String currentUserName = authentication.getName();
+        return dao.getRecipesByUser();
     }
 
 
