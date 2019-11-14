@@ -267,8 +267,8 @@ public class JDBCRecipeDAO implements RecipeDAO {
         recipePhoto.setContent(rs.getBytes("thumbnail"));
         recipe.setPhoto(recipePhoto);
 
-        user.setNume(rs.getString("user"));
-        recipe.setUser(user);
+        /*user.setNume(rs.getString("user"));
+        recipe.setUser(user);*/
 
 
         return recipe;
