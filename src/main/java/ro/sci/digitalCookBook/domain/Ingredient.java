@@ -1,7 +1,14 @@
 package ro.sci.digitalCookBook.domain;
 
-import java.util.Comparator;
 import java.util.Objects;
+
+/**
+ * POJO for a selection of ingredients
+ *
+ * @author Andrei Bu
+ */
+
+
 
 public class Ingredient extends AbstractModel  {
     private String name;

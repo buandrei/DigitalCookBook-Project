@@ -27,6 +27,13 @@ import java.io.*;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * @author Andrei Bu
+ *
+ * Controller class for the recipe entity
+ *
+ */
+
 @Controller
 @RequestMapping("/retete")
 public class RecipeController {
@@ -127,7 +134,7 @@ public class RecipeController {
 
     }
 
-    @RequestMapping(value = {"/my_recipes", "/list_all/{page}"}, method = RequestMethod.GET)
+    @RequestMapping(value = {"/my_recipes", "/my_recipes/{page}"}, method = RequestMethod.GET)
     public ModelAndView listByUser(@PathVariable(required = false, name = "page") String page,
                              HttpServletRequest request) {
 //        ModelAndView modelAndView = new ModelAndView();
@@ -434,12 +441,19 @@ public class RecipeController {
     private @ResponseBody
     String give_rating(@RequestParam("id") int id, @RequestParam("rvalue") long rating) {
         String returnText;
-
         recipeService.giveRating(id, rating);
         returnText = "Multumim pentru feedback!";
 
         return returnText;
     }
+
+    @RequestMapping(value = "/inactivare_reteta", method = RequestMethod.POST)
+    private ModelAndView inactivate_recipe( int id) {
+        //TODO
+        return null;
+    }
+
+
 
     @GetMapping("/pdfview")
     public String handleForexRequest(Model model, int id) {

@@ -10,6 +10,13 @@ import ro.sci.digitalCookBook.exception.ValidationException;
 import java.util.LinkedList;
 import java.util.List;
 
+/**
+ * Class that executes DAO methods for RecipePhotos
+ *
+ * @author Andrei Bu
+
+ */
+
 public class RecipePhotoService {
     private static final Logger LOGGER = LoggerFactory.getLogger(RecipePhotoService.class);
 

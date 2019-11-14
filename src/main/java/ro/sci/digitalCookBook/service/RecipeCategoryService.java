@@ -6,6 +6,12 @@ import ro.sci.digitalCookBook.dao.RecipeCategoryDAO;
 import ro.sci.digitalCookBook.domain.RecipeCategory;
 import java.util.Collection;
 
+/**
+ * Class that executes DAO methods for Recipe Categories
+ *
+ * @author Andrei Bu
+
+ */
 
 public class RecipeCategoryService {
     private static final Logger LOGGER = LoggerFactory.getLogger(RecipeCategoryService.class);

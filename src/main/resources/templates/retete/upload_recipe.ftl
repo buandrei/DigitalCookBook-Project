@@ -180,7 +180,7 @@
 								</div>
 							</div>
 
-							<input value="save" class="btn btn-primary btn-lg btn-block" type="submit"/>
+							<input value="Salveaza reteta!" class="btn btn-primary btn-lg btn-block" type="submit"/>
 							<#if recipe.id??>
 								<input name="id" type="hidden" value="${recipe.id?c}"/>
 							</#if>

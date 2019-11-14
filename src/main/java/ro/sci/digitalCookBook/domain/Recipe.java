@@ -43,7 +43,7 @@ public class Recipe extends AbstractModel{
     private RecipeIngredient recipeIngredient;
     private int recipeId;
 
-    private char inactiv;
+    private boolean inactiv;
     private long cookingTime;
     private long preparationTime;
 
@@ -176,11 +176,11 @@ public class Recipe extends AbstractModel{
         this.recipeIngredient = recipeIngredient;
     }
 
-    public char getInactiv() {
+    public boolean getInactiv() {
         return inactiv;
     }
 
-    public void setInactiv(char inactiv) {
+    public void setInactiv(boolean inactiv) {
         this.inactiv = inactiv;
     }
 

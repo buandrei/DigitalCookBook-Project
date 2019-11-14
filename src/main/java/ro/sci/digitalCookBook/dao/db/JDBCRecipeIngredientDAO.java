@@ -8,6 +8,13 @@ import ro.sci.digitalCookBook.domain.RecipeIngredient;
 import java.sql.*;
 import java.util.*;
 
+/**
+ * JDBC implementation for {@link ro.sci.digitalCookBook.dao.RecipeIngredientDAO}.
+ *  retetar
+ * @author Andrei Bu
+ */
+
+
 public class JDBCRecipeIngredientDAO implements RecipeIngredientDAO {
     private static final Logger LOGGER = LoggerFactory.getLogger(JDBCRecipeDAO.class);
 

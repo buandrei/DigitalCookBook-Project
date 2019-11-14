@@ -11,6 +11,14 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
 
+/**
+ * @author Andrei Bu
+ *
+ * Ingredient JDBC DAO class for retrieving or altering ingredients
+ *
+ */
+
+
 public class JDBCIngredientDAO implements IngredientDAO {
     private static final Logger LOGGER = LoggerFactory.getLogger(JDBCRecipeDAO.class);
 
@@ -28,11 +36,6 @@ public class JDBCIngredientDAO implements IngredientDAO {
         this.pass = pass;
     }
 
-    /**
-     * Method will return all the results from the retete db table
-     * @param querry
-     * @return
-     */
     @Override
     public Collection<Ingredient> searchByName(String querry) {
         return null;

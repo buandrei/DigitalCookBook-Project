@@ -11,6 +11,13 @@ import ro.sci.digitalCookBook.exception.ValidationException;
 import java.util.LinkedList;
 import java.util.List;
 
+/**
+ * Class that executes DAO methods for RecipeIngredient Service
+ *
+ * @author Andrei Bu
+
+ */
+
 public class RecipeIngredientsService {
     private static final Logger LOGGER = LoggerFactory.getLogger(RecipeIngredientsService.class);
 
