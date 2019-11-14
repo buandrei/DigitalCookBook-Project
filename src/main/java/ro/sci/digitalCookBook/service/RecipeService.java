@@ -15,6 +15,13 @@ import ro.sci.digitalCookBook.dao.RecipeDAO;
 import ro.sci.digitalCookBook.domain.Recipe;
 import ro.sci.digitalCookBook.exception.ValidationException;
 
+/**
+ * Class that executes DAO methods for Recipe
+ *
+ * @author Andrei Bu
+
+ */
+
 
 public class RecipeService {
     private static final Logger LOGGER = LoggerFactory.getLogger(RecipeService.class);
@@ -25,6 +32,11 @@ public class RecipeService {
     public Collection<Recipe> getAll(boolean isOnlyPromotedForHomePage, boolean onlyTutorialRecipes) {
 
         return dao.getAll(isOnlyPromotedForHomePage , onlyTutorialRecipes);
+    }
+
+    public Collection<Recipe> getAll() {
+
+        return dao.getAll();
     }
 
     public Collection<Recipe> searchRecipe(String name, String categoryId) {
@@ -59,6 +71,40 @@ public class RecipeService {
         }
         if (recipe != null) {
             dao.delete(recipe);
+            return true;
+        }
+
+        return false;
+    }
+
+    public boolean inactivateRecipe(int id){
+        LOGGER.debug("Inactivating recipe with id =  " + id);
+        Recipe recipe = null;
+        try {
+            recipe = dao.findById(id);
+        } catch (EmptyResultDataAccessException e) {
+            LOGGER.warn("Nu s-a putut inactiva.Nu am gasit  ID: " + id +" .Contactati suport!");
+            return false;
+        }
+        if (recipe != null) {
+            dao.inactivate(recipe);
+            return true;
+        }
+
+        return false;
+    }
+
+    public boolean activateRecipe(int id){
+        LOGGER.debug("Inactivating recipe with id =  " + id);
+        Recipe recipe = null;
+        try {
+            recipe = dao.findById(id);
+        } catch (EmptyResultDataAccessException e) {
+            LOGGER.warn("Nu s-a putut inactiva.Nu am gasit  ID: " + id +" .Contactati suport!");
+            return false;
+        }
+        if (recipe != null) {
+            dao.activateRecord(recipe);
             return true;
         }
 

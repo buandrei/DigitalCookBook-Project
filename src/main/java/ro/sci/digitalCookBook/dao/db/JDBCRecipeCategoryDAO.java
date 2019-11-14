@@ -8,6 +8,12 @@ import ro.sci.digitalCookBook.domain.RecipeCategory;
 import java.sql.*;
 import java.util.*;
 
+/**
+ * @author Andrei Bu
+ *
+ * RecipeCategory JDBC DAO class for retrieving or altering categories
+ *
+ */
 
 public class JDBCRecipeCategoryDAO implements RecipeCategoryDAO {
 

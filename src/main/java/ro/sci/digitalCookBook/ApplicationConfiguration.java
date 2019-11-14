@@ -5,14 +5,18 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.datasource.SingleConnectionDataSource;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
+import org.springframework.web.servlet.ViewResolver;
+import org.springframework.web.servlet.view.BeanNameViewResolver;
+import org.springframework.web.servlet.view.InternalResourceViewResolver;
+
+
 import ro.sci.digitalCookBook.dao.RecipeDAO;
 import ro.sci.digitalCookBook.dao.UserDAO;
 import ro.sci.digitalCookBook.dao.db.JDBCRecipeDAO;
 import ro.sci.digitalCookBook.service.RecipeService;
 import ro.sci.digitalCookBook.service.UserService;
-import org.springframework.web.servlet.ViewResolver;
-import org.springframework.web.servlet.view.BeanNameViewResolver;
-import org.springframework.web.servlet.view.InternalResourceViewResolver;
+
 
 import ro.sci.digitalCookBook.dao.*;
 import ro.sci.digitalCookBook.dao.db.*;

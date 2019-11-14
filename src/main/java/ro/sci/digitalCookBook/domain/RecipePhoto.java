@@ -1,7 +1,13 @@
 package ro.sci.digitalCookBook.domain;
 
-import java.util.Arrays;
 import java.util.Base64;
+
+/**
+ * Used to define the information needed for a Recipe Photos.
+ *
+ * @author Andrei Bu
+
+ */
 
 public class RecipePhoto extends AbstractModel{
 

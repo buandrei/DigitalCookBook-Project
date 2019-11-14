@@ -25,7 +25,7 @@ public class CommonModelInterceptor implements HandlerInterceptor {
 
         if (authentication != null && !(authentication instanceof AnonymousAuthenticationToken)) {
             String currentUserName = authentication.getName();
-            model.addObject("user", currentUserName);
+            model.addObject("loggedUser", currentUserName);
 
             List<String> roles = new LinkedList();
 

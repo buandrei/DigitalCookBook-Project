@@ -12,6 +12,13 @@ import ro.sci.digitalCookBook.service.RecipePhotoService;
 import ro.sci.digitalCookBook.service.RecipeService;
 import java.util.*;
 
+/**
+ * @author Andrei Bu
+ *
+ * class for the homepage
+ *
+ */
+
 @Controller
 @RequestMapping("/")
 public class IndexController {
@@ -32,7 +39,6 @@ public class IndexController {
 
 		ModelAndView modelAndView = new ModelAndView();
 		List<Recipe> recipesMappedByPromotion = new ArrayList<>(recipeService.getAll(true, false));
-		System.out.println(recipesMappedByPromotion);
 		Map<String, List<Recipe>> recipeUnsortedMap = new HashMap<>();
 
 		for(Recipe recipe : recipesMappedByPromotion){

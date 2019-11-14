@@ -9,7 +9,14 @@ import ro.sci.digitalCookBook.domain.Ingredient;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
+
+/**
+ * Class that executes DAO methods for IngredientService
+ *
+ * @author Andrei Bu
+
+ */
+
 
 public class IngredientService {
     private static final Logger LOGGER = LoggerFactory.getLogger(IngredientService.class);

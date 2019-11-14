@@ -19,6 +19,13 @@ import org.jsoup.Jsoup;
 import java.io.IOException;
 import java.util.Map;
 
+/**
+ * POJO for a printing recipe PDF
+ *
+ * @author Andrei Bu
+ */
+
+
 @Component("pdfview")
 public class PdfRecipeView extends AbstractView {
     @Override
