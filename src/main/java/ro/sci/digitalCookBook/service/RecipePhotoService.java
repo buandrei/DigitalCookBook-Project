@@ -7,8 +7,15 @@ import org.springframework.util.StringUtils;
 import ro.sci.digitalCookBook.dao.RecipePhotoDAO;
 import ro.sci.digitalCookBook.domain.RecipePhoto;
 import ro.sci.digitalCookBook.exception.ValidationException;
+
 import java.util.LinkedList;
 import java.util.List;
+
+/**
+ * Class that executes DAO methods for RecipePhotos
+ *
+ * @author Andrei Bu
+ */
 
 public class RecipePhotoService {
     private static final Logger LOGGER = LoggerFactory.getLogger(RecipePhotoService.class);
@@ -16,38 +23,12 @@ public class RecipePhotoService {
     @Autowired
     private RecipePhotoDAO recipePhotoDAO;
 
-//    public Collection<RecipePhoto> listAll() {
-//        return dao.getAll();
-//    }
-
-//    public Collection<Recipe> search( String query) {
-//        LOGGER.debug("Searching for " + query);
-//        return dao.searchByName(query);
-//    }
-
-//    public boolean delete(int id) {
-//        LOGGER.debug("Deleting recipe with id =  " + id);
-//        Recipe recipe = null;
-//        try {
-//            recipe = dao.findById(id);
-//        } catch (EmptyResultDataAccessException e) {
-//           LOGGER.warn("There is no recipe with id = ");
-//            return false;
-//        }
-//        if (recipe != null) {
-//            dao.delete(recipe);
-//            return true;
-//        }
-//
-//        return false;
-//    }
-
     public RecipePhoto get(int id) {
         LOGGER.debug("Getting photo for id: " + id);
         return recipePhotoDAO.findById(id);
     }
 
-    public void save(RecipePhoto recipePhoto ) throws ValidationException {
+    public void save(RecipePhoto recipePhoto) throws ValidationException {
         LOGGER.debug("Saving: " + recipePhoto);
         validate(recipePhoto);
         recipePhotoDAO.update(recipePhoto);
@@ -60,7 +41,7 @@ public class RecipePhotoService {
         }
 
         if (!errors.isEmpty()) {
-            throw new ValidationException(errors.toArray(new String[] {}));
+            throw new ValidationException(errors.toArray(new String[]{}));
         }
     }
 

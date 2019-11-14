@@ -11,23 +11,21 @@ import java.util.concurrent.TimeUnit;
  * Used to define the information needed for a Recipe.
  *
  * @author Andrei Bu
-
  */
 
-public class Recipe extends AbstractModel{
-
+public class Recipe extends AbstractModel {
 
     private String name;
 
     @NotNull
     private long portions;
 
-    @DateTimeFormat(pattern ="dd/MM/yyyy")
+    @DateTimeFormat(pattern = "dd/MM/yyyy")
     private Date addDate;
 
     private String description;
     private boolean istutorial;
-    private String  link;
+    private String link;
     private int accessCount;
     private double rating;
     private int idTipPromotie;
@@ -43,7 +41,7 @@ public class Recipe extends AbstractModel{
     private RecipeIngredient recipeIngredient;
     private int recipeId;
 
-    private char inactiv;
+    private boolean inactiv;
     private long cookingTime;
     private long preparationTime;
 
@@ -176,11 +174,11 @@ public class Recipe extends AbstractModel{
         this.recipeIngredient = recipeIngredient;
     }
 
-    public char getInactiv() {
+    public boolean getInactiv() {
         return inactiv;
     }
 
-    public void setInactiv(char inactiv) {
+    public void setInactiv(boolean inactiv) {
         this.inactiv = inactiv;
     }
 

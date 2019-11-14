@@ -2,7 +2,14 @@ package ro.sci.digitalCookBook.domain;
 
 import java.util.ArrayList;
 
-public class RecipeIngredient extends AbstractModel{
+/**
+ * Used to define the information needed for a RecipeIngredients.
+ *
+ * @author Andrei Bu
+ */
+
+
+public class RecipeIngredient extends AbstractModel {
 
     private String instructions;
     private ArrayList<Integer> ingredientsId;

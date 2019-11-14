@@ -5,12 +5,17 @@ import org.slf4j.LoggerFactory;
 import ro.sci.digitalCookBook.dao.RecipePhotoDAO;
 import ro.sci.digitalCookBook.domain.RecipePhoto;
 
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
 import java.sql.*;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
+
+/**
+ * JDBC implementation for {@link ro.sci.digitalCookBook.dao.RecipePhotoDAO}.
+ * class for adding / changing photo
+ *
+ * @author Andrei Bu
+ */
 
 public class JDBCRecipePhotoDAO implements RecipePhotoDAO {
     private static final Logger LOGGER = LoggerFactory.getLogger(JDBCRecipeDAO.class);
@@ -29,18 +34,14 @@ public class JDBCRecipePhotoDAO implements RecipePhotoDAO {
         this.pass = pass;
     }
 
-
     private RecipePhoto extractPhoto(ResultSet rs) throws SQLException {
         RecipePhoto recipePhoto = new RecipePhoto();
-
         recipePhoto.setId(rs.getInt("id"));
         recipePhoto.setContent(rs.getBytes("content"));
         recipePhoto.setFileName(rs.getString("file_name"));
 
         return recipePhoto;
     }
-
-
 
     @Override
     public Collection<RecipePhoto> getAll() {
@@ -108,7 +109,7 @@ public class JDBCRecipePhotoDAO implements RecipePhotoDAO {
 
             if (recipePhoto.getId() > 0) {
 
-                ps = connection.prepareStatement( " UPDATE poze SET content=?,file_name=? WHERE id = ? RETURNING id;");
+                ps = connection.prepareStatement(" UPDATE poze SET content=?,file_name=? WHERE id = ? RETURNING id;");
 
             } else {
                 ps = connection.prepareStatement(
@@ -153,6 +154,7 @@ public class JDBCRecipePhotoDAO implements RecipePhotoDAO {
 
     /**
      * This method will create a connection to the DB
+     *
      * @return a Connection or throws a new RuntimeException if there is no DB connection
      */
     protected Connection newConnection() {
@@ -179,6 +181,5 @@ public class JDBCRecipePhotoDAO implements RecipePhotoDAO {
         } catch (Exception e) {
             throw new RuntimeException("No DB Connection!", e);
         }
-
     }
 }

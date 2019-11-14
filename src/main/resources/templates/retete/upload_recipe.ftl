@@ -20,7 +20,7 @@
 					<li class="nav-item">
 						<a class="nav-link" href="/">Home</a>
 					</li>
-					<li class="nav-item dropdown active">
+					<li class="nav-item dropdown">
 						<a class="nav-link dropdown-toggle " style="padding:0" href="#" id="dropdown03" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Retete</a>
 						<div class="dropdown-menu" style="top:30px" aria-labelledby="dropdown03">
 							<a class="dropdown-item" href="/retete/list_all">Cautare simpla</a>
@@ -180,7 +180,7 @@
 								</div>
 							</div>
 
-							<input value="save" class="btn btn-primary btn-lg btn-block" type="submit"/>
+							<input value="Salveaza reteta!" class="btn btn-primary btn-lg btn-block" type="submit"/>
 							<#if recipe.id??>
 								<input name="id" type="hidden" value="${recipe.id?c}"/>
 							</#if>

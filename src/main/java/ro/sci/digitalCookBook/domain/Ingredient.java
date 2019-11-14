@@ -1,9 +1,14 @@
 package ro.sci.digitalCookBook.domain;
 
-import java.util.Comparator;
 import java.util.Objects;
 
-public class Ingredient extends AbstractModel  {
+/**
+ * POJO for a selection of ingredients
+ *
+ * @author Andrei Bu
+ */
+
+public class Ingredient extends AbstractModel {
     private String name;
     private String um;
 
@@ -31,7 +36,6 @@ public class Ingredient extends AbstractModel  {
                 '}';
     }
 
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -45,8 +49,6 @@ public class Ingredient extends AbstractModel  {
     public int hashCode() {
         return Objects.hash(name, um);
     }
-
-
 
 }
 

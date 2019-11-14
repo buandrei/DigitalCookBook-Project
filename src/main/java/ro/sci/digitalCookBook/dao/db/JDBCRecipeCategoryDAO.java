@@ -8,6 +8,11 @@ import ro.sci.digitalCookBook.domain.RecipeCategory;
 import java.sql.*;
 import java.util.*;
 
+/**
+ * @author Andrei Bu
+ * <p>
+ * RecipeCategory JDBC DAO class for retrieving or altering categories
+ */
 
 public class JDBCRecipeCategoryDAO implements RecipeCategoryDAO {
 
@@ -27,18 +32,8 @@ public class JDBCRecipeCategoryDAO implements RecipeCategoryDAO {
         this.pass = pass;
     }
 
-    /**
-     * Method will return all the results from the retete db table
-     * @param querry
-     * @return
-     */
-    @Override
-    public Collection<RecipeCategory> searchByName(String querry) {
-        return null;
-    }
-
     private RecipeCategory extractCategory(ResultSet rs) throws SQLException {
-        RecipeCategory  recipeCategory = new RecipeCategory();
+        RecipeCategory recipeCategory = new RecipeCategory();
 
         recipeCategory.setId(rs.getInt("id"));
         recipeCategory.setName(rs.getString("denumire"));
@@ -98,7 +93,7 @@ public class JDBCRecipeCategoryDAO implements RecipeCategoryDAO {
         }
 
         if (result.size() > 1) {
-            throw new IllegalStateException("Am gasit mai multe categorii de retete cu id ID: " + id );
+            throw new IllegalStateException("Am gasit mai multe categorii de retete cu id ID: " + id);
         }
         return result.isEmpty() ? null : result.get(0);
     }
@@ -108,9 +103,61 @@ public class JDBCRecipeCategoryDAO implements RecipeCategoryDAO {
         return null;
     }
 
+    @Override
+    public RecipeCategory save(RecipeCategory recipeCategory) {
+        Connection connection = newConnection();
+        try {
+            PreparedStatement ps = connection.prepareStatement(
+                    "INSERT INTO categorii_retete (denumire) VALUES (?) RETURNING id;"
+            );
+
+            ps.setString(1, recipeCategory.getName());
+
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                recipeCategory.setId(rs.getInt(1));
+            }
+
+            rs.close();
+            connection.commit();
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Error getting recipe category.", e);
+        } finally {
+            try {
+                connection.close();
+            } catch (Exception ex) {
+
+            }
+        }
+
+        return recipeCategory;
+    }
+
+    @Override
+    public boolean delete(RecipeCategory recipeCategory) {
+        boolean deletion = false;
+        Connection connection = newConnection();
+        try {
+            Statement statement = connection.createStatement();
+            deletion = statement.execute("DELETE FROM categorii_retete WHERE id = " + recipeCategory.getId());
+            connection.commit();
+        } catch (SQLException ex) {
+
+            throw new RuntimeException("Error deleting recipe category.", ex);
+        } finally {
+            try {
+                connection.close();
+            } catch (Exception ex) {
+
+            }
+        }
+        return deletion;
+    }
 
     /**
      * This method will create a connection to the DB
+     *
      * @return a Connection or throws a new RuntimeException if there is no DB connection
      */
     protected Connection newConnection() {
@@ -140,9 +187,6 @@ public class JDBCRecipeCategoryDAO implements RecipeCategoryDAO {
 
     }
 
-    @Override
-    public boolean delete(RecipeCategory model) {
-        return false;
-    }
+
 }
 

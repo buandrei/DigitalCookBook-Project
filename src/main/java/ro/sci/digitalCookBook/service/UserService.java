@@ -27,7 +27,7 @@ public class UserService {
         return dao.searchByName(query);
     }
 
-    public boolean delete(Long id) {
+    public boolean delete(int id) {
         LOGGER.debug("Deleting user for id: " + id);
         User user = null;
         try {

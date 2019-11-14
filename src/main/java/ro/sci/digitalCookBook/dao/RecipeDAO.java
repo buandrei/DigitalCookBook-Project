@@ -4,6 +4,11 @@ import ro.sci.digitalCookBook.domain.Recipe;
 
 import java.util.Collection;
 
+/**
+ * DAO interface for  {@link ro.sci.digitalCookBook.domain.Recipe}.
+ *
+ * @author Andrei Bu
+ */
 
 public interface RecipeDAO extends BaseDAO<Recipe> {
 
@@ -17,6 +22,10 @@ public interface RecipeDAO extends BaseDAO<Recipe> {
 
     Collection<Recipe> getAll(boolean isOnlyPromotedForHomepage, boolean getOnlyTutorialRecipes);
 
-    Collection<Recipe> getRecipesByUser(String userEmail);
+    Collection<Recipe> getRecipesByUser();
+
+    boolean inactivate(Recipe recipe);
+
+    boolean activateRecord(Recipe recipe);
 
 }

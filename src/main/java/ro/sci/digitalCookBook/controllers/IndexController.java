@@ -10,55 +10,61 @@ import ro.sci.digitalCookBook.service.RecipeCategoryService;
 import ro.sci.digitalCookBook.service.RecipeIngredientsService;
 import ro.sci.digitalCookBook.service.RecipePhotoService;
 import ro.sci.digitalCookBook.service.RecipeService;
+
 import java.util.*;
+
+/**
+ * @author Andrei Bu
+ * <p>
+ * class for the homepage
+ */
 
 @Controller
 @RequestMapping("/")
 public class IndexController {
-	@Autowired
-	private RecipeService recipeService;
+    @Autowired
+    private RecipeService recipeService;
 
-	@Autowired
-	private RecipePhotoService recipePhotoService;
+    @Autowired
+    private RecipePhotoService recipePhotoService;
 
-	@Autowired
-	private RecipeCategoryService recipeCategoryService;
+    @Autowired
+    private RecipeCategoryService recipeCategoryService;
 
-	@Autowired
-	private RecipeIngredientsService recipeIngredientsService;
+    @Autowired
+    private RecipeIngredientsService recipeIngredientsService;
 
-	@RequestMapping(value =  "", method = RequestMethod.GET)
-	public ModelAndView index() {
+    @RequestMapping(value = "", method = RequestMethod.GET)
+    public ModelAndView index() {
 
-		ModelAndView modelAndView = new ModelAndView();
-		List<Recipe> recipesMappedByPromotion = new ArrayList<>(recipeService.getAll(true, false));
-		System.out.println(recipesMappedByPromotion);
-		Map<String, List<Recipe>> recipeUnsortedMap = new HashMap<>();
+        ModelAndView modelAndView = new ModelAndView();
+        List<Recipe> recipesMappedByPromotion = new ArrayList<>(recipeService.getAll(true, false));
+        Map<String, List<Recipe>> recipeUnsortedMap = new HashMap<>();
 
-		for(Recipe recipe : recipesMappedByPromotion){
-			String promotionType;
-			if(recipe.getIdTipPromotie() == 1){
-				promotionType = "PLATINUM";
-			}else if(recipe.getIdTipPromotie() == 2){
-				promotionType = "GOLD";
-			}else{
-				promotionType = "BRONZE";
-			}
+        for (Recipe recipe : recipesMappedByPromotion) {
+            String promotionType;
+            if (recipe.getIdTipPromotie() == 1) {
+                promotionType = "PLATINUM";
+            } else if (recipe.getIdTipPromotie() == 2) {
+                promotionType = "GOLD";
+            } else {
+                promotionType = "BRONZE";
+            }
 
-			if(recipeUnsortedMap.get(promotionType) == null){
-				recipeUnsortedMap.put(promotionType, new ArrayList<>(Arrays.asList(recipe)));
-			}else{
-				recipeUnsortedMap.get(promotionType).add(recipe);
-			}
-		}
+            if (recipeUnsortedMap.get(promotionType) == null) {
+                recipeUnsortedMap.put(promotionType, new ArrayList<>(Arrays.asList(recipe)));
+            } else {
+                recipeUnsortedMap.get(promotionType).add(recipe);
+            }
+        }
 
-		Map<String, List<Recipe>> reverseSortedMap = new TreeMap<>(Collections.reverseOrder());
-		reverseSortedMap.putAll(recipeUnsortedMap);
+        Map<String, List<Recipe>> reverseSortedMap = new TreeMap<>(Collections.reverseOrder());
+        reverseSortedMap.putAll(recipeUnsortedMap);
 
-		modelAndView.addObject("recipeMap", reverseSortedMap);
-		modelAndView.setViewName("index");
-		return modelAndView;
-	}
+        modelAndView.addObject("recipeMap", reverseSortedMap);
+        modelAndView.setViewName("index");
+        return modelAndView;
+    }
 
 
 }

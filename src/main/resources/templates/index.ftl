@@ -7,6 +7,7 @@
 </head>
 <body>
 <div class="container">
+
 	<header>
         <#include '/top_of_pages.ftl'>
 
@@ -65,7 +66,7 @@
 							<#if recipe.idTipPromotie == 1>
 								platinum_card
 							<#elseif recipe.idTipPromotie == 2>
-								golden_card
+								gold_card
 							<#elseif recipe.idTipPromotie == 3>
 								bronze_card
 							<#else>
