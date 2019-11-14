@@ -82,9 +82,11 @@
 							</div>
 						</a>
 						<div class="card-footer">
-							 <small class="text-muted">Author: ${recipe.user.getNume()!''} </small>
+							<a href="/retete/editare_reteta?id=${recipe.id?c}" class="btn btn-warning">Editare</a>
+							<a href="" id="delete_recipe_ref_${recipe.id?c}" onclick="adminDeleteRecipe(${recipe.id?c})" class="btn btn-danger">Stergere</a>
 						</div>
 					</div>
+
 			<#assign x++>
 		</#list>
 		</div>
@@ -130,6 +132,18 @@
 <#include '/bootstrap_footer.ftl'>
 </div>
 <script src="/js/search_recipe.js" ></script>
+  <script>
+
+  function adminDeleteRecipe(recipeId){
+	if(!confirm("Atentie! Sunteti sigur ca doriti stergerea retetei?")){
+		return false;
+	}else{
+		document.getElementById("delete_recipe_ref_"+recipeId).href= "/retete/delete?id="+recipeId;
+	}
+
+  }
+
+  </script>
 </body>
 </html>
 
