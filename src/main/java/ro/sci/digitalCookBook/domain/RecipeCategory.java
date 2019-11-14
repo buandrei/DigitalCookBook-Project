@@ -4,10 +4,9 @@ package ro.sci.digitalCookBook.domain;
  * Used to define the information needed for a RecipeCategory.
  *
  * @author Andrei Bu
-
  */
 
-public class RecipeCategory extends AbstractModel{
+public class RecipeCategory extends AbstractModel {
     private String name;
 
     public String getName() {

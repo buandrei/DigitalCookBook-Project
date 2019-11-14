@@ -25,6 +25,7 @@ public interface RecipeDAO extends BaseDAO<Recipe> {
     Collection<Recipe> getRecipesByUser(String userEmail);
 
     boolean inactivate(Recipe recipe);
+
     boolean activateRecord(Recipe recipe);
 
 }

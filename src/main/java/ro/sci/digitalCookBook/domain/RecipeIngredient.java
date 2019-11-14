@@ -6,11 +6,10 @@ import java.util.ArrayList;
  * Used to define the information needed for a RecipeIngredients.
  *
  * @author Andrei Bu
-
  */
 
 
-public class RecipeIngredient extends AbstractModel{
+public class RecipeIngredient extends AbstractModel {
 
     private String instructions;
     private ArrayList<Integer> ingredientsId;

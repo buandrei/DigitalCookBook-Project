@@ -11,12 +11,12 @@ import java.util.Collection;
  * @author Andrei Bu
  */
 
-
-
 public interface IngredientDAO extends BaseDAO<Ingredient> {
 
     Collection<Ingredient> searchByName(String querry);
 
     Collection<Ingredient> findByMultipleId(ArrayList<Integer> ids);
+
+    Ingredient save(Ingredient ingredient);
 
 }

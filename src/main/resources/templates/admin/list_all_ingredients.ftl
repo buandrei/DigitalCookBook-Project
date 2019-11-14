@@ -50,37 +50,23 @@
 				<div class="col-lg-12">
 					<div style="display:block;width:100%;">
 						<button  type="button" id="menu-toggle" class="btn btn-secondary btn-sm">Open/Close SideMenu</button>
-						<h3 style="text-align:center;"> Lista RETETE </h3>
+						<h3 style="text-align:center;"> Lista INGREDIENTE </h3>
 					</div>
 					<table class="table table-bordered table-dark">
 						<thead>
 							<tr class="text-center" style="font-size:1.2em;">
 								<th scope="col">Denumire Reteta</th>
-								<th scope="col">Categoria</th>
-								<th scope="col">Descriere</th>
-								<th scope="col">Autor</th>
-								<th scope="col">&nbsp</th>
-								<th scope="col">&nbsp</th>
-								<th scope="col">&nbsp</th>
+								<th scope="col">UM</th>
 								<th scope="col">&nbsp</th>
 							</tr>
 						</thead>
 						<tbody>
-						<#assign recipePageList = recipeList>
-						<#list recipeList.pageList as recipe>
+						<#assign ingredientList = ingredientList>
+						<#list ingredientList.pageList as ingredient>
 						<tr>
-							<th scope="row">${recipe.name!''}</th>
-							<td>${recipe.recipeCategory.getName()!''}</td>
-							<td>${recipe.description!''}</td>
-							<td>${recipe.user.getNume()!''}</td>
-							<td><a href="/retete/vizualizare_reteta?id=${recipe.id!''}" class="btn btn-info">Vizualizare</a></td>
-							<td><a href="/retete/editare_reteta?id=${recipe.id!''}" class="btn btn-warning">Editare</a></td>
-							<#if recipe.inactiv == true>
-								<td><a href="/admin/activate_recipe?id=${recipe.id!''}" class="btn btn-success">Activare</a></td>
-							<#else>
-								<td><a href="/admin/inactivate_recipe?id=${recipe.id!''}" class="btn btn-warning">Inactivare</a></td>
-							</#if>
-							<td><a href="" id="delete_recipe_ref_${recipe.id!''}" onclick="adminDeleteRecipe(${recipe.id!''})" class="btn btn-danger">Stergere</a></td>
+							<th scope="row">${ingredient.name!''}</th>
+							<td>${ingredient.um!''}</td>
+							<td><a href="" id="delete_ingredient_${ingredient.id!''}" onclick="adminDeleteIngredient(${ingredient.id!''})" class="btn btn-danger">Stergere</a></td>
 						</tr>
 						</#list>
 						</tbody>
@@ -88,17 +74,17 @@
 					<nav>
 						<ul class="pagination">
 
-							<#if recipePageList.firstPage>
+							<#if ingredientList.firstPage>
 								<li class="page-item disabled">
 									<span class="page-link">Prev</span>
 								</li>
 							<#else>
 								<li class="page-item">
-									<span class="page-link"><a href="/admin/view_recipes/prev">Prev</a></span>
+									<span class="page-link"><a href="/admin/view_ingredients/prev">Prev</a></span>
 								</li>
 							</#if>
-							<#list 1..recipePageList.pageCount as tagStatus>
-								<#if (recipePageList.page + 1) == tagStatus?counter>
+							<#list 1..ingredientList.pageCount as tagStatus>
+								<#if (ingredientList.page + 1) == tagStatus?counter>
 
 								<li class="page-item active">
 									<span class="page-link">
@@ -107,22 +93,23 @@
 									</span>
 								</li>
 								<#else >
-									 <li class="page-item"><a class="page-link"  href="/admin/view_recipes/${tagStatus?counter}">${tagStatus?counter}</a></li>
+									 <li class="page-item"><a class="page-link"  href="/admin/view_ingredients/${tagStatus?counter}">${tagStatus?counter}</a></li>
 								</#if>
 							</#list>
-							<#if recipePageList.lastPage>
+							<#if ingredientList.lastPage>
 								<li class="page-item disabled">
 									<a class="page-link">Next</a>
 								</li>
 							<#else>
 								<li class="page-item">
-									<a class="page-link" href="/admin/view_recipes/next">Next</a>
+									<a class="page-link" href="/admin/view_ingredients/next">Next</a>
 								</li>
 
 							</#if>
 						</ul>
 					</nav>
 					<a href="/" class="btn btn-info float-right">Inapoi la site</a>
+					<a href="/recipe_atributes/add_ingredient" class="btn btn-success float-right" style="margin-right:15px">Adaugare ingredient nou</a>
 				</div>
 			</div>
 		</div>
@@ -136,11 +123,11 @@
     });
   });
 
-  function adminDeleteRecipe(recipeId){
-	if(!confirm("Atentie! Sunteti sigur ca doriti stergerea retetei?")){
+  function adminDeleteIngredient(ingredientId){
+	if(!confirm("Atentie! Sunteti sigur ca doriti stergerea ingredientului?")){
 		return false;
 	}else{
-		document.getElementById("delete_recipe_ref_"+recipeId).href= "/admin/delete_recipe?id="+recipeId;
+		document.getElementById("delete_ingredient_" + ingredientId).href= "/recipe_atributes/delete_ingredient?id="+ingredientId;
 	}
 
   }

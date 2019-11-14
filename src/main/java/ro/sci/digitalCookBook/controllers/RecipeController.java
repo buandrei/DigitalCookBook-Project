@@ -29,9 +29,8 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * @author Andrei Bu
- *
+ * <p>
  * Controller class for the recipe entity
- *
  */
 
 @Controller
@@ -136,7 +135,7 @@ public class RecipeController {
 
     @RequestMapping(value = {"/my_recipes", "/my_recipes/{page}"}, method = RequestMethod.GET)
     public ModelAndView listByUser(@PathVariable(required = false, name = "page") String page,
-                             HttpServletRequest request) {
+                                   HttpServletRequest request) {
 //        ModelAndView modelAndView = new ModelAndView();
 //        Collection<Recipe> recipes = recipeService.getAll(false);
 //        Collection<RecipeCategory> recipeCategories = recipeCategoryService.listAll();
@@ -144,7 +143,7 @@ public class RecipeController {
 
         //if (setAndGetRecipePage(page, request, modelAndView, recipes)) return modelAndView;
 
-       // modelAndView.setViewName("/retete/list_all");
+        // modelAndView.setViewName("/retete/list_all");
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentUserName = authentication.getName();
@@ -156,7 +155,7 @@ public class RecipeController {
 
     @RequestMapping(value = {"/tutoriale_incepatori", "/tutoriale_incepatori/{page}"}, method = RequestMethod.GET)
     public ModelAndView listRecipeTutorials(@PathVariable(required = false, name = "page") String page,
-                             HttpServletRequest request) {
+                                            HttpServletRequest request) {
 
         ModelAndView modelAndView = new ModelAndView();
         Collection<Recipe> recipes = recipeService.getAll(false, true);
@@ -448,11 +447,10 @@ public class RecipeController {
     }
 
     @RequestMapping(value = "/inactivare_reteta", method = RequestMethod.POST)
-    private ModelAndView inactivate_recipe( int id) {
+    private ModelAndView inactivate_recipe(int id) {
         //TODO
         return null;
     }
-
 
 
     @GetMapping("/pdfview")

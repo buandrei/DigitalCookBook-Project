@@ -10,10 +10,10 @@ import java.util.*;
 
 /**
  * JDBC implementation for {@link ro.sci.digitalCookBook.dao.RecipeIngredientDAO}.
- *  retetar
+ * retetar
+ *
  * @author Andrei Bu
  */
-
 
 public class JDBCRecipeIngredientDAO implements RecipeIngredientDAO {
     private static final Logger LOGGER = LoggerFactory.getLogger(JDBCRecipeDAO.class);
@@ -89,7 +89,6 @@ public class JDBCRecipeIngredientDAO implements RecipeIngredientDAO {
         return result.isEmpty() ? null : result.get(0);
     }
 
-
     @Override
     public RecipeIngredient update(RecipeIngredient recipeIngredient) {
         Connection connection = newConnection();
@@ -99,7 +98,7 @@ public class JDBCRecipeIngredientDAO implements RecipeIngredientDAO {
 
             if (recipeIngredient.getId() > 0) {
 
-                ps = connection.prepareStatement( " UPDATE retetar SET idingrediente=?,instructiuni=? WHERE id = ? RETURNING id;");
+                ps = connection.prepareStatement(" UPDATE retetar SET idingrediente=?,instructiuni=? WHERE id = ? RETURNING id;");
 
             } else {
                 ps = connection.prepareStatement(
@@ -173,6 +172,5 @@ public class JDBCRecipeIngredientDAO implements RecipeIngredientDAO {
         } catch (Exception e) {
             throw new RuntimeException("No DB Connection!", e);
         }
-
     }
 }

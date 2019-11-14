@@ -41,7 +41,7 @@ public class JDBCRecipeDAO implements RecipeDAO {
 
 
     @Override
-    public Collection<Recipe> searchForRecipeByIngredients(String ingredients, boolean moreIngredients ) {
+    public Collection<Recipe> searchForRecipeByIngredients(String ingredients, boolean moreIngredients) {
         Collection<Recipe> result = new LinkedList<>();
         StringBuilder query = new StringBuilder();
         query.append("" +
@@ -70,9 +70,9 @@ public class JDBCRecipeDAO implements RecipeDAO {
 
 
         if (!StringUtils.isEmpty(ingredients)) {
-            if(!moreIngredients) {
+            if (!moreIngredients) {
                 query.append(" AND retetar.idingrediente = ARRAY[" + ingredients + "]");
-            }else{
+            } else {
                 query.append(" AND retetar.idingrediente @> ARRAY[" + ingredients + "]");
             }
         }
@@ -110,6 +110,7 @@ public class JDBCRecipeDAO implements RecipeDAO {
                 "  categorii_retete.denumire AS categoria," +
                 "  promovari.idtip_promovare AS idtip_promovare," +
                 "  retete.idpromotie AS idpromotie," +
+                "  retete.inactiv," +
                 "  poze.content AS thumbnail," +
                 "  COALESCE(InitCap(app_user.nume), $$$$) ||  $$ $$ || COALESCE(InitCap(app_user.prenume), $$$$) AS user," +
                 "  1 AS unu " +
@@ -213,26 +214,24 @@ public class JDBCRecipeDAO implements RecipeDAO {
                 "WHERE" +
                 "   retete.inactiv = $$N$$");
 
-        if(onlyTutorialRecipes){
+        if (onlyTutorialRecipes) {
             query.append(" AND retete.istutorial = $$D$$");
         }
 
-        if(isOnlyPromotedForHomepage){
+        if (isOnlyPromotedForHomepage) {
             query.append(" AND retete.idpromotie IS NOT NULL");
             query.append(" AND promovari.data_final > CURRENT_DATE");
         }
 
         query.append(" ORDER BY retete.id");
 
-        if(!isOnlyPromotedForHomepage && !onlyTutorialRecipes){
+        if (!isOnlyPromotedForHomepage && !onlyTutorialRecipes) {
             query.append("  ,retete.data_adaugarii");
         }
 
-        if(isOnlyPromotedForHomepage){
+        if (isOnlyPromotedForHomepage) {
             query.append(", promovari.idtip_promovare, promovari.data_final");
         }
-
-
 
         try (Connection connection = newConnection();
              ResultSet rs = connection.createStatement()
@@ -317,7 +316,7 @@ public class JDBCRecipeDAO implements RecipeDAO {
                 "  LEFT JOIN categorii_retete ON categorii_retete.id = retete.idcategoria" +
                 "  LEFT JOIN promovari ON promovari.id = retete.idpromotie " +
                 "  LEFT JOIN app_user ON app_user.id = retete.iduser " +
-                " ORDER BY retete.data_adaugarii" );
+                " ORDER BY retete.data_adaugarii");
 
         try (Connection connection = newConnection();
              ResultSet rs = connection.createStatement()
@@ -501,7 +500,7 @@ public class JDBCRecipeDAO implements RecipeDAO {
             } else {
                 ps = connection.prepareStatement(
                         "INSERT INTO retete (denumire, portii, data_adaugarii, descriere, istutorial, link, iduser, idcategoria, idpoza, idretetar, timp_gatire, timp_preparare) "
-                                + "VALUES(?, ?, now(), ?, ?, ?,(SELECT id FROM app_user WHERE email = $$"+ currentUserEmail +"$$) , ?, ?, ?, ?, ?) RETURNING id;"
+                                + "VALUES(?, ?, now(), ?, ?, ?,(SELECT id FROM app_user WHERE email = $$" + currentUserEmail + "$$) , ?, ?, ?, ?, ?) RETURNING id;"
                 );
             }
 
@@ -583,7 +582,6 @@ public class JDBCRecipeDAO implements RecipeDAO {
 
         return result;
     }
-
 
 
     private String setEmbedOnlyLink(String link) {

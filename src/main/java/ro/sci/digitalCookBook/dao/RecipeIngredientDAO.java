@@ -8,8 +8,5 @@ import ro.sci.digitalCookBook.domain.RecipeIngredient;
  * @author Andrei Bu
  */
 
-
-
 public interface RecipeIngredientDAO extends BaseDAO<RecipeIngredient> {
-
 }

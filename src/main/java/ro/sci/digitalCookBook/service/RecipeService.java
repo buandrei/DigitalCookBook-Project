@@ -19,7 +19,6 @@ import ro.sci.digitalCookBook.exception.ValidationException;
  * Class that executes DAO methods for Recipe
  *
  * @author Andrei Bu
-
  */
 
 
@@ -30,12 +29,10 @@ public class RecipeService {
     private RecipeDAO dao;
 
     public Collection<Recipe> getAll(boolean isOnlyPromotedForHomePage, boolean onlyTutorialRecipes) {
-
-        return dao.getAll(isOnlyPromotedForHomePage , onlyTutorialRecipes);
+        return dao.getAll(isOnlyPromotedForHomePage, onlyTutorialRecipes);
     }
 
     public Collection<Recipe> getAll() {
-
         return dao.getAll();
     }
 
@@ -48,7 +45,6 @@ public class RecipeService {
         LOGGER.debug("Searching for recipes with ingredients " + ingredients + " and with the more ingredients option selected");
         return dao.searchForRecipeByIngredients(ingredients, moreIngredients);
     }
-
 
 
     public Collection<Recipe> getAllWherePromotionNotNull() {
@@ -66,7 +62,7 @@ public class RecipeService {
         try {
             recipe = dao.findById(id);
         } catch (EmptyResultDataAccessException e) {
-            LOGGER.warn("Nu s-a putut sterge.Nu am gasit  ID: " + id +" .Contactati suport!");
+            LOGGER.warn("Nu s-a putut sterge.Nu am gasit  ID: " + id + " .Contactati suport!");
             return false;
         }
         if (recipe != null) {
@@ -77,13 +73,13 @@ public class RecipeService {
         return false;
     }
 
-    public boolean inactivateRecipe(int id){
+    public boolean inactivateRecipe(int id) {
         LOGGER.debug("Inactivating recipe with id =  " + id);
         Recipe recipe = null;
         try {
             recipe = dao.findById(id);
         } catch (EmptyResultDataAccessException e) {
-            LOGGER.warn("Nu s-a putut inactiva.Nu am gasit  ID: " + id +" .Contactati suport!");
+            LOGGER.warn("Nu s-a putut inactiva.Nu am gasit  ID: " + id + " .Contactati suport!");
             return false;
         }
         if (recipe != null) {
@@ -94,13 +90,13 @@ public class RecipeService {
         return false;
     }
 
-    public boolean activateRecipe(int id){
+    public boolean activateRecipe(int id) {
         LOGGER.debug("Inactivating recipe with id =  " + id);
         Recipe recipe = null;
         try {
             recipe = dao.findById(id);
         } catch (EmptyResultDataAccessException e) {
-            LOGGER.warn("Nu s-a putut inactiva.Nu am gasit  ID: " + id +" .Contactati suport!");
+            LOGGER.warn("Nu s-a putut inactiva.Nu am gasit  ID: " + id + " .Contactati suport!");
             return false;
         }
         if (recipe != null) {
@@ -151,7 +147,7 @@ public class RecipeService {
         }
 
         if (!errors.isEmpty()) {
-            throw new ValidationException(errors.toArray(new String[] {}));
+            throw new ValidationException(errors.toArray(new String[]{}));
         }
     }
 
@@ -162,7 +158,7 @@ public class RecipeService {
         try {
             recipe = dao.findById(id);
         } catch (EmptyResultDataAccessException e) {
-            LOGGER.warn("Nu s-a putut sterge.Nu am gasit  ID: " + id +" .Contactati suport!");
+            LOGGER.warn("Nu s-a putut sterge.Nu am gasit  ID: " + id + " .Contactati suport!");
             return false;
         }
         if (recipe != null) {

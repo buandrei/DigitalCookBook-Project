@@ -15,7 +15,6 @@ import java.util.List;
  * Class that executes DAO methods for RecipeIngredient Service
  *
  * @author Andrei Bu
-
  */
 
 public class RecipeIngredientsService {
@@ -24,43 +23,14 @@ public class RecipeIngredientsService {
     @Autowired
     private RecipeIngredientDAO recipeIngredientDAO;
 
-//    public Collection<RecipePhoto> listAll() {
-//        return dao.getAll();
-//    }
-
-//    public Collection<Recipe> search( String query) {
-//        LOGGER.debug("Searching for " + query);
-//        return dao.searchByName(query);
-//    }
-
-//    public boolean delete(int id) {
-//        LOGGER.debug("Deleting recipe with id =  " + id);
-//        Recipe recipe = null;
-//        try {
-//            recipe = dao.findById(id);
-//        } catch (EmptyResultDataAccessException e) {
-//           LOGGER.warn("There is no recipe with id = ");
-//            return false;
-//        }
-//        if (recipe != null) {
-//            dao.delete(recipe);
-//            return true;
-//        }
-//
-//        return false;
-//    }
-
     public RecipeIngredient get(int id) {
         LOGGER.debug("Getting ingredients for id's: " + id);
         return recipeIngredientDAO.findById(id);
     }
 
 
-
     public void save(RecipeIngredient recipeIngredient) throws ValidationException {
         LOGGER.debug("Saving: " + recipeIngredient);
-
-
         validate(recipeIngredient);
         recipeIngredientDAO.update(recipeIngredient);
     }
@@ -71,12 +41,12 @@ public class RecipeIngredientsService {
             errors.add("Nu au fost alese ingrediente!");
         }
 
-        if(StringUtils.isEmpty(recipeIngredient.getInstructions())){
+        if (StringUtils.isEmpty(recipeIngredient.getInstructions())) {
             errors.add("Nu a fost completata descrierea!");
         }
 
         if (!errors.isEmpty()) {
-            throw new ValidationException(errors.toArray(new String[] {}));
+            throw new ValidationException(errors.toArray(new String[]{}));
         }
     }
 

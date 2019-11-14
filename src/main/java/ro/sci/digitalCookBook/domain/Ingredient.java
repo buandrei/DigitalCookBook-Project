@@ -8,9 +8,7 @@ import java.util.Objects;
  * @author Andrei Bu
  */
 
-
-
-public class Ingredient extends AbstractModel  {
+public class Ingredient extends AbstractModel {
     private String name;
     private String um;
 
@@ -38,7 +36,6 @@ public class Ingredient extends AbstractModel  {
                 '}';
     }
 
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -52,8 +49,6 @@ public class Ingredient extends AbstractModel  {
     public int hashCode() {
         return Objects.hash(name, um);
     }
-
-
 
 }
 

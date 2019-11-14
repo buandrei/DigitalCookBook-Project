@@ -1,10 +1,10 @@
 <#ftl]
 <#import "/spring.ftl" as spring />
 <#include "/bootstrap_header.ftl">
-  <div id="admin_wrapper">
+<div id="admin_wrapper">
     <!-- Sidebar -->
     <div id="admin_sidebar_wrapper">
-      <ul class="admin_sidebar_nav"><b>
+    <ul class="admin_sidebar_nav"><b>
 			<li>
 				<a href="/admin/view_recipes">
 					Listare/Editare/Stergere<br>RETETE
@@ -48,16 +48,33 @@
 		<div class="container-fluid">
 			<div class="row">
 				<div class="col-lg-12">
-					<button  type="button" id="menu-toggle" class="btn btn-secondary btn-sm">Open/Close SideMenu</button>
-					<h1 class="text-center">DigitalCookBook Admininstration Page</h1>
-					<p class="text-center">Bine ati venit pe pagina de administrator! Aici puteti sa editati/stergeti/lista entitatille aplicatiei!</p>
+					<div style="display:block;width:100%;">
+						<button  type="button" id="menu-toggle" class="btn btn-secondary btn-sm">Open/Close SideMenu</button>
+						<h3 style="text-align:center;"> Lista CATEGORII RETETE </h3>
+					</div>
+					<table class="table table-bordered table-dark">
+						<thead>
+							<tr class="text-center" style="font-size:1.2em;">
+								<th scope="col">Denumire Categorie</th>
+								<th scope="col">&nbsp</th>
+							</tr>
+						</thead>
+						<tbody>
+						<#list categories as category>
+						<tr>
+							<th scope="row">${category.name!''}</th>
+							<td><a href="" id="delete_recipe_category_${category.id!''}" onclick="adminDeleteCategory(${category.id!''})" class="btn btn-danger">Stergere</a></td>
+						</tr>
+						</#list>
+						</tbody>
+					</table>
+					<a href="/" class="btn btn-info float-right">Inapoi la site</a>
+					<a href="/recipe_atributes/add_recipe_category" class="btn btn-success float-right" style="margin-right:15px">Adaugare categorie noua</a>
 				</div>
 			</div>
-			<a href="/" class="btn btn-info float-right">Inapoi la site</a>
 		</div>
 	</div>
-
-  </div>
+</div>
   <script>
   $(document).ready(function(){
     $("#menu-toggle").click(function(e){
@@ -65,6 +82,15 @@
       $("#admin_wrapper").toggleClass("menuDisplayed");
     });
   });
+
+  function adminDeleteCategory(cateogryId){
+	if(!confirm("Atentie! Sunteti sigur ca doriti stergerea categoriei?")){
+		return false;
+	}else{
+		document.getElementById("delete_recipe_category_" + cateogryId).href= "/recipe_atributes/delete_category?id="+cateogryId;
+	}
+
+  }
 
   </script>
 <div style="display:none;"

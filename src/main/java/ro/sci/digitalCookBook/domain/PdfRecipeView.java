@@ -14,6 +14,7 @@ import org.springframework.web.servlet.view.AbstractView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import org.jsoup.Jsoup;
 
 import java.io.IOException;
@@ -72,7 +73,7 @@ public class PdfRecipeView extends AbstractView {
 
         Paragraph ingredientsParagraph = new Paragraph(ingredient);
         ingredientsParagraph.setMarginLeft(25);
-         pdfDocument.add(ingredientsParagraph);
+        pdfDocument.add(ingredientsParagraph);
 
         Paragraph instructionsTitle = new Paragraph("Pasi de urmat  ");
         instructionsTitle.setTextAlignment(TextAlignment.CENTER);
@@ -80,8 +81,6 @@ public class PdfRecipeView extends AbstractView {
         instructionsTitle.setFont(PdfFontFactory.createFont(FontConstants.HELVETICA));
         instructionsTitle.setFontSize(18f);
         pdfDocument.add(instructionsTitle);
-
-
 
 
         Paragraph instructions = new Paragraph(extractText(recipeIngredient.getInstructions()));
