@@ -93,6 +93,7 @@ public class JDBCPromotionDAO implements PromotionDAO {
         return result;
     }
 
+    @Override
     public Collection<Promotion> getByUserId(int id) {
         List<Promotion> result = new LinkedList<>();
         try (Connection conn = newConnection();

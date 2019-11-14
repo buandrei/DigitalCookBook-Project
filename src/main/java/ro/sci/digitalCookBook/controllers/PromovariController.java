@@ -109,6 +109,15 @@ public class PromovariController {
         return result;
     }
 
+    @RequestMapping("/list_by_id_promotions")
+    public ModelAndView list_by_id_promotions() {
+        ModelAndView result = new ModelAndView("promotion/list_by_id_promotions");
+        Collection<Promotion> lista_promotion = promotionService.listByUserId();
+        result.addObject("listPromovari", lista_promotion);
+        return result;
+    }
+
+
     @RequestMapping("/list_promotion_userId")
     public ModelAndView list_promotion_userId() {
         ModelAndView result = new ModelAndView("promotion/list_promotion_userId");

@@ -50,6 +50,10 @@ public class PromotionService {
         return daoPromotion.findById(id);
     }
 
+    public Collection<Promotion> listByUserId(int id){
+        return daoPromotion.getByUserId(id);
+    }
+
     public Collection<Promotion> listAll() {
         return daoPromotion.getAll();
     }
