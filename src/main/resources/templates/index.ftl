@@ -7,6 +7,7 @@
 </head>
 <body>
 <div class="container">
+
 	<header>
         <#include '/top_of_pages.ftl'>
 

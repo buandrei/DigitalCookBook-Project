@@ -2,6 +2,7 @@ package ro.sci.digitalCookBook.dao.db;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import ro.sci.digitalCookBook.dao.UserDAO;
 import ro.sci.digitalCookBook.domain.User;
 
@@ -108,39 +109,53 @@ public class JDBCuserDAO implements UserDAO {
     }
 
     @Override
-    public User update(User model) {
+    public User update(User user) {
         Connection connection = newConnection();
         try {
             PreparedStatement ps = null;
-            if (model.getId() > 0) {
+            if (user.getId() > 0) {
                 ps = connection.prepareStatement(
-                        "update app_user set username=?, email=?, nume=?, prenume=?, isbucatar=?, parola = ?, poza=?,data_adaugare=?,data_last_login=?, active=? "
+                        "update app_user set username=?, email=?, nume=?, prenume=?, isbucatar=?, password = ? "
                                 + "where id = ? returning id");
 
             } else {
                 ps = connection.prepareStatement(
-                        "insert into app_user (username, email, nume, prenume, isbucatar, parola, poza, data_adaugare,data_last_login, active) "
-                                + "values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?) returning id");
+                        "insert into app_user (username, email, nume, prenume, isbucatar, password) "
+                                + "values (?, ?, ?, ?, ?, ?) returning id" , Statement.RETURN_GENERATED_KEYS);
 
             }
-            ps.setString(1, model.getUserName());
-            ps.setString(2, model.getEmail());
-            ps.setString(3, model.getNume());
-            ps.setString(4,model.getPrenume());
-            ps.setString(5,model.getIsBucatar());
-            ps.setString(6,model.getParola());
-            ps.setString(7,model.getPicturePath());
-            ps.setString(8, String.valueOf(model.getAddDate().getTime()));
-            ps.setString(9, String.valueOf(model.getLastLoginDate().getTime()));
-            ps.setBoolean(10,model.isActive());
+            ps.setString(1, user.getUserName());
+            ps.setString(2, user.getEmail());
+            ps.setString(3, user.getNume());
+            ps.setString(4, user.getPrenume());
+            ps.setString(5, user.getIsBucatar());
+            ps.setString(6, encriptPasswordWithBCrypt(user.getParola()));
 
-            if (model.getId() > 0) {
-                ps.setLong(7, model.getId());
+
+            int insertedRows = ps.executeUpdate();
+
+            if(insertedRows == 0) {
+                throw new SQLException("Nu am reusit sa adaug user!");
+            }
+
+            try(ResultSet generatedKeys = ps.getGeneratedKeys()){
+                if(generatedKeys.next()){
+                    user.setId(generatedKeys.getInt(1));
+                    PreparedStatement ps2 = connection.prepareStatement("INSERT INTO user_role(user_id,role_id) VALUES(?,2)");
+                    ps2.setInt(1,user.getId());
+                    ps2.executeUpdate();
+                }else{
+                    throw new SQLException("Nu am reusit sa gases user ID!");
+                }
+            }
+
+            if (user.getId() > 0) {
+                ps.setInt(7, user.getId());
             }
 
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
-                model.setId(rs.getInt(1));
+                user.setId(rs.getInt(1));
             }
             rs.close();
 
@@ -157,7 +172,7 @@ public class JDBCuserDAO implements UserDAO {
             }
         }
 
-        return model;
+        return user;
     }
 
     @Override
@@ -217,12 +232,17 @@ public class JDBCuserDAO implements UserDAO {
         user.setPrenume(rs.getString("prenume"));
         user.setIsBucatar(rs.getString("isbucatar"));
         user.setParola(rs.getString("parola"));
-        user.setPicturePath(rs.getString("poza"));
+        /*user.setPicturePath(rs.getString("poza"));
         user.setAddDate(rs.getTimestamp("data_adaugare"));
         user.setLastLoginDate(rs.getTimestamp("data_last_login"));
-        user.setActive(rs.getBoolean("active"));
+        user.setActive(rs.getBoolean("active"));*/
 
         return user;
 
+    }
+
+    private String encriptPasswordWithBCrypt(String password) {
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        return encoder.encode(password);
     }
 }

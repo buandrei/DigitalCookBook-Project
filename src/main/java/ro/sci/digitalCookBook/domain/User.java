@@ -20,7 +20,8 @@ public class User extends AbstractModel {
 	private String prenume;
 	private String isBucatar;
 	private String parola;
-	private String picturePath;
+	private UserPhoto userPhoto;
+	private int photoId;
 	private boolean active;
 
 	@DateTimeFormat(pattern = "dd/MM/yyyy")
@@ -77,12 +78,12 @@ public class User extends AbstractModel {
 		this.parola = parola;
 	}
 
-	public String getPicturePath() {
-		return picturePath;
+	public UserPhoto getUserPhoto() {
+		return userPhoto;
 	}
 
-	public void setPicturePath(String picturePath) {
-		this.picturePath = picturePath;
+	public void setUserPhoto(UserPhoto userPhoto) {
+		this.userPhoto = userPhoto;
 	}
 
 	public boolean isActive() {
@@ -109,6 +110,14 @@ public class User extends AbstractModel {
 		this.lastLoginDate = lastLoginDate;
 	}
 
+	public int getPhotoId() {
+		return photoId;
+	}
+
+	public void setPhotoId(int photoId) {
+		this.photoId = photoId;
+	}
+
 	@Override
 	public String toString() {
 		return "User{" +
@@ -118,7 +127,7 @@ public class User extends AbstractModel {
 				", prenume='" + prenume + '\'' +
 				", isBucatar='" + isBucatar + '\'' +
 				", parola='" + parola + '\'' +
-				", picturePath='" + picturePath + '\'' +
+				", userPhoto=" + userPhoto +
 				", active=" + active +
 				", addDate=" + addDate +
 				", lastLoginDate=" + lastLoginDate +
@@ -137,13 +146,13 @@ public class User extends AbstractModel {
 				Objects.equals(prenume, user.prenume) &&
 				Objects.equals(isBucatar, user.isBucatar) &&
 				Objects.equals(parola, user.parola) &&
-				Objects.equals(picturePath, user.picturePath) &&
+				Objects.equals(userPhoto, user.userPhoto) &&
 				Objects.equals(addDate, user.addDate) &&
 				Objects.equals(lastLoginDate, user.lastLoginDate);
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(userName, email, nume, prenume, isBucatar, parola, picturePath, active, addDate, lastLoginDate);
+		return Objects.hash(userName, email, nume, prenume, isBucatar, parola, userPhoto, active, addDate, lastLoginDate);
 	}
 }

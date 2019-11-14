@@ -87,7 +87,6 @@ public class ApplicationConfiguration {
     }
 
     @Bean
-
     public UserService userService(){
         UserService userService = new UserService();
 
